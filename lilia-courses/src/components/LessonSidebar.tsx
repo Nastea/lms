@@ -16,6 +16,8 @@ type Props = {
   currentLessonId: string;
   progress: { total: number; completed: number };
   lessons: Lesson[];
+  /** Lesson IDs that are locked (no entitlement); show lock and link to /plata */
+  lockedLessonIds?: string[];
 };
 
 export default function LessonSidebar({
@@ -24,6 +26,7 @@ export default function LessonSidebar({
   currentLessonId,
   progress,
   lessons,
+  lockedLessonIds = [],
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const percentage = progress.total > 0 ? Math.round((progress.completed / progress.total) * 100) : 0;
@@ -112,6 +115,34 @@ export default function LessonSidebar({
                 <div className="space-y-1">
                   {moduleLessons.map((lesson) => {
                     const isCurrent = lesson.id === currentLessonId;
+                    const isLocked = lockedLessonIds.includes(lesson.id);
+                    if (isLocked) {
+                      return (
+                        <Link
+                          key={lesson.id}
+                          href="/plata"
+                          onClick={() => setIsOpen(false)}
+                          className="block px-3 py-2 rounded-lg text-sm transition-all duration-200 text-white/50 hover:text-white/70 hover:bg-white/5"
+                        >
+                          <div className="flex items-center gap-2">
+                            <svg
+                              className="w-4 h-4 text-white/40 flex-shrink-0"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                              />
+                            </svg>
+                            <span className="truncate">{lesson.title}</span>
+                          </div>
+                        </Link>
+                      );
+                    }
                     return (
                       <Link
                         key={lesson.id}

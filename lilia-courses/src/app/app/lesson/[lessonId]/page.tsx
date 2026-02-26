@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { supabaseServer } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import LessonPageWrapper from "@/components/LessonPageWrapper";
 import CompleteButton from "@/components/CompleteButton";
@@ -69,11 +70,14 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
   const isDone = !!progress?.completed_at;
 
   // Fetch all lessons in the course for sidebar
+  // When user has no entitlement, RLS only returns the first lesson — use admin to get full list for sidebar (locked state)
   let sidebarLessons: Array<{ id: string; title: string; module_title: string; isCompleted: boolean }> = [];
   let courseProgress = { total: 0, completed: 0 };
   let nextLessonId: string | null = null;
+  let lockedLessonIds: string[] = [];
 
   if (lesson?.course_id) {
+    const fetchSupabase = !hasEntitlement ? supabaseAdmin : supabase;
     // Get course info
     const { data: course } = await supabase
       .from("courses")
@@ -82,22 +86,22 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
       .single();
 
     // Get modules
-    const { data: modules } = await supabase
+    const { data: modules } = await fetchSupabase
       .from("modules")
       .select("id,title,sort_order")
       .eq("course_id", lesson.course_id)
       .order("sort_order", { ascending: true });
 
     const moduleIds = (modules ?? []).map((m) => m.id);
-    
-    // Get all lessons
-    const { data: allLessons } = await supabase
+
+    // Get all lessons (admin when no entitlement so we get full list for sidebar)
+    const { data: allLessons } = await fetchSupabase
       .from("lessons")
       .select("id,module_id,title,sort_order")
       .in("module_id", moduleIds.length ? moduleIds : ["00000000-0000-0000-0000-000000000000"])
       .order("sort_order", { ascending: true });
 
-    // Get all progress for this course
+    // Get all progress for this course (user-scoped, always with user client)
     const lessonIds = (allLessons ?? []).map((l) => l.id);
     const { data: allProgress } = await supabase
       .from("lesson_progress")
@@ -124,6 +128,10 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
         if (moduleOrder !== 0) return moduleOrder;
         return a.sort_order - b.sort_order;
       });
+
+      if (!hasEntitlement) {
+        lockedLessonIds = sortedLessons.filter((l) => l.id !== lessonId).map((l) => l.id);
+      }
 
       // Build sidebar lessons list
       sidebarLessons = sortedLessons.map((l) => {
@@ -155,6 +163,7 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
             currentLessonId={lessonId}
             progress={courseProgress}
             lessons={sidebarLessons}
+            lockedLessonIds={lockedLessonIds}
           />
         )}
 
@@ -241,7 +250,25 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
               </div>
             )}
 
-            <CompleteButton lessonId={lessonId} isDone={isDone} nextLessonId={nextLessonId} />
+            <CompleteButton
+              lessonId={lessonId}
+              isDone={isDone}
+              nextLessonId={hasEntitlement ? nextLessonId : null}
+            />
+
+            {!hasEntitlement && (
+              <div className="rounded-2xl border-2 border-amber-500/40 bg-amber-500/10 p-6 space-y-4">
+                <p className="text-white font-medium">
+                  Ai acces la prima lecție. Restul cursului este blocat până la plată.
+                </p>
+                <Link
+                  href="/plata"
+                  className="inline-flex items-center gap-2 rounded-xl bg-amber-500 text-black py-3 px-6 font-semibold hover:bg-amber-400 transition-colors"
+                >
+                  Finalizează plata pentru acces complet →
+                </Link>
+              </div>
+            )}
           </div>
         </main>
       </div>

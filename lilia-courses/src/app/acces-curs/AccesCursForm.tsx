@@ -159,15 +159,6 @@ export function AccesCursForm({
             boxShadow: brand.cardShadow,
           }}
         >
-          <p className="mb-4 pb-4 border-b text-center text-sm font-medium" style={{ borderColor: brand.inputBorder, color: brand.text }}>
-            După înregistrare vei fi dus la:{" "}
-            {targetAfterSignup.startsWith("/app/lesson/") ? (
-              <span style={{ color: "#059669" }}>prima lecție</span>
-            ) : (
-              <span style={{ color: "#b45309" }}>dashboard</span>
-            )}
-            {" "}({targetAfterSignup})
-          </p>
           <p className="text-sm mb-6" style={{ color: brand.text }}>
             Completează doar aceste câmpuri — nu te mai întrebăm nimic altceva.
           </p>
