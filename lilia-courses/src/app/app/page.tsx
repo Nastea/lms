@@ -29,10 +29,18 @@ export default async function AppHome() {
   const courseIds = Array.from(entitledCourseIds);
 
   // Published courses (with new RLS we can read courses that have lessons)
-  const { data: publishedCourses } = await supabase
+  let { data: publishedCourses } = await supabase
     .from("courses")
     .select("id,title,description,cover_url")
     .eq("is_published", true);
+
+  // Fallback: if no published courses, show any course that has lessons (so "Lecția 1 gratuită" still appears)
+  if (!publishedCourses?.length) {
+    const { data: coursesWithLessons } = await supabase
+      .from("courses")
+      .select("id,title,description,cover_url");
+    publishedCourses = coursesWithLessons ?? [];
+  }
 
   const allDisplayCourses = publishedCourses ?? [];
   const freePreviewCourseIds = allDisplayCourses

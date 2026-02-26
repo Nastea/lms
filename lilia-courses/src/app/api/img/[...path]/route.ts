@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import path from "path";
 import fs from "fs";
 
-const IMAGES_DIR = path.join(process.cwd(), "public", "images");
 const MIMES: Record<string, string> = {
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
@@ -12,6 +11,19 @@ const MIMES: Record<string, string> = {
   ".heic": "image/heic",
 };
 
+// Try app root first (Vercel with Root Directory = lilia-courses), then repo root (monorepo)
+function getImagesDir(): string {
+  const cwd = process.cwd();
+  const atAppRoot = path.join(cwd, "public", "images");
+  const atRepoRoot = path.join(cwd, "lilia-courses", "public", "images");
+  try {
+    if (fs.existsSync(atAppRoot)) return atAppRoot;
+  } catch {
+    // ignore
+  }
+  return atRepoRoot;
+}
+
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ path: string[] }> }
@@ -20,9 +32,10 @@ export async function GET(
   if (!segs?.length) {
     return NextResponse.json({ error: "Missing path" }, { status: 400 });
   }
+  const IMAGES_DIR = getImagesDir();
   const requestedPath = path.join(IMAGES_DIR, ...segs);
   const normalized = path.normalize(requestedPath);
-  if (!normalized.startsWith(IMAGES_DIR)) {
+  if (!normalized.startsWith(path.normalize(IMAGES_DIR))) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
   const ext = path.extname(normalized).toLowerCase();
