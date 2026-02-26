@@ -20,7 +20,7 @@ const DEFAULT_COURSE_ID = "6b8bc0bf-d5b9-4914-b980-b728199d809b";
 export default async function AccesCursPage({
   searchParams,
 }: {
-  searchParams: Promise<{ course?: string }>;
+  searchParams: Promise<{ course?: string; debug?: string }>;
 }) {
   const params = await searchParams;
   const courseId =
