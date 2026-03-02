@@ -10,6 +10,7 @@ export async function middleware(request: NextRequest) {
     "/login",
     "/signup",
     "/acces-curs",
+    "/curs",
     "/",
     "/conflicte",
     "/inscriere",
@@ -24,6 +25,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/api") ||
     pathname === "/inscriere" ||
     pathname.startsWith("/inscriere/") ||
+    pathname.startsWith("/curs/") ||
     publicPaths.some((p) => (p === "/" ? pathname === "/" : pathname.startsWith(p)));
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;

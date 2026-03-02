@@ -8,14 +8,14 @@ type Props = {
   paymentUrl?: string;
 };
 
-export default function PaywallBanner({ courseTitle, paymentUrl = "/plata" }: Props) {
+export default function PaywallBanner({ courseTitle, paymentUrl = "/inscriere" }: Props) {
   return (
     <div className="rounded-2xl border-2 border-amber-400/30 bg-amber-500/10 p-8 text-center space-y-4">
       <h2 className="text-xl font-semibold text-amber-200">
-        Lecția gratuită s-a terminat
+        Acces restricționat
       </h2>
       <p className="text-white/80 max-w-md mx-auto">
-        Ai văzut prima lecție din <strong>{courseTitle}</strong>. Pentru a debloca restul cursului și toate materialele, finalizează plata.
+        Conținutul acestui curs (<strong>{courseTitle}</strong>) este disponibil după achiziție. Achiziționează cursul pentru a accesa toate lecțiile.
       </p>
       <div className="pt-2">
         <Link

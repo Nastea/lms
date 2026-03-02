@@ -28,36 +28,15 @@ export default async function AppHome() {
   const entitledCourseIds = new Set((entitlements ?? []).map((e) => e.course_id));
   const courseIds = Array.from(entitledCourseIds);
 
-  // Published courses (with new RLS we can read courses that have lessons)
-  let { data: publishedCourses } = await supabase
-    .from("courses")
-    .select("id,title,description,cover_url")
-    .eq("is_published", true);
-
-  // Fallback: if no published courses, show any course that has lessons (so "Lecția 1 gratuită" still appears)
-  if (!publishedCourses?.length) {
-    const { data: coursesWithLessons } = await supabase
+  // Only show courses the user has purchased (entitled)
+  let displayCourses: Array<{ id: string; title: string; description: string | null; cover_url: string | null }> = [];
+  if (courseIds.length > 0) {
+    const { data: entitledCourses } = await supabase
       .from("courses")
-      .select("id,title,description,cover_url");
-    publishedCourses = coursesWithLessons ?? [];
-  }
-
-  const allDisplayCourses = publishedCourses ?? [];
-  const freePreviewCourseIds = allDisplayCourses
-    .map((c) => c.id)
-    .filter((id) => !entitledCourseIds.has(id));
-
-  // First lesson id per course for "free preview" cards (RPC)
-  let firstLessonByCourse = new Map<string, string>();
-  if (freePreviewCourseIds.length > 0) {
-    const { data: firstLessons } = await supabase.rpc("get_first_lesson_ids", {
-      p_course_ids: freePreviewCourseIds,
-    });
-    (firstLessons ?? []).forEach(
-      (row: { course_id: string; first_lesson_id: string }) => {
-        firstLessonByCourse.set(row.course_id, row.first_lesson_id);
-      }
-    );
+      .select("id,title,description,cover_url")
+      .in("id", courseIds)
+      .eq("is_published", true);
+    displayCourses = entitledCourses ?? [];
   }
 
   // Get all lessons for entitled courses (for progress)
@@ -86,7 +65,7 @@ export default async function AppHome() {
     progressByCourse.set(lesson.course_id, existing);
   });
 
-  const hasAnyCards = allDisplayCourses.length > 0;
+  const hasAnyCards = displayCourses.length > 0;
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
@@ -111,14 +90,17 @@ export default async function AppHome() {
         <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-6">
           <div className="text-lg font-medium">Încă nu ai cursuri disponibile</div>
           <p className="text-sm opacity-80 mt-1">
-            Cursurile publicate vor apărea aici. Poți începe cu lecția gratuită sau după ce achiziționezi accesul.
+            După ce achiziționezi un curs, acesta va apărea aici. Poți începe cu{" "}
+            <Link href="/curs/lectia-0" className="underline hover:no-underline">
+              lecția gratuită
+            </Link>{" "}
+            pe site sau achiziționa accesul la curs.
           </p>
         </div>
       ) : (
         <div className="mt-6 grid md:grid-cols-2 gap-6">
-          {allDisplayCourses.map((c) => {
+          {displayCourses.map((c) => {
             const progress = progressByCourse.get(c.id) || { total: 0, completed: 0 };
-            const freeFirstLessonId = firstLessonByCourse.get(c.id) ?? null;
             return (
               <CourseCard
                 key={c.id}
@@ -126,7 +108,6 @@ export default async function AppHome() {
                 title={c.title}
                 coverUrl={c.cover_url}
                 progress={progress}
-                freeFirstLessonId={entitledCourseIds.has(c.id) ? null : freeFirstLessonId}
               />
             );
           })}

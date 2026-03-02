@@ -14,7 +14,7 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
   const { data: userRes } = await supabase.auth.getUser();
   const user = userRes.user!;
 
-  // Paywall: first lesson is free; rest require entitlement
+  // Paywall: all lessons require entitlement (no free first lesson in app)
   const { data: paywallRows } = await supabase.rpc("get_lesson_paywall_info", {
     p_lesson_id: lessonId,
   });
@@ -30,7 +30,7 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
       .eq("course_id", paywallInfo.course_id)
       .eq("status", "active")
       .maybeSingle()).data != null;
-  if (!paywallInfo.is_first_lesson && !hasEntitlement) {
+  if (!hasEntitlement) {
     return (
       <LessonPageWrapper>
         <div className="max-w-2xl mx-auto py-16 px-6">
@@ -43,7 +43,7 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
     );
   }
 
-  // Update last_seen_at on every view (server-side)
+  // Update last_seen_at (only for entitled users; we already returned paywall above if !hasEntitlement)
   await supabase
     .from("lesson_progress")
     .upsert({
@@ -77,7 +77,7 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
   let lockedLessonIds: string[] = [];
 
   if (lesson?.course_id) {
-    const fetchSupabase = !hasEntitlement ? supabaseAdmin : supabase;
+    const fetchSupabase = supabase;
     // Get course info
     const { data: course } = await supabase
       .from("courses")
@@ -94,7 +94,7 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
 
     const moduleIds = (modules ?? []).map((m) => m.id);
 
-    // Get all lessons (admin when no entitlement so we get full list for sidebar)
+    // Get all lessons for sidebar
     const { data: allLessons } = await fetchSupabase
       .from("lessons")
       .select("id,module_id,title,sort_order")
@@ -128,10 +128,6 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
         if (moduleOrder !== 0) return moduleOrder;
         return a.sort_order - b.sort_order;
       });
-
-      if (!hasEntitlement) {
-        lockedLessonIds = sortedLessons.filter((l) => l.id !== lessonId).map((l) => l.id);
-      }
 
       // Build sidebar lessons list
       sidebarLessons = sortedLessons.map((l) => {
@@ -253,22 +249,8 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
             <CompleteButton
               lessonId={lessonId}
               isDone={isDone}
-              nextLessonId={hasEntitlement ? nextLessonId : null}
+              nextLessonId={nextLessonId}
             />
-
-            {!hasEntitlement && (
-              <div className="rounded-2xl border-2 border-amber-500/40 bg-amber-500/10 p-6 space-y-4">
-                <p className="text-white font-medium">
-                  Ai acces la prima lecție. Restul cursului este blocat până la plată.
-                </p>
-                <Link
-                  href="/plata"
-                  className="inline-flex items-center gap-2 rounded-xl bg-amber-500 text-black py-3 px-6 font-semibold hover:bg-amber-400 transition-colors"
-                >
-                  Finalizează plata pentru acces complet →
-                </Link>
-              </div>
-            )}
           </div>
         </main>
       </div>

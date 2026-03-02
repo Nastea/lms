@@ -110,7 +110,7 @@ export default function Relatia360Page() {
                 >
                   Vreau acces la curs
                 </Link>
-                <Link href="/acces-curs" className="text-sm font-medium underline hover:opacity-90" style={{ color: "#1F2933" }}>
+                <Link href="/curs/lectia-0" className="text-sm font-medium underline hover:opacity-90" style={{ color: "#1F2933" }}>
                   Sau începe cu lecția 1 gratuită →
                 </Link>
               </div>
@@ -178,7 +178,7 @@ export default function Relatia360Page() {
               >
                 Vreau acces la curs
               </Link>
-              <Link href="/acces-curs" className="text-sm font-medium underline hover:opacity-90 w-fit" style={{ color: "#1F2933" }}>
+              <Link href="/curs/lectia-0" className="text-sm font-medium underline hover:opacity-90 w-fit" style={{ color: "#1F2933" }}>
                 Sau începe cu lecția 1 gratuită →
               </Link>
             </div>
