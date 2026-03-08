@@ -69,27 +69,32 @@ export default function PlataPage() {
   return (
     <div className="min-h-screen w-full overflow-x-hidden" style={{ background: 'linear-gradient(to bottom, #f5ede3, #ebdfce)' }}>
       <section className="py-10 md:py-16">
-        <div className="mx-auto max-w-2xl px-4 sm:px-6">
-          {/* Imagine + titlu */}
-          <div className="mb-8 text-center">
-            <div className="mx-auto mb-6 max-w-xs overflow-hidden rounded-2xl shadow-lg" style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}>
-              <img
-                src="/api/img/IMG_0646.JPG"
-                alt="Lilia Dubița - RELAȚIA 360"
-                className="h-auto w-full object-cover"
-              />
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 md:items-start">
+            {/* Coloana stânga: imagine (doar pe desktop; pe mobil e deasupra) */}
+            <div className="md:sticky md:top-8">
+              <div className="overflow-hidden rounded-2xl shadow-lg" style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}>
+                <img
+                  src="/api/img/IMG_0646.JPG"
+                  alt="Lilia Dubița - RELAȚIA 360"
+                  className="h-auto w-full object-cover"
+                />
+              </div>
+              <div className="mt-4 text-center md:text-left">
+                <h1
+                  className="text-2xl font-bold uppercase tracking-tight text-[#1F2933] md:text-3xl"
+                  style={{ letterSpacing: '-0.02em', lineHeight: '1.2' }}
+                >
+                  Plată curs
+                </h1>
+                <p className="mt-2 text-lg text-[#6B7280]">
+                  RELAȚIA 360 – De la conflict la conectare
+                </p>
+              </div>
             </div>
-            <h1
-              className="text-2xl font-bold uppercase tracking-tight text-[#1F2933] md:text-3xl"
-              style={{ letterSpacing: '-0.02em', lineHeight: '1.2' }}
-            >
-              Plată curs
-            </h1>
-            <p className="mt-2 text-lg text-[#6B7280]">
-              RELAȚIA 360 – De la conflict la conectare
-            </p>
-          </div>
 
+            {/* Coloana dreapta: formular + info */}
+            <div>
           <div
             className="rounded-2xl p-6 md:p-8 shadow-lg"
             style={{
@@ -195,6 +200,7 @@ export default function PlataPage() {
               <Link href="/confidentialitate" className="underline hover:opacity-80">Confidențialitate</Link>
             </p>
           </div>
+            </div>
         </div>
       </section>
     </div>
