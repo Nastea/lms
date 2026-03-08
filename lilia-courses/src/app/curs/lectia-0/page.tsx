@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { getFirstLessonPublicData } from "@/lib/lesson-zero-public";
-import MarkdownRenderer from "@/components/MarkdownRenderer";
 import { notFound } from "next/navigation";
 import { getFunnelBotUrl } from "@/lib/funnel";
 
@@ -10,20 +9,23 @@ const COURSE_ID =
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Lecția 0 – RELAȚIA 360 | De la conflict la conectare",
+  title: "Lecția 1 – RELAȚIA 360 | De la conflict la conectare",
   description:
-    "Lecție gratuită de introducere. Descoperă cum să transformi conflictele în conectare.",
+    "Lecție gratuită: de ce aceleași conflicte revin în relație și ce se întâmplă în comunicare. Continuă cu programul complet.",
 };
 
-const sectionStyle = "py-12 md:py-16";
-const cardStyle =
-  "rounded-2xl p-6 shadow-lg border border-black/5 bg-white";
-const headingStyle =
-  "text-2xl md:text-3xl font-bold uppercase tracking-tight text-[#1F2933] mb-6 text-center";
+const PROGRAM_INCLUDE = [
+  "5 lecții video practice",
+  "explicații clare despre dinamica conflictelor",
+  "exerciții aplicate pentru relația ta",
+  "caiet PDF de lucru",
+  "acces online imediat",
+  "acces pe viață",
+];
 
 /**
- * Lecția 0: video + descriere + mini landing (ce primește, pentru cine, ce rezolvă, preț, CTA).
- * Butonul de plată duce la botul Telegram (funnel).
+ * Pagina lecției gratuite: hero, video, clarificare, program complet, ofertă, CTA către bot.
+ * Mai scurtă decât landingul principal; livrare lecție, claritate, tranziție spre program, CTA bot.
  */
 export default async function LessonZeroPublicPage() {
   const data = await getFirstLessonPublicData(COURSE_ID);
@@ -39,145 +41,142 @@ export default async function LessonZeroPublicPage() {
         color: "#1F2933",
       }}
     >
-      <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-        {/* Badge + titlu */}
-        <p className="mb-2 text-center text-sm font-medium uppercase tracking-wide text-[#6B7280]">
-          Lecție gratuită
-        </p>
-        <h1
-          className="text-center text-3xl font-bold uppercase leading-tight text-[#1F2933] md:text-4xl"
-          style={{ letterSpacing: "-0.02em" }}
-        >
-          {data.course_title}
-        </h1>
-        <p className="mt-2 text-center text-xl font-semibold text-[#1F2933]">
-          {data.title}
-        </p>
-
-        {/* Video */}
-        {data.video_url && (
-          <div className="mt-8 overflow-hidden rounded-2xl border border-black/10 bg-black/5 shadow-xl">
-            <div className="aspect-video">
-              <iframe
-                className="h-full w-full"
-                src={data.video_url}
-                title={data.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Descriere lecție (text vizibil pe fundal deschis) */}
-        {data.body_md && (
-          <article className="mt-8 space-y-6 rounded-2xl border border-black/5 bg-white/90 p-6 shadow-sm md:p-8">
-            <MarkdownRenderer content={data.body_md} theme="light" />
-          </article>
-        )}
-
-        {/* ---------- Mini landing ---------- */}
-
-        {/* Ce primește */}
-        <section className={sectionStyle}>
-          <h2 className={headingStyle}>Ce primește</h2>
-          <ul className="space-y-3 text-[#1F2933]">
-            {[
-              "5 lecții practice, ușor de parcurs",
-              "Exerciții aplicate, nu doar teorie",
-              "Caiet practic PDF",
-              "Acces online imediat",
-              "Acces pe viață",
-            ].map((item, i) => (
-              <li key={i} className="flex items-center gap-3">
-                <span className="text-[#E56B6F]">✔</span>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* Pentru cine este */}
-        <section className={sectionStyle}>
-          <h2 className={headingStyle}>Pentru cine este</h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className={cardStyle}>
-              <h3 className="mb-3 font-semibold text-[#1F2933]">Este pentru:</h3>
-              <ul className="space-y-2 text-[#6B7280] text-sm">
-                {[
-                  "cei care își doresc o relație sănătoasă",
-                  "cei în relație cu tensiuni în comunicare",
-                  "cei care vor să crească împreună",
-                ].map((item, i) => (
-                  <li key={i} className="flex gap-2">
-                    <span className="text-[#E56B6F]">✔</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className={cardStyle}>
-              <h3 className="mb-3 font-semibold text-[#1F2933]">NU este pentru:</h3>
-              <ul className="space-y-2 text-[#6B7280] text-sm">
-                {[
-                  "cei care vor să-și schimbe partenerul",
-                  "cei care caută vinovați",
-                  "cei care vor doar „dreptate”",
-                ].map((item, i) => (
-                  <li key={i} className="flex gap-2">
-                    <span className="text-[#6B7280]">✖</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* Ce problemă rezolvă */}
-        <section className={sectionStyle}>
-          <h2 className={headingStyle}>Ce problemă rezolvă</h2>
-          <p className="mb-4 text-center text-[#6B7280]">
-            Nu te învață ce să spui „corect”. Te învață cum să comunici astfel încât mesajul tău să fie auzit și primit.
+      <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
+        {/* SECTION 1 — HERO */}
+        <section className="pb-8 md:pb-12">
+          <h1
+            className="text-center text-2xl font-bold uppercase leading-tight text-[#1F2933] md:text-3xl"
+            style={{ letterSpacing: "-0.02em" }}
+          >
+            Lecția 1 din programul „Relația 360”
+          </h1>
+          <p className="mt-4 text-center text-lg leading-relaxed text-[#1F2933]">
+            În această lecție vei înțelege de ce aceleași conflicte revin în relație și ce se întâmplă, de fapt, în comunicare atunci când simți că nu mai ajungeți unul la altul.
           </p>
-          <ul className="mx-auto max-w-2xl space-y-2 text-[#1F2933]">
-            {[
-              "cum să exprimi nevoile fără presiune",
-              "cum să asculți fără să te pierzi pe tine",
-              "cum să transformați conflictele în conectare",
-              "cum să transmiteți iubirea prin comunicare matură",
-            ].map((item, i) => (
-              <li key={i} className="flex items-center gap-3">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#E56B6F]/20 text-sm font-semibold text-[#E56B6F]">
-                  ✓
-                </span>
+          <p className="mt-4 text-center text-[#6B7280]">
+            Privește lecția până la capăt.
+            <br />
+            După ea poți continua cu programul complet „Relația 360 – De la conflict la conectare”.
+          </p>
+        </section>
+
+        {/* SECTION 2 — VIDEO */}
+        <section className="py-8 md:py-12">
+          <h2 className="text-xl font-bold text-[#1F2933] md:text-2xl">
+            Lecția 1 – {data.title}
+          </h2>
+          <p className="mt-2 text-[#6B7280]">
+            Aceasta este prima lecție din mini-cursul „Relația 360”.
+            <br />
+            În această lecție vei observa mai clar tiparul în care intrați ca relație și de ce unele conflicte se repetă fără să ducă la apropiere.
+          </p>
+          {data.video_url ? (
+            <div className="mt-6 overflow-hidden rounded-2xl border border-black/10 bg-black/5 shadow-xl">
+              <div className="aspect-video">
+                <iframe
+                  className="h-full w-full"
+                  src={data.video_url}
+                  title={data.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="mt-6 rounded-2xl border border-black/10 bg-white/80 p-8 text-center text-[#6B7280]">
+              Video indisponibil momentan.
+            </div>
+          )}
+        </section>
+
+        {/* SECTION 3 — CLARIFICARE */}
+        <section className="py-8 md:py-12">
+          <div
+            className="rounded-2xl p-6 md:p-8"
+            style={{
+              backgroundColor: "#FFFFFF",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+              border: "1px solid rgba(0, 0, 0, 0.05)",
+            }}
+          >
+            <h2 className="text-xl font-bold text-[#1F2933] md:text-2xl">
+              Ce se întâmplă, de fapt, în conflict
+            </h2>
+            <p className="mt-4 leading-relaxed text-[#6B7280]">
+              În relație, conflictul nu apare doar din ceea ce se spune.
+              <br /><br />
+              De cele mai multe ori apare din felul în care fiecare intră în conversație:
+              din tensiuni nespuse, nevoi neexprimate și tipare de comunicare care s-au format între voi în timp.
+              <br /><br />
+              Această lecție aduce claritate asupra acestor mecanisme.
+            </p>
+          </div>
+        </section>
+
+        {/* SECTION 4 — PROGRAMUL COMPLET */}
+        <section className="py-8 md:py-12">
+          <h2 className="text-xl font-bold text-[#1F2933] md:text-2xl">
+            Programul complet „Relația 360 – De la conflict la conectare”
+          </h2>
+          <p className="mt-3 text-[#6B7280]">
+            Programul merge mai departe și îți arată cum să transformi aceste tipare de comunicare.
+          </p>
+          <p className="mt-2 text-sm font-semibold text-[#1F2933]">Include:</p>
+          <ul className="mt-2 space-y-1.5 text-[#6B7280]">
+            {PROGRAM_INCLUDE.map((item, i) => (
+              <li key={i} className="flex items-center gap-2">
+                <span className="text-[#E56B6F]">•</span>
                 {item}
               </li>
             ))}
           </ul>
         </section>
 
-        {/* Preț + CTA */}
-        <section className={sectionStyle}>
-          <div className={`${cardStyle} text-center`}>
-            <p className="text-3xl font-bold text-[#1F2933]">19€</p>
-            <p className="mt-1 text-[#6B7280]">acces la tot cursul, pe viață</p>
+        {/* SECTION 5 — OFERTĂ */}
+        <section className="py-8 md:py-12">
+          <div
+            className="rounded-2xl p-6 md:p-8"
+            style={{
+              backgroundColor: "#FFFFFF",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+              border: "1px solid rgba(0, 0, 0, 0.05)",
+            }}
+          >
+            <h2 className="text-xl font-bold text-[#1F2933] md:text-2xl">
+              Acces la programul complet
+            </h2>
+            <p className="mt-4 leading-relaxed text-[#6B7280]">
+              Pentru următoarele 24 de ore, accesul la program este disponibil la prețul special de <strong className="text-[#1F2933]">29 €</strong>.
+              <br /><br />
+              După această perioadă, programul va avea un preț mai mare.
+              <br /><br />
+              După înscriere primești acces imediat la curs și poți începe prima lecție.
+            </p>
+          </div>
+        </section>
+
+        {/* SECTION 6 — CTA FINAL */}
+        <section className="py-10 md:py-14">
+          <h2 className="text-center text-xl font-bold text-[#1F2933] md:text-2xl">
+            Continuă cu programul complet
+          </h2>
+          <div className="mt-6 flex justify-center">
             <a
               href={botUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:opacity-95"
+              className="inline-flex items-center justify-center rounded-xl px-8 py-4 text-lg font-semibold text-white transition hover:opacity-95"
               style={{
                 background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
                 boxShadow: "0 4px 12px rgba(229, 107, 111, 0.4)",
               }}
             >
-              Vreau cursul – plătesc 19€
+              Intră în program
             </a>
-            <p className="mt-3 text-xs text-[#6B7280]">
-              Vei fi dus în Telegram pentru finalizarea plății.
-            </p>
           </div>
+          <p className="mt-3 text-center text-sm text-[#6B7280]">
+            Vei fi dus în Telegram pentru pașii următori.
+          </p>
         </section>
 
         <p className="pb-12 text-center text-sm text-[#6B7280]">

@@ -3,6 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
+const PRICE_EUR = 35;
+
+const CE_CONTINE = [
+  '5 lecții practice',
+  'Exerciții aplicate + caiet PDF',
+  'Acces online imediat, pe viață',
+];
+
 export default function PlataPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -23,7 +31,7 @@ export default function PlataPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         productId: 'relatia360_conflicte',
-        amount: 35,
+        amount: PRICE_EUR,
         currency: 'EUR',
         customer_name: name.trim(),
         customer_email: email.trim(),
@@ -64,20 +72,20 @@ export default function PlataPage() {
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden" style={{ background: 'linear-gradient(to bottom, #f5ede3, #ebdfce)' }}>
-      <section className="py-20 md:py-32">
-        <div className="mx-auto px-4 sm:px-6 max-w-2xl w-full">
+      <section className="py-12 md:py-20">
+        <div className="mx-auto max-w-xl px-4 sm:px-6">
           <h1
-            className="text-4xl md:text-5xl font-bold mb-4 text-center uppercase"
+            className="text-3xl md:text-4xl font-bold mb-2 text-center uppercase"
             style={{ color: '#1F2933', letterSpacing: '-0.02em', lineHeight: '1.1' }}
           >
             Plată curs
           </h1>
-          <p className="text-center text-lg mb-12" style={{ color: '#6B7280' }}>
+          <p className="text-center mb-8" style={{ color: '#6B7280' }}>
             RELAȚIA 360 – De la conflict la conectare
           </p>
 
           <div
-            className="rounded-2xl p-8 md:p-12 space-y-8"
+            className="rounded-2xl p-6 md:p-8 space-y-6"
             style={{
               backgroundColor: '#FFFFFF',
               boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
@@ -85,60 +93,71 @@ export default function PlataPage() {
             }}
           >
             {/* Preț */}
-            <div className="text-center pb-6 border-b" style={{ borderColor: '#e5d9c8' }}>
+            <div className="text-center pb-4 border-b" style={{ borderColor: '#e5d9c8' }}>
               <p className="text-3xl font-bold" style={{ color: '#1F2933' }}>
-                35 EUR
+                {PRICE_EUR} EUR
               </p>
               <p className="text-sm mt-1" style={{ color: '#6B7280' }}>
                 Preț unic • Acces pe viață
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2" style={{ color: '#1F2933' }}>
-                  Nume și prenume *
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border text-black"
-                  style={{ borderColor: '#e5d9c8', backgroundColor: '#faf8f5' }}
-                  placeholder="Ex: Maria Popescu"
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: '#1F2933' }}>
-                  Adresă de email *
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border text-black"
-                  style={{ borderColor: '#e5d9c8', backgroundColor: '#faf8f5' }}
-                  placeholder="email@exemplu.md"
-                />
-              </div>
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium mb-2" style={{ color: '#1F2933' }}>
-                  Număr de telefon *
-                </label>
-                <input
-                  id="phone"
-                  type="tel"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border text-black"
-                  style={{ borderColor: '#e5d9c8', backgroundColor: '#faf8f5' }}
-                  placeholder="+373 69 123 456"
-                />
+            {/* Ce conține programul */}
+            <div>
+              <p className="text-sm font-semibold mb-2" style={{ color: '#1F2933' }}>
+                Ce conține programul
+              </p>
+              <ul className="space-y-1.5 text-sm" style={{ color: '#6B7280' }}>
+                {CE_CONTINE.map((item, i) => (
+                  <li key={i} className="flex items-center gap-2">
+                    <span style={{ color: '#E56B6F' }}>✔</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div>
+                  <label htmlFor="name" className="sr-only">Nume și prenume</label>
+                  <input
+                    id="name"
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full px-3 py-2.5 rounded-lg border text-black text-sm"
+                    style={{ borderColor: '#e5d9c8', backgroundColor: '#faf8f5' }}
+                    placeholder="Nume prenume"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="sr-only">Email</label>
+                  <input
+                    id="email"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-3 py-2.5 rounded-lg border text-black text-sm"
+                    style={{ borderColor: '#e5d9c8', backgroundColor: '#faf8f5' }}
+                    placeholder="Email"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phone" className="sr-only">Telefon</label>
+                  <input
+                    id="phone"
+                    type="tel"
+                    required
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full px-3 py-2.5 rounded-lg border text-black text-sm"
+                    style={{ borderColor: '#e5d9c8', backgroundColor: '#faf8f5' }}
+                    placeholder="Telefon"
+                  />
+                </div>
               </div>
 
               <div className="flex items-start gap-3">
@@ -159,7 +178,7 @@ export default function PlataPage() {
               </div>
 
               {error && (
-                <div className="p-4 rounded-lg text-sm" style={{ backgroundColor: '#fee2e2', color: '#991b1b' }}>
+                <div className="p-3 rounded-lg text-sm" style={{ backgroundColor: '#fee2e2', color: '#991b1b' }}>
                   {error}
                 </div>
               )}
@@ -167,18 +186,18 @@ export default function PlataPage() {
               <button
                 type="submit"
                 disabled={!acceptedTerms || isLoading}
-                className="w-full py-4 rounded-lg text-lg font-semibold uppercase tracking-wide text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-4 rounded-xl text-base font-semibold text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
                   background: 'linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)',
                   boxShadow: '0 4px 12px rgba(229, 107, 111, 0.4)',
                 }}
               >
-                {isLoading ? 'Se pregătește plata...' : 'Merg la plată (35 EUR)'}
+                {isLoading ? 'Se pregătește plata...' : `Merg la plată (${PRICE_EUR} EUR)`}
               </button>
             </form>
 
             <p className="text-center text-xs" style={{ color: '#6B7280' }}>
-              După ce apeși butonul, vei fi redirecționat către pagina securizată de plată Paynet.
+              După ce apeși butonul, vei fi dus la pagina securizată de plată Paynet.
             </p>
           </div>
         </div>
