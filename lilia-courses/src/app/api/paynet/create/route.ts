@@ -309,7 +309,7 @@ export async function POST(req: Request) {
         Invoice: invoiceNumber, // NUMBER (small integer, ~10 digits)
         MerchantCode: merchantCode, // STRING "982657"
         LinkUrlSuccess: `${baseUrl}/multumim?order=${orderId}`,
-        LinkUrlCancel: `${baseUrl}/inscriere?cancel=1&order=${orderId}`,
+        LinkUrlCancel: `${baseUrl}/plata?cancel=1&order=${orderId}`,
         Customer: {
           Code: 'no-reply@liliadubita.md', // Email-like as in Reg.json
           Name: 'Customer',
@@ -443,7 +443,7 @@ export async function POST(req: Request) {
 
         // Paynet getecom expects POST (form), not GET (per psp-redirect.html)
         const successUrl = `${baseUrl}/multumim?order=${orderId}`;
-        const cancelUrl = `${baseUrl}/inscriere?cancel=1&order=${orderId}`;
+        const cancelUrl = `${baseUrl}/plata?cancel=1&order=${orderId}`;
         const expiryDate = formatPaynetDate(new Date(Date.now() + 2 * 60 * 60 * 1000));
         const redirectAction = `${portalHost}/acquiring/getecom`;
         const paynet_redirect_params: Record<string, string> = {

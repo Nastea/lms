@@ -14,7 +14,7 @@ export default function SignupPage() {
         </p>
         <div className="mt-6 flex flex-col gap-3">
           <Link
-            href="/inscriere"
+            href="/plata"
             className="rounded-xl bg-white text-black font-medium py-3 px-6 hover:opacity-90 transition"
           >
             Cumpără cursul

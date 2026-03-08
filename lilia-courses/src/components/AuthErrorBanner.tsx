@@ -35,7 +35,7 @@ export function AuthErrorBanner() {
       <p className="font-medium">Link invalid sau expirat.</p>
       <p className="mt-1 opacity-90">
         Poți <Link href="/login" className="underline font-medium">te autentifica</Link> dacă ai deja cont, sau{" "}
-        <Link href="/inscriere" className="underline font-medium">solicită o nouă invitație</Link> după plată.
+        <Link href="/plata" className="underline font-medium">solicită o nouă invitație</Link> după plată.
       </p>
     </div>
   );

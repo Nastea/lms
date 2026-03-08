@@ -100,7 +100,7 @@ export default function Relatia360Page() {
               {/* CTA Button */}
               <div className="flex flex-col items-center gap-3">
                 <Link
-                  href="/inscriere"
+                  href="/plata"
                   className="inline-block px-6 py-3 rounded-lg text-sm font-semibold uppercase tracking-wide transition-all hover:opacity-90"
                   style={{
                     background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
@@ -168,7 +168,7 @@ export default function Relatia360Page() {
             {/* CTA Button */}
             <div className="flex flex-col gap-3">
               <Link
-                href="/inscriere"
+                href="/plata"
                 className="inline-block px-8 py-4 rounded-lg text-base font-semibold uppercase tracking-wide transition-all hover:opacity-90 w-fit"
                 style={{
                   background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
@@ -749,7 +749,7 @@ export default function Relatia360Page() {
           </h2>
           <div className="mt-12">
             <Link
-              href="/inscriere"
+              href="/plata"
               className="inline-block px-10 py-5 rounded-lg text-lg font-semibold uppercase tracking-wide transition-all hover:opacity-90"
               style={{
                 background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",

@@ -8,7 +8,7 @@ type Props = {
   paymentUrl?: string;
 };
 
-export default function PaywallBanner({ courseTitle, paymentUrl = "/inscriere" }: Props) {
+export default function PaywallBanner({ courseTitle, paymentUrl = "/plata" }: Props) {
   return (
     <div className="rounded-2xl border-2 border-amber-400/30 bg-amber-500/10 p-8 text-center space-y-4">
       <h2 className="text-xl font-semibold text-amber-200">

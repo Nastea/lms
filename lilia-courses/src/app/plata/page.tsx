@@ -4,41 +4,42 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 export default function PlataPage() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handlePayment = async () => {
-    if (!acceptedTerms || isLoading) return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !email.trim() || !phone.trim() || !acceptedTerms || isLoading) return;
 
     setIsLoading(true);
     setError(null);
 
     const res = await fetch('/api/paynet/create', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         productId: 'relatia360_conflicte',
-        amount: 990,
-        currency: 'MDL',
+        amount: 35,
+        currency: 'EUR',
+        customer_name: name.trim(),
+        customer_email: email.trim(),
+        customer_phone: phone.trim(),
       }),
     });
 
     const json = await res.json();
-    console.log('PAYNET_CREATE_RESPONSE', json);
 
     if (json.error) {
-      // Display error from API
-      const errorMsg = json.details || json.error || 'Nu s-a putut genera link-ul de plată. Te rugăm să încerci din nou.';
-      setError(errorMsg);
+      setError(json.details || json.error || 'Nu s-a putut genera link-ul de plată. Te rugăm să încerci din nou.');
       setIsLoading(false);
       return;
     }
 
     if (json.ok && json.paynet_redirect_action && json.paynet_redirect_params) {
-      // Paynet getecom expects POST (form submit), not GET
       const form = document.createElement('form');
       form.method = 'POST';
       form.action = json.paynet_redirect_action;
@@ -56,140 +57,128 @@ export default function PlataPage() {
     } else if (json.ok && json.payment_id && json.redirect_base) {
       window.location.assign(`${json.redirect_base}?operation=${json.payment_id}&Lang=ro`);
     } else {
-      // No payment URL in response
-      setError(json.details || json.error || 'Nu s-a putut genera link-ul de plată. Te rugăm să încerci din nou.');
+      setError(json.details || json.error || 'Nu s-a putut genera link-ul de plată.');
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden" style={{ background: "linear-gradient(to bottom, #f5ede3, #ebdfce)" }}>
+    <div className="min-h-screen w-full overflow-x-hidden" style={{ background: 'linear-gradient(to bottom, #f5ede3, #ebdfce)' }}>
       <section className="py-20 md:py-32">
         <div className="mx-auto px-4 sm:px-6 max-w-2xl w-full">
-          <h1 
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-12 text-center uppercase"
-            style={{ 
-              color: "#1F2933",
-              letterSpacing: "-0.02em",
-              lineHeight: "1.1",
-            }}
+          <h1
+            className="text-4xl md:text-5xl font-bold mb-4 text-center uppercase"
+            style={{ color: '#1F2933', letterSpacing: '-0.02em', lineHeight: '1.1' }}
           >
-            FINALIZARE<br />
-            PLATĂ
+            Plată curs
           </h1>
+          <p className="text-center text-lg mb-12" style={{ color: '#6B7280' }}>
+            RELAȚIA 360 – De la conflict la conectare
+          </p>
 
-          <div 
+          <div
             className="rounded-2xl p-8 md:p-12 space-y-8"
             style={{
-              backgroundColor: "#FFFFFF",
-              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
-              border: "1px solid rgba(0, 0, 0, 0.05)",
+              backgroundColor: '#FFFFFF',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+              border: '1px solid rgba(0, 0, 0, 0.05)',
             }}
           >
-            {/* Course Info */}
-            <div className="text-center pb-8 border-b" style={{ borderColor: "#e5d9c8" }}>
-              <h2 
-                className="text-2xl md:text-3xl font-bold mb-4 uppercase"
-                style={{ color: "#1F2933" }}
-              >
-                RELAȚIA 360<br />
-                DE LA CONFLICT LA CONECTARE
-              </h2>
-              <p className="text-lg" style={{ color: "#6B7280" }}>
-                Curs practic de comunicare în relații
+            {/* Preț */}
+            <div className="text-center pb-6 border-b" style={{ borderColor: '#e5d9c8' }}>
+              <p className="text-3xl font-bold" style={{ color: '#1F2933' }}>
+                35 EUR
+              </p>
+              <p className="text-sm mt-1" style={{ color: '#6B7280' }}>
+                Preț unic • Acces pe viață
               </p>
             </div>
 
-            {/* Terms Checkbox */}
-            <div className="space-y-6">
-              <div className="flex items-start gap-4 p-6 rounded-lg" style={{ backgroundColor: "#faf8f5" }}>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium mb-2" style={{ color: '#1F2933' }}>
+                  Nume și prenume *
+                </label>
                 <input
+                  id="name"
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg border text-black"
+                  style={{ borderColor: '#e5d9c8', backgroundColor: '#faf8f5' }}
+                  placeholder="Ex: Maria Popescu"
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: '#1F2933' }}>
+                  Adresă de email *
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg border text-black"
+                  style={{ borderColor: '#e5d9c8', backgroundColor: '#faf8f5' }}
+                  placeholder="email@exemplu.md"
+                />
+              </div>
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium mb-2" style={{ color: '#1F2933' }}>
+                  Număr de telefon *
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
+                  required
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg border text-black"
+                  style={{ borderColor: '#e5d9c8', backgroundColor: '#faf8f5' }}
+                  placeholder="+373 69 123 456"
+                />
+              </div>
+
+              <div className="flex items-start gap-3">
+                <input
+                  id="terms"
                   type="checkbox"
-                  id="terms-checkbox"
                   checked={acceptedTerms}
                   onChange={(e) => setAcceptedTerms(e.target.checked)}
-                  className="mt-1 w-5 h-5 rounded border-2 cursor-pointer"
-                  style={{
-                    accentColor: "#E56B6F",
-                    borderColor: acceptedTerms ? "#E56B6F" : "#d1d5db",
-                  }}
+                  className="mt-1 rounded"
                 />
-                <label 
-                  htmlFor="terms-checkbox"
-                  className="flex-1 text-base leading-relaxed cursor-pointer"
-                  style={{ color: "#1F2933" }}
-                >
+                <label htmlFor="terms" className="text-sm" style={{ color: '#6B7280' }}>
                   Am citit și accept{' '}
-                  <Link 
-                    href="/termeni"
-                    className="underline hover:opacity-80 transition-opacity font-semibold"
-                    style={{ color: "#E56B6F" }}
-                    target="_blank"
-                  >
+                  <Link href="/termeni" className="underline hover:opacity-80" style={{ color: '#1F2933' }}>
                     Termenii și Condițiile
                   </Link>
-                  {' '}și{' '}
-                  <Link 
-                    href="/confidentialitate"
-                    className="underline hover:opacity-80 transition-opacity font-semibold"
-                    style={{ color: "#E56B6F" }}
-                    target="_blank"
-                  >
-                    Politica de Confidențialitate
-                  </Link>
+                  .
                 </label>
               </div>
 
-              {/* Error Message */}
               {error && (
-                <div 
-                  className="p-4 rounded-lg text-sm"
-                  style={{ 
-                    backgroundColor: "#fee2e2",
-                    color: "#991b1b",
-                  }}
-                >
+                <div className="p-4 rounded-lg text-sm" style={{ backgroundColor: '#fee2e2', color: '#991b1b' }}>
                   {error}
                 </div>
               )}
 
-              {/* Payment Button */}
               <button
-                onClick={handlePayment}
+                type="submit"
                 disabled={!acceptedTerms || isLoading}
-                className="w-full py-4 rounded-lg text-lg font-semibold uppercase tracking-wide transition-all"
+                className="w-full py-4 rounded-lg text-lg font-semibold uppercase tracking-wide text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
-                  background: acceptedTerms && !isLoading
-                    ? "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)"
-                    : "#d1d5db",
-                  color: acceptedTerms && !isLoading ? "#FFFFFF" : "#9ca3af",
-                  boxShadow: acceptedTerms && !isLoading
-                    ? "0 4px 12px rgba(229, 107, 111, 0.4)"
-                    : "none",
-                  cursor: acceptedTerms && !isLoading ? "pointer" : "not-allowed",
-                  opacity: acceptedTerms && !isLoading ? 1 : 0.6,
+                  background: 'linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)',
+                  boxShadow: '0 4px 12px rgba(229, 107, 111, 0.4)',
                 }}
               >
-                {isLoading 
-                  ? "Se procesează..." 
-                  : acceptedTerms 
-                    ? "Plătește" 
-                    : "Bifează termenii pentru a continua"}
+                {isLoading ? 'Se pregătește plata...' : 'Merg la plată (35 EUR)'}
               </button>
+            </form>
 
-              {/* Info Note */}
-              <div className="pt-4 text-center">
-                <p className="text-sm" style={{ color: "#6B7280" }}>
-                  Vei fi redirecționat către platforma de plată securizată Paynet
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Security Info */}
-          <div className="mt-8 text-center">
-            <p className="text-sm" style={{ color: "#6B7280" }}>
-              🔒 Plăți securizate prin Paynet
+            <p className="text-center text-xs" style={{ color: '#6B7280' }}>
+              După ce apeși butonul, vei fi redirecționat către pagina securizată de plată Paynet.
             </p>
           </div>
         </div>
@@ -197,4 +186,3 @@ export default function PlataPage() {
     </div>
   );
 }
-

@@ -338,7 +338,7 @@ async function sendAskTokenMessage(params: {
       'Dacă nu ai efectuat încă plata, o poți face aici:',
     replyMarkup: {
       inline_keyboard: [
-        [{ text: '🌐 Plătește pe site', url: `${siteUrl}/inscriere` }],
+        [{ text: '🌐 Plătește pe site', url: `${siteUrl}/plata` }],
       ],
     },
   });
