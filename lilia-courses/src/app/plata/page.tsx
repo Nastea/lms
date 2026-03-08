@@ -189,17 +189,6 @@ export default function PlataPage() {
               Plată securizată prin Paynet. După ce apeși butonul, vei fi redirecționat către pagina de plată.
             </p>
           </div>
-
-          {/* Info suplimentară */}
-          <div className="mt-8 rounded-xl p-5 text-center" style={{ backgroundColor: 'rgba(255,255,255,0.7)', border: '1px solid rgba(0,0,0,0.06)' }}>
-            <p className="text-sm font-medium text-[#1F2933]">Danex Prim SRL</p>
-            <p className="mt-1 text-xs text-[#6B7280]">mun. Chișinău, str. Calea Ieșilor, 11</p>
-            <p className="mt-1 text-xs text-[#6B7280]">
-              <Link href="/termeni" className="underline hover:opacity-80">Termeni</Link>
-              {' · '}
-              <Link href="/confidentialitate" className="underline hover:opacity-80">Confidențialitate</Link>
-            </p>
-          </div>
             </div>
         </div>
       </section>
