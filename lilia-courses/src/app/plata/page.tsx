@@ -83,29 +83,27 @@ export default function PlataPage() {
                   className="h-auto w-full object-cover md:h-full md:object-cover"
                 />
               </div>
-              <div className="mt-4 text-center md:absolute md:bottom-0 md:left-0 md:right-0 md:mt-0 md:bg-black/50 md:px-4 md:py-3 md:text-left">
-                <h1
-                  className="text-2xl font-bold uppercase tracking-tight text-[#1F2933] md:text-white md:text-2xl"
-                  style={{ letterSpacing: '-0.02em', lineHeight: '1.2' }}
-                >
-                  Plată curs
-                </h1>
-                <p className="mt-2 text-lg text-[#6B7280] md:text-white/90 md:text-sm">
-                  RELAȚIA 360 – De la conflict la conectare
-                </p>
-              </div>
             </div>
 
-            {/* Coloana dreapta: formular */}
+            {/* Coloana dreapta: titlu + formular */}
             <div className="flex flex-col justify-center md:h-full md:py-8 md:pl-12">
-          <div
-            className="rounded-2xl p-6 md:p-8 shadow-lg"
-            style={{
-              backgroundColor: '#FFFFFF',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-              border: '1px solid rgba(0, 0, 0, 0.05)',
-            }}
-          >
+              <h1
+                className="text-2xl font-bold uppercase tracking-tight text-[#1F2933] md:text-3xl"
+                style={{ letterSpacing: '-0.02em', lineHeight: '1.2' }}
+              >
+                Plată curs
+              </h1>
+              <p className="mt-2 text-lg text-[#6B7280]">
+                RELAȚIA 360 – De la conflict la conectare
+              </p>
+              <div
+                className="mt-6 rounded-2xl p-6 md:p-8 shadow-lg"
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+                  border: '1px solid rgba(0, 0, 0, 0.05)',
+                }}
+              >
             {/* Preț */}
             <div className="text-center pb-5 border-b" style={{ borderColor: '#e5d9c8' }}>
               <p className="text-3xl font-bold text-[#1F2933]">
@@ -191,17 +189,7 @@ export default function PlataPage() {
             <p className="mt-4 text-center text-xs text-[#6B7280]">
               Plată securizată prin Paynet. După ce apeși butonul, vei fi redirecționat către pagina de plată.
             </p>
-          </div>
-
-            <div className="mt-8 rounded-xl p-5 text-center" style={{ backgroundColor: 'rgba(255,255,255,0.7)', border: '1px solid rgba(0,0,0,0.06)' }}>
-              <p className="text-sm font-medium text-[#1F2933]">Danex Prim SRL</p>
-              <p className="mt-1 text-xs text-[#6B7280]">mun. Chișinău, str. Calea Ieșilor, 11</p>
-              <p className="mt-1 text-xs text-[#6B7280]">
-                <Link href="/termeni" className="underline hover:opacity-80">Termeni</Link>
-                {' · '}
-                <Link href="/confidentialitate" className="underline hover:opacity-80">Confidențialitate</Link>
-              </p>
-            </div>
+              </div>
             </div>
           </div>
         </div>
