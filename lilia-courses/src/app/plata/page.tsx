@@ -68,33 +68,33 @@ export default function PlataPage() {
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden" style={{ background: 'linear-gradient(to bottom, #f5ede3, #ebdfce)' }}>
-      <section className="py-10 md:py-16">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 md:items-start">
-            {/* Coloana stânga: imagine (doar pe desktop; pe mobil e deasupra) */}
-            <div className="md:sticky md:top-8">
-              <div className="overflow-hidden rounded-2xl shadow-lg" style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}>
+      <section className="py-10 md:py-0 md:h-screen">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 md:h-full">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 md:h-full md:min-h-0">
+            {/* Coloana stânga: imagine full height pe desktop */}
+            <div className="relative flex flex-col md:h-full md:min-h-0">
+              <div className="overflow-hidden rounded-2xl shadow-lg md:absolute md:inset-0 md:rounded-l-2xl" style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}>
                 <img
                   src="/api/img/IMG_0646.JPG"
                   alt="Lilia Dubița - RELAȚIA 360"
-                  className="h-auto w-full object-cover"
+                  className="h-auto w-full object-cover md:h-full md:object-cover"
                 />
               </div>
-              <div className="mt-4 text-center md:text-left">
+              <div className="mt-4 text-center md:absolute md:bottom-0 md:left-0 md:right-0 md:mt-0 md:bg-black/50 md:px-4 md:py-3 md:text-left">
                 <h1
-                  className="text-2xl font-bold uppercase tracking-tight text-[#1F2933] md:text-3xl"
+                  className="text-2xl font-bold uppercase tracking-tight text-[#1F2933] md:text-white md:text-2xl"
                   style={{ letterSpacing: '-0.02em', lineHeight: '1.2' }}
                 >
                   Plată curs
                 </h1>
-                <p className="mt-2 text-lg text-[#6B7280]">
+                <p className="mt-2 text-lg text-[#6B7280] md:text-white/90 md:text-sm">
                   RELAȚIA 360 – De la conflict la conectare
                 </p>
               </div>
             </div>
 
-            {/* Coloana dreapta: formular + info */}
-            <div>
+            {/* Coloana dreapta: formular */}
+            <div className="flex flex-col justify-center md:h-full md:py-8 md:pl-12">
           <div
             className="rounded-2xl p-6 md:p-8 shadow-lg"
             style={{
