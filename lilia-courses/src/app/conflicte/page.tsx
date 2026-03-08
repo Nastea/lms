@@ -623,7 +623,7 @@ export default function Relatia360Page() {
               "exerciții aplicate, nu teorie",
               "caiet practic PDF",
               "acces online imediat",
-              "acces pe viață"
+              "acces pentru 6 luni"
             ].map((item, idx) => (
               <div 
                 key={idx} 

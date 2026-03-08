@@ -8,7 +8,7 @@ const PRICE_EUR = 35;
 const CE_CONTINE = [
   '5 lecții practice',
   'Exerciții aplicate + caiet PDF',
-  'Acces online imediat, pe viață',
+  'Acces online imediat, pentru 6 luni',
 ];
 
 export default function PlataPage() {
@@ -98,7 +98,7 @@ export default function PlataPage() {
                 {PRICE_EUR} EUR
               </p>
               <p className="text-sm mt-1" style={{ color: '#6B7280' }}>
-                Preț unic • Acces pe viață
+                Preț unic • Acces pentru 6 luni
               </p>
             </div>
 

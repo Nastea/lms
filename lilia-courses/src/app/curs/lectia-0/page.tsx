@@ -20,7 +20,7 @@ const PROGRAM_INCLUDE = [
   "exerciții aplicate pentru relația ta",
   "caiet PDF de lucru",
   "acces online imediat",
-  "acces pe viață",
+  "acces pentru 6 luni",
 ];
 
 /**
