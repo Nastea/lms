@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing email' }, { status: 400 });
     }
 
-    const siteUrl = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://www.liliadubita.md';
+    const siteUrl = (process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://www.liliadubita.md').replace(/\/$/, '');
     const redirectTo = `${siteUrl}/login`;
 
     const { error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {

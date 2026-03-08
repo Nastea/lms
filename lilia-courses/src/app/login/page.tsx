@@ -1,28 +1,36 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { supabaseBrowser } from "@/lib/supabase/client";
 
-function parseHashParams(hash: string): Record<string, string> {
+function parseParamsFromString(q: string): Record<string, string> {
   const params: Record<string, string> = {};
-  if (!hash || !hash.startsWith("#")) return params;
-  const q = hash.slice(1);
+  if (!q) return params;
   q.split("&").forEach((pair) => {
     const idx = pair.indexOf("=");
     if (idx === -1) return;
-    const k = decodeURIComponent(pair.slice(0, idx));
-    const v = decodeURIComponent(pair.slice(idx + 1));
+    const k = decodeURIComponent(pair.slice(0, idx).replace(/\+/g, " "));
+    const v = decodeURIComponent(pair.slice(idx + 1).replace(/\+/g, " "));
     if (k && v) params[k] = v;
   });
   return params;
 }
 
+function getAuthParams(): Record<string, string> {
+  if (typeof window === "undefined") return {};
+  const hash = window.location.hash;
+  const search = window.location.search;
+  const fromHash = hash && hash.startsWith("#") ? parseParamsFromString(hash.slice(1)) : {};
+  const fromSearch = search ? parseParamsFromString(search.slice(1)) : {};
+  return { ...fromSearch, ...fromHash };
+}
+
 function LoginForm() {
-  const router = useRouter();
   const search = useSearchParams();
   const next = search.get("next") || "/app";
+  const inviteHandled = useRef(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,11 +40,12 @@ function LoginForm() {
 
   // Handle auth redirect: invite tokens or error (expired/invalid link)
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const params = parseHashParams(window.location.hash);
+    if (typeof window === "undefined" || inviteHandled.current) return;
+    const params = getAuthParams();
     const error = params.error || params["error"];
     const errorCode = params.error_code || params["error_code"];
     if (error === "access_denied" || errorCode === "otp_expired") {
+      inviteHandled.current = true;
       setErr("Link invalid sau expirat. Te poți autentifica cu email și parolă dacă ai deja cont.");
       window.history.replaceState(null, "", window.location.pathname + window.location.search);
       return;
@@ -46,6 +55,7 @@ function LoginForm() {
     const refresh_token = params.refresh_token || params["refresh_token"];
     if (!access_token || !refresh_token) return;
 
+    inviteHandled.current = true;
     let cancelled = false;
     setHandlingInvite(true);
 
@@ -53,22 +63,21 @@ function LoginForm() {
       if (cancelled) return;
       setErr("Link expirat sau eroare la confirmare. Autentifică-te cu email și parolă.");
       setHandlingInvite(false);
-    }, 12000);
+    }, 15000);
 
     const supabase = supabaseBrowser();
     supabase.auth
       .setSession({ access_token, refresh_token })
-      .then(({ data, error }) => {
+      .then(({ error: sessionError }) => {
         if (cancelled) return;
         clearTimeout(timeoutId);
-        if (error) {
-          setErr(error.message || "Link invalid sau expirat.");
+        if (sessionError) {
+          setErr(sessionError.message || "Link invalid sau expirat.");
           setHandlingInvite(false);
           return;
         }
         window.history.replaceState(null, "", window.location.pathname + window.location.search);
-        router.push(next);
-        router.refresh();
+        window.location.href = next;
       })
       .catch((e) => {
         if (!cancelled) {
@@ -81,7 +90,7 @@ function LoginForm() {
       cancelled = true;
       clearTimeout(timeoutId);
     };
-  }, [router, next]);
+  }, [next]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -94,8 +103,7 @@ function LoginForm() {
     setLoading(false);
     if (error) return setErr(error.message);
 
-    router.push(next);
-    router.refresh();
+    window.location.href = next;
   }
 
   if (handlingInvite) {
@@ -146,6 +154,11 @@ function LoginForm() {
           >
             {loading ? "Se conectează..." : "Conectează-te"}
           </button>
+          <p className="text-center text-sm text-white/60">
+            <Link href="/forgot-password" className="underline hover:text-white/80">
+              Ai uitat parola?
+            </Link>
+          </p>
         </form>
 
         <p className="mt-4 text-center text-sm opacity-80">

@@ -68,14 +68,22 @@ Salvezi template-ul. Toate invitațiile trimise după plată vor folosi acest su
 
 ---
 
-## 4. Variantă alternativă: utilizator cu parolă temporară
+## 4. Variantă implementată: utilizator cu parolă temporară (Recomandat)
 
-În loc de „invite” (link magic), poți:
+Dacă setezi **RESEND_API_KEY** în mediul de deploy (ex. Vercel), aplicația folosește acest flow în loc de invite:
 
-- Crea utilizatorul în Supabase cu o parolă temporară (din API: `createUser` + parolă).
-- Trimite un email propriu (de la cursuri@liliadubita.md, prin Resend/SMTP) în română: „Te-ai înscris la curs. Date de autentificare: email + parolă temporară. Te rugăm să te autentifici și să îți schimbi parola.”
+1. La confirmarea plății se creează utilizatorul în Supabase cu o **parolă temporară** generată automat.
+2. Se trimite un email (prin Resend) cu:
+   - Link către pagina de login
+   - Emailul și parola temporară
+   - Link „Schimbă parola” (recovery Supabase) ca să poată seta o parolă nouă
 
-Această variantă necesită: API care creează user cu parolă, trimitere email custom (template în română) și, opțional, flux „schimbă parola la prima autentificare” în app. O poți implementa ulterior dacă renunți la flow-ul de invite.
+**Variabile de mediu necesare:**
+
+- **RESEND_API_KEY** – cheia API Resend (obții din [resend.com](https://resend.com)); verifică domeniul liliadubita.md în Resend.
+- **CREDENTIALS_EMAIL_FROM** (opțional) – expeditorul emailului, ex. `Lilia Dubița Cursuri <cursuri@liliadubita.md>`. Implicit: `Lilia Dubița Cursuri <cursuri@liliadubita.md>`.
+
+Dacă **RESEND_API_KEY** nu e setat, rămâne flow-ul clasic de **invite** (link magic din Supabase).
 
 ---
 

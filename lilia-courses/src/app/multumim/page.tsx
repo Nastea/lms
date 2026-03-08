@@ -73,11 +73,11 @@ function MultumimContent() {
           if (pollInterval) clearInterval(pollInterval);
           setIsLoading(false);
         } else {
+          // pending: show UI immediately (incl. "Confirmă plata" button) and keep polling in background
+          setIsLoading(false);
           pollCount++;
           if (pollCount >= maxPolls) {
-            // Timeout after max polls
             if (pollInterval) clearInterval(pollInterval);
-            setIsLoading(false);
             setError('Timeout waiting for payment confirmation');
           }
         }
@@ -181,10 +181,10 @@ function MultumimContent() {
             </div>
 
             {/* Status Message */}
-            {isLoading && status === 'pending' && (
+            {isLoading && (status === 'pending' || status === null) && (
               <div className="text-center space-y-4">
                 <p className="text-lg" style={{ color: "#6B7280" }}>
-                  Se confirmă plata…
+                  Se verifică plata…
                 </p>
                 <div className="flex justify-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2" style={{ borderColor: "#E56B6F" }}></div>
