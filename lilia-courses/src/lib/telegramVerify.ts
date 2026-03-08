@@ -1,10 +1,12 @@
 import { supabaseAdmin } from './supabaseAdmin';
 import { sha256Hex } from './token';
+import { isTelegramTokenExpired } from './telegramAccessToken';
 
 export type VerifyResultReason =
   | 'NOT_FOUND'
   | 'NOT_PAID'
   | 'TOKEN_USED_BY_OTHER'
+  | 'TOKEN_EXPIRED'
   | 'BAD_FORMAT'
   | 'BLOCKED'
   | 'RATE_LIMIT'
@@ -13,6 +15,16 @@ export type VerifyResultReason =
 export type VerifyResult =
   | { ok: true; productId: string }
   | { ok: false; reason: VerifyResultReason };
+
+/** For Smart Sender: full verdict shape */
+export type VerifyVerdict = {
+  valid: boolean;
+  paid: boolean;
+  used: boolean;
+  product_id: string | null;
+  access_granted: boolean;
+  reason?: VerifyResultReason;
+};
 
 type VerifyParams = {
   token: string;
@@ -28,7 +40,8 @@ export async function verifyAccessTokenAndBind(
   const { token, telegramUserId, username } = params;
 
   const trimmed = token.trim();
-  if (!trimmed || trimmed.length < 16) {
+  const minLen = trimmed.startsWith('tg_') ? 10 : 16;
+  if (!trimmed || trimmed.length < minLen) {
     await logAttempt(telegramUserId, false, 'BAD_FORMAT');
     return { ok: false, reason: 'BAD_FORMAT' };
   }
@@ -89,14 +102,39 @@ export async function verifyAccessTokenAndBind(
     return { ok: false, reason: 'RATE_LIMIT' };
   }
 
-  // Fetch order by access_token
-  const { data: order, error: orderError } = await supabaseAdmin
+  // Fetch order by telegram_access_token first, then fallback to legacy access_token
+  type OrderRow = {
+    id: string;
+    product_id: string;
+    status: string;
+    telegram_user_id: number | null;
+    telegram_username: string | null;
+    telegram_access_token_created_at: string | null;
+  };
+  let order: OrderRow | null = null;
+  let orderError: { message?: string } | null = null;
+
+  const { data: byTelegramToken } = await supabaseAdmin
     .from('orders')
     .select(
-      'id, product_id, status, access_token, telegram_user_id, telegram_username',
+      'id, product_id, status, telegram_user_id, telegram_username, telegram_access_token_created_at',
     )
-    .eq('access_token', trimmed)
+    .eq('telegram_access_token', trimmed)
     .maybeSingle();
+
+  if (byTelegramToken) {
+    order = byTelegramToken as OrderRow;
+  } else {
+    const { data: byLegacyToken, error: legErr } = await supabaseAdmin
+      .from('orders')
+      .select(
+        'id, product_id, status, telegram_user_id, telegram_username, telegram_access_token_created_at',
+      )
+      .eq('access_token', trimmed)
+      .maybeSingle();
+    orderError = legErr;
+    order = (byLegacyToken ?? null) as OrderRow | null;
+  }
 
   if (orderError) {
     console.error('TELEGRAM_VERIFY_ORDER_ERROR', orderError);
@@ -112,6 +150,11 @@ export async function verifyAccessTokenAndBind(
   if (order.status !== 'paid') {
     await logAttempt(telegramUserId, false, 'NOT_PAID');
     return { ok: false, reason: 'NOT_PAID' };
+  }
+
+  if (isTelegramTokenExpired(order.telegram_access_token_created_at)) {
+    await logAttempt(telegramUserId, false, 'TOKEN_EXPIRED');
+    return { ok: false, reason: 'TOKEN_EXPIRED' };
   }
 
   // Bind token to first Telegram user
@@ -181,6 +224,34 @@ export async function verifyAccessTokenAndBind(
   await logAttempt(telegramUserId, true, 'OK');
 
   return { ok: true, productId: order.product_id };
+}
+
+/** Build Smart Sender verdict from verify result (and optional order state). */
+export function verifyResultToVerdict(
+  result: VerifyResult,
+  order?: { status?: string; telegram_user_id?: number | null } | null,
+): VerifyVerdict {
+  if (result.ok) {
+    return {
+      valid: true,
+      paid: true,
+      used: false,
+      product_id: result.productId,
+      access_granted: true,
+    };
+  }
+  const reason = result.reason;
+  const notFound = reason === 'NOT_FOUND' || reason === 'TOKEN_EXPIRED' || reason === 'BAD_FORMAT';
+  const notPaid = reason === 'NOT_PAID';
+  const usedByOther = reason === 'TOKEN_USED_BY_OTHER';
+  return {
+    valid: !notFound,
+    paid: !notFound && !notPaid,
+    used: usedByOther,
+    product_id: null,
+    access_granted: false,
+    reason,
+  };
 }
 
 async function logAttempt(

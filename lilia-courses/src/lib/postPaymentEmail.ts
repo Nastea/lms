@@ -1,0 +1,59 @@
+/**
+ * Post-payment email: Telegram bot link + support fallback. No signup/login/password.
+ * Uses Resend. Requires RESEND_API_KEY.
+ */
+
+function getFrom(): string {
+  return process.env.CREDENTIALS_EMAIL_FROM || 'Lilia Dubița Cursuri <cursuri@liliadubita.md>';
+}
+
+function getSupportUrl(): string {
+  const url = process.env.SUPPORT_URL || process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL;
+  if (url) return url.replace(/\/$/, '');
+  return 'https://www.liliadubita.md';
+}
+
+export type PostPaymentEmailParams = {
+  to: string;
+  telegramDeepLink: string;
+  /** Optional; defaults to SUPPORT_URL or site URL */
+  supportUrl?: string;
+};
+
+export async function sendPostPaymentTelegramEmail(
+  params: PostPaymentEmailParams,
+): Promise<{ ok: boolean; error?: string }> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    return { ok: false, error: 'RESEND_API_KEY not set' };
+  }
+
+  const { Resend } = await import('resend');
+  const resend = new Resend(apiKey);
+  const supportUrl = params.supportUrl ?? getSupportUrl();
+
+  const subject = 'Acces la cursul RELAȚIA 360 – deschide în Telegram';
+
+  const html = `
+<p>Bună ziua,</p>
+<p>Ai achiziționat accesul la cursul <strong>De la conflict la conectare</strong> (RELAȚIA 360).</p>
+<p>Deschide linkul de mai jos în Telegram pentru a primi accesul la lecții:</p>
+<p><a href="${params.telegramDeepLink}" style="font-weight:600;">Deschide în Telegram</a></p>
+<p>Link: ${params.telegramDeepLink}</p>
+<p>Întrebări sau probleme? Contactează-ne: <a href="${supportUrl}">${supportUrl}</a></p>
+<p>Cu drag,<br>Echipa Lilia Dubița</p>
+`.trim();
+
+  const { error } = await resend.emails.send({
+    from: getFrom(),
+    to: params.to,
+    subject,
+    html,
+  });
+
+  if (error) {
+    console.error('Post-payment email error:', error);
+    return { ok: false, error: error.message };
+  }
+  return { ok: true };
+}

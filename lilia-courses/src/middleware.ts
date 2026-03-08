@@ -5,13 +5,14 @@ export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
   const pathname = request.nextUrl.pathname;
 
-  // Landing, legal, payment and API routes — no auth required
+  // Landing, legal, payment, API, and course/lessons (public access — no login)
   const publicPaths = [
     "/login",
     "/signup",
     "/forgot-password",
     "/acces-curs",
     "/curs",
+    "/app", // lessons and courses publicly accessible by link
     "/",
     "/conflicte",
     "/inscriere",
@@ -27,6 +28,7 @@ export async function middleware(request: NextRequest) {
     pathname === "/inscriere" ||
     pathname.startsWith("/inscriere/") ||
     pathname.startsWith("/curs/") ||
+    pathname.startsWith("/app") ||
     publicPaths.some((p) => (p === "/" ? pathname === "/" : pathname.startsWith(p)));
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;

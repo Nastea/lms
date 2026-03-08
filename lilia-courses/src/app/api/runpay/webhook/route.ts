@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { ensureOrderHasTelegramToken } from '@/lib/orderTelegramToken';
 
 /**
  * POST /api/runpay/webhook
@@ -59,6 +60,9 @@ export async function POST(req: Request) {
         );
       }
 
+      ensureOrderHasTelegramToken(orderId).then((r) => {
+        if (!r.ok) console.error('RUNPAY_WEBHOOK_TOKEN_ENSURE', r.error);
+      });
       console.log('RUNPAY_WEBHOOK_SUCCESS', { orderId, paymentId });
     } else {
       // Log other statuses but don't update order

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { ensureOrderHasTelegramToken } from '@/lib/orderTelegramToken';
 
 /**
  * GET /mock/runpay/success?order=<uuid>
@@ -79,10 +80,12 @@ export async function GET(req: Request) {
 
     if (updateError) {
       console.error('Order update error:', updateError);
-      // If update fails, still try to redirect (might be a race condition)
-      // But log the error for debugging
       return NextResponse.redirect(successUrl);
     }
+
+    ensureOrderHasTelegramToken(orderParam).catch((e) =>
+      console.error('Mock RunPay token ensure:', e),
+    );
 
     // Redirect to success page
     return NextResponse.redirect(successUrl);

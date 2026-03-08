@@ -1,17 +1,21 @@
 import { NextResponse } from 'next/server';
-import { verifyAccessTokenAndBind } from '@/lib/telegramVerify';
+import {
+  verifyAccessTokenAndBind,
+  verifyResultToVerdict,
+} from '@/lib/telegramVerify';
 
 /**
  * GET /api/telegram/verify
  *
  * Query params:
- * - token: access_token returned after payment
+ * - token: telegram_access_token (from thank-you page / email link)
  * - telegramUserId: Telegram numeric user ID
  * - username: optional Telegram username
  *
- * Returns:
- * - { ok: true, productId }
- * - { ok: false, reason }
+ * Returns (Smart Sender–friendly):
+ * - valid, paid, used, product_id, access_granted
+ * - ok, productId (success) or reason (failure)
+ * Rate limit: 5 attempts per 10 min per user. Token: single-use (first bind).
  */
 export async function GET(req: Request) {
   try {
@@ -21,18 +25,21 @@ export async function GET(req: Request) {
     const username = searchParams.get('username');
 
     if (!token) {
+      const verdict = verifyResultToVerdict({ ok: false, reason: 'BAD_FORMAT' });
       return NextResponse.json(
-        { ok: false, reason: 'BAD_FORMAT', error: 'Missing token parameter' },
+        { ok: false, reason: 'BAD_FORMAT', error: 'Missing token parameter', ...verdict },
         { status: 400 }
       );
     }
 
     if (!telegramUserIdRaw) {
+      const verdict = verifyResultToVerdict({ ok: false, reason: 'BAD_FORMAT' });
       return NextResponse.json(
         {
           ok: false,
           reason: 'BAD_FORMAT',
           error: 'Missing telegramUserId parameter',
+          ...verdict,
         },
         { status: 400 }
       );
@@ -40,11 +47,13 @@ export async function GET(req: Request) {
 
     const telegramUserId = Number(telegramUserIdRaw);
     if (!Number.isFinite(telegramUserId) || telegramUserId <= 0) {
+      const verdict = verifyResultToVerdict({ ok: false, reason: 'BAD_FORMAT' });
       return NextResponse.json(
         {
           ok: false,
           reason: 'BAD_FORMAT',
           error: 'Invalid telegramUserId parameter',
+          ...verdict,
         },
         { status: 400 }
       );
@@ -56,18 +65,21 @@ export async function GET(req: Request) {
       username: username ?? null,
     });
 
+    const verdict = verifyResultToVerdict(result);
+
     if (result.ok) {
       return NextResponse.json({
         ok: true,
         productId: result.productId,
+        ...verdict,
       });
     }
 
-    // Map reasons to HTTP status for debugging (Telegram will usually ignore status)
     let status = 400;
     switch (result.reason) {
       case 'NOT_FOUND':
       case 'TOKEN_USED_BY_OTHER':
+      case 'TOKEN_EXPIRED':
         status = 404;
         break;
       case 'NOT_PAID':
@@ -90,16 +102,19 @@ export async function GET(req: Request) {
       {
         ok: false,
         reason: result.reason,
+        ...verdict,
       },
       { status }
     );
   } catch (error) {
     console.error('TELEGRAM_VERIFY_ROUTE_ERROR', String(error));
+    const verdict = verifyResultToVerdict({ ok: false, reason: 'INTERNAL_ERROR' });
     return NextResponse.json(
       {
         ok: false,
         reason: 'INTERNAL_ERROR',
         error: 'Internal server error',
+        ...verdict,
       },
       { status: 500 }
     );

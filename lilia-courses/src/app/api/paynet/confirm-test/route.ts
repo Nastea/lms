@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { ensureOrderHasTelegramToken } from '@/lib/orderTelegramToken';
 
 async function markOrderPaid(orderId: string) {
   const { data: order, error: fetchError } = await supabaseAdmin
@@ -12,6 +13,7 @@ async function markOrderPaid(orderId: string) {
     return { ok: false, error: 'Order not found' };
   }
   if (order.status === 'paid') {
+    await ensureOrderHasTelegramToken(orderId);
     return { ok: true, alreadyPaid: true };
   }
 
@@ -27,6 +29,8 @@ async function markOrderPaid(orderId: string) {
   if (updateError) {
     return { ok: false, error: updateError.message };
   }
+
+  await ensureOrderHasTelegramToken(orderId);
   return { ok: true };
 }
 

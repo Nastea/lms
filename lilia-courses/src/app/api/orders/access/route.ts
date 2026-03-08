@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { ensureOrderHasTelegramToken } from '@/lib/orderTelegramToken';
 
 /**
  * GET /api/orders/access?order=<uuid>
- * Returns access_token ONLY if order status is 'paid'
- * Used by /multumim page to get Telegram deep link token
+ * Returns Telegram deep-link token ONLY if order is paid.
+ * Token is generated when payment is confirmed (single-use in bot).
+ * Used by /multumim thank-you page for "Accesează în Telegram" button.
  */
 export async function GET(req: Request) {
   try {
@@ -18,30 +19,23 @@ export async function GET(req: Request) {
       );
     }
 
-    const { data: order, error } = await supabaseAdmin
-      .from('orders')
-      .select('status, access_token')
-      .eq('id', orderId)
-      .single();
+    const result = await ensureOrderHasTelegramToken(orderId);
 
-    if (error) {
-      console.error('Order access fetch error:', error);
+    if (!result.ok) {
+      if (result.error === 'Order not found') {
+        return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+      }
+      if (result.error === 'Order not paid') {
+        return NextResponse.json({ error: 'Order not paid yet' }, { status: 403 });
+      }
       return NextResponse.json(
-        { error: 'Order not found', details: error.message },
-        { status: 404 }
-      );
-    }
-
-    // Only return access_token if order is paid
-    if (order.status !== 'paid') {
-      return NextResponse.json(
-        { error: 'Order not paid yet' },
-        { status: 403 }
+        { error: 'Internal server error', details: result.error },
+        { status: 500 }
       );
     }
 
     return NextResponse.json({
-      access_token: order.access_token,
+      access_token: result.token,
     });
   } catch (error) {
     console.error('Order access error:', error);

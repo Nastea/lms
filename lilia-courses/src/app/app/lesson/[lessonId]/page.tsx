@@ -5,88 +5,61 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 import LessonPageWrapper from "@/components/LessonPageWrapper";
 import CompleteButton from "@/components/CompleteButton";
 import LessonSidebar from "@/components/LessonSidebar";
-import PaywallBanner from "@/components/PaywallBanner";
 import { notFound } from "next/navigation";
 
+// Lessons are publicly accessible by link (no login required). Access control disabled.
 export default async function LessonPage({ params }: { params: Promise<{ lessonId: string }> }) {
   const { lessonId } = await params;
   const supabase = await supabaseServer();
   const { data: userRes } = await supabase.auth.getUser();
-  const user = userRes.user!;
+  const user = userRes?.user ?? null;
 
-  // Paywall: all lessons require entitlement (no free first lesson in app)
-  const { data: paywallRows } = await supabase.rpc("get_lesson_paywall_info", {
-    p_lesson_id: lessonId,
-  });
-  const paywallInfo = paywallRows?.[0] as { course_id: string; course_title: string; is_first_lesson: boolean } | undefined;
-  if (!paywallInfo) {
-    notFound();
-  }
-  const hasEntitlement =
-    (await supabase
-      .from("entitlements")
-      .select("course_id")
-      .eq("user_id", user.id)
-      .eq("course_id", paywallInfo.course_id)
-      .eq("status", "active")
-      .maybeSingle()).data != null;
-  if (!hasEntitlement) {
-    return (
-      <LessonPageWrapper>
-        <div className="max-w-2xl mx-auto py-16 px-6">
-          <Link href="/app" className="text-sm opacity-80 hover:opacity-100">← Înapoi la cursuri</Link>
-          <div className="mt-8">
-            <PaywallBanner courseTitle={paywallInfo.course_title} />
-          </div>
-        </div>
-      </LessonPageWrapper>
-    );
-  }
-
-  // Update last_seen_at (only for entitled users; we already returned paywall above if !hasEntitlement)
-  await supabase
-    .from("lesson_progress")
-    .upsert({
-      user_id: user.id,
-      lesson_id: lessonId,
-      last_seen_at: new Date().toISOString(),
-    }, {
-      onConflict: "user_id,lesson_id",
-    });
-
-  const { data: lesson } = await supabase
+  // Fetch lesson (admin so it works with or without auth / RLS)
+  const { data: lesson } = await supabaseAdmin
     .from("lesson_full")
     .select("*")
     .eq("id", lessonId)
     .single();
 
-  const { data: progress } = await supabase
-    .from("lesson_progress")
-    .select("completed_at")
-    .eq("user_id", user.id)
-    .eq("lesson_id", lessonId)
-    .maybeSingle();
+  if (!lesson) {
+    notFound();
+  }
 
-  const isDone = !!progress?.completed_at;
+  // Update last_seen_at and fetch progress only when user is logged in
+  let isDone = false;
+  if (user) {
+    await supabase
+      .from("lesson_progress")
+      .upsert(
+        {
+          user_id: user.id,
+          lesson_id: lessonId,
+          last_seen_at: new Date().toISOString(),
+        },
+        { onConflict: "user_id,lesson_id" }
+      );
+    const { data: progress } = await supabase
+      .from("lesson_progress")
+      .select("completed_at")
+      .eq("user_id", user.id)
+      .eq("lesson_id", lessonId)
+      .maybeSingle();
+    isDone = !!progress?.completed_at;
+  }
 
-  // Fetch all lessons in the course for sidebar
-  // When user has no entitlement, RLS only returns the first lesson — use admin to get full list for sidebar (locked state)
   let sidebarLessons: Array<{ id: string; title: string; module_title: string; isCompleted: boolean }> = [];
   let courseProgress = { total: 0, completed: 0 };
   let nextLessonId: string | null = null;
-  let lockedLessonIds: string[] = [];
+  const lockedLessonIds: string[] = []; // no locking — all lessons public
 
-  if (lesson?.course_id) {
-    const fetchSupabase = supabase;
-    // Get course info
-    const { data: course } = await supabase
+  if (lesson.course_id) {
+    const { data: course } = await supabaseAdmin
       .from("courses")
       .select("id,title")
       .eq("id", lesson.course_id)
       .single();
 
-    // Get modules
-    const { data: modules } = await fetchSupabase
+    const { data: modules } = await supabaseAdmin
       .from("modules")
       .select("id,title,sort_order")
       .eq("course_id", lesson.course_id)
@@ -94,33 +67,30 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
 
     const moduleIds = (modules ?? []).map((m) => m.id);
 
-    // Get all lessons for sidebar
-    const { data: allLessons } = await fetchSupabase
+    const { data: allLessons } = await supabaseAdmin
       .from("lessons")
       .select("id,module_id,title,sort_order")
       .in("module_id", moduleIds.length ? moduleIds : ["00000000-0000-0000-0000-000000000000"])
       .order("sort_order", { ascending: true });
 
-    // Get all progress for this course (user-scoped, always with user client)
     const lessonIds = (allLessons ?? []).map((l) => l.id);
-    const { data: allProgress } = await supabase
-      .from("lesson_progress")
-      .select("lesson_id,completed_at")
-      .eq("user_id", user.id)
-      .in("lesson_id", lessonIds.length ? lessonIds : ["00000000-0000-0000-0000-000000000000"]);
+    let allProgress: { lesson_id: string; completed_at: string | null }[] = [];
+    if (user) {
+      const { data: progressData } = await supabase
+        .from("lesson_progress")
+        .select("lesson_id,completed_at")
+        .eq("user_id", user.id)
+        .in("lesson_id", lessonIds.length ? lessonIds : ["00000000-0000-0000-0000-000000000000"]);
+      allProgress = progressData ?? [];
+    }
+    const completedMap = new Map(allProgress.map((p) => [p.lesson_id, !!p.completed_at]));
 
-    const completedMap = new Map(
-      (allProgress ?? []).map((p) => [p.lesson_id, !!p.completed_at])
-    );
-
-    // Calculate progress
     courseProgress = {
       total: allLessons?.length ?? 0,
-      completed: (allProgress ?? []).filter((p) => p.completed_at !== null).length,
+      completed: allProgress.filter((p) => p.completed_at !== null).length,
     };
 
     if (allLessons && modules) {
-      // Sort lessons by module sort_order, then lesson sort_order
       const sortedLessons = [...allLessons].sort((a, b) => {
         const moduleA = modules.find((m) => m.id === a.module_id);
         const moduleB = modules.find((m) => m.id === b.module_id);
@@ -128,8 +98,6 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
         if (moduleOrder !== 0) return moduleOrder;
         return a.sort_order - b.sort_order;
       });
-
-      // Build sidebar lessons list
       sidebarLessons = sortedLessons.map((l) => {
         const module = modules.find((m) => m.id === l.module_id);
         return {
@@ -139,8 +107,6 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
           isCompleted: completedMap.get(l.id) ?? false,
         };
       });
-
-      // Find next lesson
       const currentIndex = sortedLessons.findIndex((l) => l.id === lessonId);
       if (currentIndex >= 0 && currentIndex < sortedLessons.length - 1) {
         nextLessonId = sortedLessons[currentIndex + 1].id;
@@ -151,8 +117,7 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
   return (
     <LessonPageWrapper>
       <div className="min-h-screen flex">
-        {/* Sidebar */}
-        {lesson?.course_id && (
+        {lesson.course_id && (
           <LessonSidebar
             courseId={lesson.course_id}
             courseTitle={lesson.course_title ?? ""}
@@ -163,17 +128,16 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
           />
         )}
 
-        {/* Main content */}
         <main className="flex-1 lg:ml-0">
           <div className="max-w-4xl mx-auto py-12 px-6 lg:px-12 space-y-8">
             <header className="space-y-3">
-              <h1 className="text-4xl font-bold leading-tight text-white">{lesson?.title}</h1>
+              <h1 className="text-4xl font-bold leading-tight text-white">{lesson.title}</h1>
               <div className="text-sm opacity-60 font-medium">
-                {lesson?.course_title} • {lesson?.module_title}
+                {lesson.course_title} • {lesson.module_title}
               </div>
             </header>
 
-            {lesson?.video_url && (
+            {lesson.video_url && (
               <div className="rounded-3xl overflow-hidden border border-white/10 bg-black/40 shadow-2xl shadow-black/20">
                 <div className="aspect-video">
                   <iframe
@@ -186,13 +150,13 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
               </div>
             )}
 
-            {lesson?.body_md && (
+            {lesson.body_md && (
               <article className="prose-content space-y-6">
                 <MarkdownRenderer content={lesson.body_md} />
               </article>
             )}
 
-            {lesson?.pdf_url && (
+            {lesson.pdf_url && (
               <div className="rounded-2xl border border-blue-400/20 bg-gradient-to-br from-blue-500/10 via-blue-400/5 to-transparent p-6 shadow-lg">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
@@ -246,15 +210,16 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
               </div>
             )}
 
-            <CompleteButton
-              lessonId={lessonId}
-              isDone={isDone}
-              nextLessonId={nextLessonId}
-            />
+            {user && (
+              <CompleteButton
+                lessonId={lessonId}
+                isDone={isDone}
+                nextLessonId={nextLessonId}
+              />
+            )}
           </div>
         </main>
       </div>
     </LessonPageWrapper>
   );
 }
-

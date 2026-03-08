@@ -9,21 +9,21 @@ function MultumimContent() {
   const orderId = searchParams.get('order');
   
   const [status, setStatus] = useState<'pending' | 'paid' | 'failed' | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [inviteSent, setInviteSent] = useState(false);
-  const [telegramBotUsername, setTelegramBotUsername] = useState<string>('Relatia360Bot');
   const [paynetEnv, setPaynetEnv] = useState<string>('test');
+  const [supportUrl, setSupportUrl] = useState<string>('');
+  const [smartSenderPaidDeepLink, setSmartSenderPaidDeepLink] = useState<string>('');
   const [confirming, setConfirming] = useState(false);
 
-  // Fetch config (Telegram bot, Paynet env)
+  // Fetch config (SmartSender deep link, Paynet env, support URL)
   useEffect(() => {
     fetch('/api/config')
       .then(res => res.json())
       .then(data => {
-        if (data.telegramBotUsername) setTelegramBotUsername(data.telegramBotUsername);
         if (data.paynetEnv) setPaynetEnv(data.paynetEnv);
+        if (data.supportUrl) setSupportUrl(data.supportUrl);
+        if (data.smartSenderPaidDeepLink) setSmartSenderPaidDeepLink(data.smartSenderPaidDeepLink);
       })
       .catch(() => {});
   }, []);
@@ -50,23 +50,8 @@ function MultumimContent() {
         const data = await response.json();
         setStatus(data.status as 'pending' | 'paid' | 'failed');
 
-        // If paid, fetch access token and send LMS invite email (once)
-        if (data.status === 'paid') {
-          if (!accessToken) {
-            const accessResponse = await fetch(`/api/orders/access?order=${orderId}`);
-            if (accessResponse.ok) {
-              const accessData = await accessResponse.json();
-              setAccessToken(accessData.access_token);
-            }
-          }
-          if (!inviteSent) {
-            fetch('/api/orders/send-invite', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ orderId }),
-            }).then(() => setInviteSent(true)).catch(() => {});
-          }
-        }
+        // Paid: no token/email; SmartSender deep link on confirmation page only
+        // (deprecated: send-telegram-email and /api/orders/access no longer used here)
 
         // Stop polling if paid or failed
         if (data.status === 'paid' || data.status === 'failed') {
@@ -100,7 +85,7 @@ function MultumimContent() {
     return () => {
       if (pollInterval) clearInterval(pollInterval);
     };
-  }, [orderId, status, accessToken, inviteSent]);
+  }, [orderId, status]);
 
   const handleConfirmTest = async () => {
     if (!orderId || confirming) return;
@@ -120,25 +105,14 @@ function MultumimContent() {
       }
       setStatus('paid');
       setIsLoading(false);
-      const accessRes = await fetch(`/api/orders/access?order=${orderId}`);
-      if (accessRes.ok) {
-        const accessData = await accessRes.json();
-        setAccessToken(accessData.access_token);
-      }
-      fetch('/api/orders/send-invite', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId }),
-      }).then(() => setInviteSent(true)).catch(() => {});
     } catch (e) {
       setError('Eroare la confirmare');
     }
     setConfirming(false);
   };
 
-  const telegramUrl = accessToken
-    ? `https://t.me/${telegramBotUsername}?start=access_${accessToken}`
-    : `https://t.me/${telegramBotUsername}`;
+  // SmartSender deep link: adds PAID_CONFLICT, SOURCE_PAYMENT_PAGE, subscribes to TG_PAID_ONBOARDING_SUCCESS
+  const telegramUrl = smartSenderPaidDeepLink || `https://t.me/liliadubita_bot?start=ZGw6MzE3NzUz`;
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden" style={{ background: "linear-gradient(to bottom, #f5ede3, #ebdfce)" }}>
@@ -200,40 +174,35 @@ function MultumimContent() {
                     ✅ Plata a fost efectuată!
                   </p>
                   <p className="text-sm" style={{ color: "#6B7280" }}>
-                    Ți-am trimis pe email un link pentru a accesa platforma de curs și a-ți seta parola. Verifică căsuța de email (inclusiv spam).
-                  </p>
-                  <p className="text-sm" style={{ color: "#6B7280" }}>
-                    Poți accesa cursul și în Telegram folosind butonul de mai jos.
+                    Deschide Telegram și începe cursul folosind butonul de mai jos.
                   </p>
                 </div>
 
-                {/* Telegram Button (when we have token) */}
-                {accessToken && (
-                  <div className="pt-4">
-                    <Link
-                      href={telegramUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block w-full py-4 rounded-lg text-lg font-semibold uppercase tracking-wide text-center transition-all hover:opacity-90"
-                      style={{
-                        background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
-                        color: "#FFFFFF",
-                        boxShadow: "0 4px 12px rgba(229, 107, 111, 0.4)",
-                      }}
-                    >
-                      Primește acces în Telegram
-                    </Link>
-                  </div>
-                )}
+                {/* SmartSender deep link: PAID_CONFLICT, SOURCE_PAYMENT_PAGE, TG_PAID_ONBOARDING_SUCCESS */}
+                <div className="pt-4">
+                  <Link
+                    href={telegramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full py-5 rounded-xl text-lg font-semibold uppercase tracking-wide text-center transition-all hover:opacity-90"
+                    style={{
+                      background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
+                      color: "#FFFFFF",
+                      boxShadow: "0 4px 12px rgba(229, 107, 111, 0.4)",
+                    }}
+                  >
+                    Deschide Telegram și începe cursul
+                  </Link>
+                </div>
 
                 <div className="pt-4 text-center">
-                  <Link
-                    href="/login"
+                  <a
+                    href={supportUrl || '/'}
                     className="text-sm font-medium underline"
                     style={{ color: "#1F2933" }}
                   >
-                    Mergi la autentificare (platformă LMS)
-                  </Link>
+                    Întrebări? Contactează suportul
+                  </a>
                 </div>
               </>
             )}
@@ -286,14 +255,6 @@ function MultumimContent() {
               </div>
             )}
 
-            {/* Info Note */}
-            {status === 'paid' && (
-              <div className="pt-4 text-center">
-                <p className="text-sm" style={{ color: "#6B7280" }}>
-                  Din email vei putea seta parola și accesa toate materialele cursului pe platformă.
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </section>

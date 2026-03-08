@@ -1,20 +1,22 @@
 import Link from "next/link";
 import { supabaseServer } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import LessonListItem from "@/components/LessonListItem";
 
+// Course page is publicly accessible (no login required).
 export default async function CoursePage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = await params;
   const supabase = await supabaseServer();
   const { data: userRes } = await supabase.auth.getUser();
-  const user = userRes.user!;
+  const user = userRes?.user ?? null;
 
-  const { data: course } = await supabase
+  const { data: course } = await supabaseAdmin
     .from("courses")
     .select("id,title,description")
     .eq("id", courseId)
     .single();
 
-  const { data: modules } = await supabase
+  const { data: modules } = await supabaseAdmin
     .from("modules")
     .select("id,title,sort_order")
     .eq("course_id", courseId)
@@ -22,28 +24,26 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
 
   const moduleIds = (modules ?? []).map((m) => m.id);
 
-  const { data: lessons } = await supabase
+  const { data: lessons } = await supabaseAdmin
     .from("lessons")
     .select("id,module_id,title,sort_order,type")
     .in("module_id", moduleIds.length ? moduleIds : ["00000000-0000-0000-0000-000000000000"])
     .order("sort_order", { ascending: true });
 
-  // Fetch lesson progress for current user
   const lessonIds = (lessons ?? []).map((l) => l.id);
-  const { data: progress } = await supabase
-    .from("lesson_progress")
-    .select("lesson_id,completed_at,last_seen_at")
-    .eq("user_id", user.id)
-    .in("lesson_id", lessonIds.length ? lessonIds : ["00000000-0000-0000-0000-000000000000"]);
+  let progress: { lesson_id: string; completed_at: string | null; last_seen_at: string | null }[] = [];
+  if (user) {
+    const { data: progressData } = await supabase
+      .from("lesson_progress")
+      .select("lesson_id,completed_at,last_seen_at")
+      .eq("user_id", user.id)
+      .in("lesson_id", lessonIds.length ? lessonIds : ["00000000-0000-0000-0000-000000000000"]);
+    progress = progressData ?? [];
+  }
 
-  // Create a map of lesson_id -> completed_at for quick lookup
-  const completedLessons = new Map(
-    (progress ?? []).map((p) => [p.lesson_id, p.completed_at])
-  );
-
-  // Calculate course progress
+  const completedLessons = new Map(progress.map((p) => [p.lesson_id, p.completed_at]));
   const totalLessons = lessons?.length ?? 0;
-  const completedCount = (progress ?? []).filter((p) => p.completed_at !== null).length;
+  const completedCount = progress.filter((p) => p.completed_at !== null).length;
   const percentage = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
 
   // Determine next lesson and current lesson

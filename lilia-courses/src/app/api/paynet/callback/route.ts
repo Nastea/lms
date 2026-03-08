@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getNotifySecret } from '@/lib/paynet';
+import { ensureOrderHasTelegramToken } from '@/lib/orderTelegramToken';
 import { createHash } from 'crypto';
 
 export async function POST(req: Request) {
@@ -94,6 +95,9 @@ export async function POST(req: Request) {
           if (updateError) {
             console.error('Supabase update error:', updateError);
           } else {
+            ensureOrderHasTelegramToken(order.id).then((r) => {
+              if (!r.ok) console.error('Telegram token ensure failed:', r.error);
+            });
             console.log(`Order ${order.id} marked as paid (invoice: ${externalId})`);
           }
         }

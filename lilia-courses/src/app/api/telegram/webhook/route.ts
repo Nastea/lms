@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
-import { extractTokenFromText } from '@/lib/token';
-import { verifyAccessTokenAndBind } from '@/lib/telegramVerify';
+// DEPRECATED: Token verification removed; SmartSender handles onboarding via deep links.
+// import { extractTokenFromText } from '@/lib/token';
+import { verifyAccessTokenAndBind } from '@/lib/telegramVerify'; // kept for deprecated handleTokenVerification
 import { sendMessage, sendMainMenu, answerCallbackQuery } from '@/lib/telegram';
 
 type TelegramUser = {
@@ -157,84 +158,24 @@ export async function POST(req: Request) {
 
     const lower = text.toLowerCase().trim();
 
-    // Check if user already has active access
-    const { data: existingAccess } = await supabaseAdmin
-      .from('telegram_access')
-      .select('product_id, revoked_at')
-      .eq('telegram_user_id', telegramUserId)
-      .is('revoked_at', null)
-      .limit(1)
-      .maybeSingle();
+    // DEPRECATED: No token/access check; onboarding is via SmartSender deep links.
+    // const { data: existingAccess } = await supabaseAdmin
+    //   .from('telegram_access')...
+    // const hasActiveAccess = !!existingAccess;
 
-    const hasActiveAccess = !!existingAccess;
-
-    // /start command
+    // /start command — no token verification; SmartSender uses deep links for onboarding; SmartSender uses deep links for onboarding
     if (lower.startsWith('/start')) {
-      const tokenFromStart = extractTokenFromText(text);
-
-      if (tokenFromStart) {
-        // Verify provided token
-        await handleTokenVerification({
-          botToken,
-          siteUrl,
-          chatId,
-          telegramUserId,
-          username,
-          token: tokenFromStart,
-        });
-        return NextResponse.json({ ok: true });
-      }
-
-      if (hasActiveAccess) {
-        await sendMessage({
-          botToken,
-          chatId,
-          text:
-            'Bine ai revenit! Ai deja acces activ la cursul RELAȚIA 360.\nAlege din meniu ce vrei să deschizi.',
-        });
-        await sendMainMenu({ botToken, chatId, siteUrl });
-        return NextResponse.json({ ok: true });
-      }
-
-      // No token and no access: ask for token
-      await sendAskTokenMessage({ botToken, chatId, siteUrl });
-      await supabaseAdmin
-        .from('telegram_users')
-        .update({ state: 'AWAITING_TOKEN', last_seen_at: now })
-        .eq('telegram_user_id', telegramUserId);
-
-      return NextResponse.json({ ok: true });
-    }
-
-    // Try to interpret message as token
-    const tokenFromText = extractTokenFromText(text);
-    if (tokenFromText) {
-      await handleTokenVerification({
-        botToken,
-        siteUrl,
-        chatId,
-        telegramUserId,
-        username,
-        token: tokenFromText,
-      });
-      return NextResponse.json({ ok: true });
-    }
-
-    // Fallback: if user has access, just show menu again
-    if (hasActiveAccess) {
       await sendMessage({
         botToken,
         chatId,
-        text:
-          'Ai deja acces la curs. Folosește meniul pentru a naviga între secțiuni.',
+        text: 'Bine ai venit! Folosește meniul de mai jos pentru a naviga.',
       });
       await sendMainMenu({ botToken, chatId, siteUrl });
       return NextResponse.json({ ok: true });
     }
 
-    // Otherwise, remind user to send token
-    await sendAskTokenMessage({ botToken, chatId, siteUrl });
-
+    // Other message: show menu
+    await sendMainMenu({ botToken, chatId, siteUrl });
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error('TELEGRAM_WEBHOOK_ERROR', String(error));
@@ -243,6 +184,7 @@ export async function POST(req: Request) {
   }
 }
 
+/** @deprecated Token verification disabled; onboarding via SmartSender deep link. */
 async function handleTokenVerification(params: {
   botToken: string;
   siteUrl: string;
@@ -323,6 +265,7 @@ async function handleTokenVerification(params: {
   }
 }
 
+/** @deprecated No longer used; no token prompt. */
 async function sendAskTokenMessage(params: {
   botToken: string;
   chatId: number;
