@@ -203,6 +203,7 @@ export default function PlataPage() {
               </p>
             </div>
             </div>
+          </div>
         </div>
       </section>
     </div>
