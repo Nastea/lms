@@ -114,25 +114,40 @@ export async function POST(req: Request) {
                 const email = order.customer_email.trim();
                 if (email) {
                   console.log('Paynet callback: sending post-payment email to', email, 'order', order.id);
+
+                  // Try to ensure per-order Telegram token; if it fails, fall back to SmartSender deep link.
                   const tokenResult = await ensureOrderHasTelegramToken(order.id);
-                  if (!tokenResult.ok || !tokenResult.token) {
-                    console.error('Telegram token ensure failed for order', order.id, tokenResult.error);
+                  const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'Relatia360Bot';
+                  const smartSenderPaidDeepLink =
+                    process.env.SMART_SENDER_PAID_DEEP_LINK ||
+                    process.env.NEXT_PUBLIC_SMART_SENDER_PAID_DEEP_LINK ||
+                    'https://t.me/liliadubita_bot?start=ZGw6MzE3NzUz';
+
+                  let telegramDeepLink: string;
+                  if (tokenResult.ok && tokenResult.token) {
+                    telegramDeepLink = `https://t.me/${botUsername}?start=${tokenResult.token}`;
                   } else {
-                    const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'Relatia360Bot';
-                    const telegramDeepLink = `https://t.me/${botUsername}?start=${tokenResult.token}`;
-                    const sent = await sendPostPaymentTelegramEmail({
-                      to: email,
-                      telegramDeepLink,
-                    });
-                    if (!sent.ok) {
-                      console.error('Post-payment Telegram email failed for order', order.id, 'error:', sent.error);
-                    } else {
-                      await supabaseAdmin
-                        .from('orders')
-                        .update({ invite_sent_at: new Date().toISOString() })
-                        .eq('id', order.id);
-                      console.log('Post-payment email sent and invite_sent_at set for order', order.id);
-                    }
+                    console.error(
+                      'Telegram token ensure failed for order',
+                      order.id,
+                      tokenResult.error,
+                      '- falling back to SmartSender deep link',
+                    );
+                    telegramDeepLink = smartSenderPaidDeepLink;
+                  }
+
+                  const sent = await sendPostPaymentTelegramEmail({
+                    to: email,
+                    telegramDeepLink,
+                  });
+                  if (!sent.ok) {
+                    console.error('Post-payment Telegram email failed for order', order.id, 'error:', sent.error);
+                  } else {
+                    await supabaseAdmin
+                      .from('orders')
+                      .update({ invite_sent_at: new Date().toISOString() })
+                      .eq('id', order.id);
+                    console.log('Post-payment email sent and invite_sent_at set for order', order.id);
                   }
                 } else {
                   console.warn('Paynet callback: order', order.id, 'has empty customer_email after trim');
