@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getFirstLessonPublicData } from "@/lib/lesson-zero-public";
 import { notFound } from "next/navigation";
 import { getFunnelBotUrl } from "@/lib/funnel";
+import { COURSE_PRICE } from "@/lib/coursePrice";
 
 const COURSE_ID =
   process.env.PAYMENT_COURSE_ID || "6b8bc0bf-d5b9-4914-b980-b728199d809b";
@@ -146,7 +147,7 @@ export default async function LessonZeroPublicPage() {
               Acces la programul complet
             </h2>
             <p className="mt-4 leading-relaxed text-[#6B7280]">
-              Pentru următoarele 24 de ore, accesul la program este disponibil la prețul special de <strong className="text-[#1F2933]">29 €</strong>.
+              Pentru următoarele 24 de ore, accesul la program este disponibil la prețul special de <strong className="text-[#1F2933]">{COURSE_PRICE.label}</strong>.
               <br /><br />
               După această perioadă, programul va avea un preț mai mare.
               <br /><br />

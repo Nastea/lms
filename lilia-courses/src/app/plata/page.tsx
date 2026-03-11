@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-
-const PRICE_EUR = 35;
+import { COURSE_PRICE } from '@/lib/coursePrice';
 
 const CE_CONTINE = [
   '5 lecții video practice',
@@ -29,8 +28,8 @@ export default function PlataPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         productId: 'relatia360_conflicte',
-        amount: PRICE_EUR,
-        currency: 'EUR',
+        amount: COURSE_PRICE.amount,
+        currency: COURSE_PRICE.currency,
         customer_email: email.trim(),
       }),
     });
@@ -107,7 +106,7 @@ export default function PlataPage() {
             {/* Preț */}
             <div className="text-center pb-5 border-b" style={{ borderColor: '#e5d9c8' }}>
               <p className="text-3xl font-bold text-[#1F2933]">
-                {PRICE_EUR} EUR
+                {COURSE_PRICE.label}
               </p>
               <p className="mt-1 text-sm text-[#6B7280]">
                 Preț unic • Acces pentru 6 luni
@@ -182,7 +181,7 @@ export default function PlataPage() {
                   boxShadow: '0 4px 12px rgba(229, 107, 111, 0.4)',
                 }}
               >
-                {isLoading ? 'Se pregătește plata...' : `Merg la plată (${PRICE_EUR} EUR)`}
+                {isLoading ? 'Se pregătește plata...' : `Merg la plată (${COURSE_PRICE.label})`}
               </button>
             </form>
 
