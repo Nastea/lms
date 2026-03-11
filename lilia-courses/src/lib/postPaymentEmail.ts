@@ -1,10 +1,18 @@
 /**
  * Post-payment email: Telegram bot link + support fallback. No signup/login/password.
  * Uses Resend. Requires RESEND_API_KEY.
+ *
+ * To send to real customer emails you must verify your domain in Resend (Domains).
+ * Until then, use CREDENTIALS_EMAIL_FROM unset to send from Resend's address (may have limits).
  */
 
 function getFrom(): string {
-  return process.env.CREDENTIALS_EMAIL_FROM || 'Lilia Dubița Cursuri <cursuri@liliadubita.md>';
+  // Custom from (requires verified domain in Resend). Fallback: Resend's address so API accepts the request.
+  return (
+    process.env.CREDENTIALS_EMAIL_FROM ||
+    process.env.RESEND_FROM ||
+    'Lilia Dubița Cursuri <onboarding@resend.dev>'
+  );
 }
 
 function getSupportUrl(): string {
@@ -44,16 +52,26 @@ export async function sendPostPaymentTelegramEmail(
 <p>Cu drag,<br>Echipa Lilia Dubița</p>
 `.trim();
 
-  const { error } = await resend.emails.send({
-    from: getFrom(),
+  const from = getFrom();
+  const { data, error } = await resend.emails.send({
+    from,
     to: params.to,
     subject,
     html,
   });
 
   if (error) {
-    console.error('Post-payment email error:', error);
-    return { ok: false, error: error.message };
+    const errMsg = typeof error === 'object' && error !== null && 'message' in error
+      ? (error as { message?: string }).message
+      : String(error);
+    console.error('Post-payment email FAILED:', {
+      to: params.to,
+      from,
+      error: errMsg,
+      full: error,
+    });
+    return { ok: false, error: errMsg };
   }
+  console.log('Post-payment email sent:', { to: params.to, id: data?.id });
   return { ok: true };
 }

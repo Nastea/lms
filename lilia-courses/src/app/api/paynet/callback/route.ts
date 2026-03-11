@@ -100,6 +100,7 @@ export async function POST(req: Request) {
               if (order.customer_email && !order.invite_sent_at) {
                 const email = order.customer_email.trim();
                 if (email) {
+                  console.log('Paynet callback: sending post-payment email to', email, 'order', order.id);
                   const tokenResult = await ensureOrderHasTelegramToken(order.id);
                   if (!tokenResult.ok || !tokenResult.token) {
                     console.error('Telegram token ensure failed for order', order.id, tokenResult.error);
@@ -111,15 +112,21 @@ export async function POST(req: Request) {
                       telegramDeepLink,
                     });
                     if (!sent.ok) {
-                      console.error('Post-payment Telegram email failed for order', order.id, sent.error);
+                      console.error('Post-payment Telegram email failed for order', order.id, 'error:', sent.error);
                     } else {
                       await supabaseAdmin
                         .from('orders')
                         .update({ invite_sent_at: new Date().toISOString() })
                         .eq('id', order.id);
+                      console.log('Post-payment email sent and invite_sent_at set for order', order.id);
                     }
                   }
+                } else {
+                  console.warn('Paynet callback: order', order.id, 'has empty customer_email after trim');
                 }
+              } else {
+                if (!order.customer_email) console.warn('Paynet callback: order', order.id, 'has no customer_email');
+                if (order.invite_sent_at) console.log('Paynet callback: order', order.id, 'already had invite_sent_at');
               }
             } catch (e) {
               console.error('Post-payment Telegram email flow error for order', order.id, e);
