@@ -195,6 +195,19 @@ function MultumimContent() {
               </div>
             )}
 
+            {/* Pending state (după prima verificare) */}
+            {!isLoading && status === 'pending' && (
+              <div className="text-center space-y-3">
+                <p className="text-lg font-medium" style={{ color: "#1F2933" }}>
+                  Plata ta este în curs de confirmare.
+                </p>
+                <p className="text-sm" style={{ color: "#6B7280" }}>
+                  Pagina se va actualiza automat imediat ce procesatorul de plăți confirmă tranzacția.
+                  Acest lucru poate dura câteva secunde.
+                </p>
+              </div>
+            )}
+
             {error && (
               <div 
                 className="p-4 rounded-lg text-sm text-center"
