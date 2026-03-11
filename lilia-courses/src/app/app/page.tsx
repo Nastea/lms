@@ -38,17 +38,17 @@ export default async function AppHome() {
       .select("id,course_id")
       .in("course_id", courseIds.length ? courseIds : ["00000000-0000-0000-0000-000000000000"]);
     const lessonIds = (allLessons ?? []).map((l) => l.id);
-    const { data: completedProgress } = await supabase
+    // Progress = "reached" = lessons the user has opened (has progress row)
+    const { data: reachedProgress } = await supabase
       .from("lesson_progress")
       .select("lesson_id")
       .eq("user_id", user.id)
-      .not("completed_at", "is", null)
       .in("lesson_id", lessonIds.length ? lessonIds : ["00000000-0000-0000-0000-000000000000"]);
-    const completedLessonIds = new Set((completedProgress ?? []).map((p) => p.lesson_id));
+    const reachedLessonIds = new Set((reachedProgress ?? []).map((p) => p.lesson_id));
     (allLessons ?? []).forEach((lesson) => {
       const existing = progressByCourse.get(lesson.course_id) || { total: 0, completed: 0 };
       existing.total += 1;
-      if (completedLessonIds.has(lesson.id)) existing.completed += 1;
+      if (reachedLessonIds.has(lesson.id)) existing.completed += 1;
       progressByCourse.set(lesson.course_id, existing);
     });
   } else {

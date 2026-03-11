@@ -11,11 +11,17 @@ export async function GET() {
     process.env.SMART_SENDER_PAID_DEEP_LINK ||
     process.env.NEXT_PUBLIC_SMART_SENDER_PAID_DEEP_LINK ||
     'https://t.me/liliadubita_bot?start=ZGw6MzE3NzUz';
+  const telegramQuizBotBase =
+    process.env.TELEGRAM_QUIZ_BOT_BASE ||
+    process.env.NEXT_PUBLIC_TELEGRAM_QUIZ_BOT_BASE ||
+    'https://t.me/liliadubita_bot';
+
   return NextResponse.json({
     telegramBotUsername: process.env.TELEGRAM_BOT_USERNAME || 'Relatia360Bot',
     paynetEnv: process.env.PAYNET_ENV || 'test',
     supportUrl: process.env.SUPPORT_URL || siteUrl,
     smartSenderPaidDeepLink,
+    telegramQuizBotBase,
   });
 }
 

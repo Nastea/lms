@@ -3,7 +3,6 @@ import { supabaseServer } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import LessonPageWrapper from "@/components/LessonPageWrapper";
-import CompleteButton from "@/components/CompleteButton";
 import LessonSidebar from "@/components/LessonSidebar";
 import { notFound } from "next/navigation";
 
@@ -25,8 +24,7 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
     notFound();
   }
 
-  // Update last_seen_at and fetch progress only when user is logged in
-  let isDone = false;
+  // Update last_seen_at when user opens lesson (progress = "reached" = visited)
   if (user) {
     await supabase
       .from("lesson_progress")
@@ -38,13 +36,6 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
         },
         { onConflict: "user_id,lesson_id" }
       );
-    const { data: progress } = await supabase
-      .from("lesson_progress")
-      .select("completed_at")
-      .eq("user_id", user.id)
-      .eq("lesson_id", lessonId)
-      .maybeSingle();
-    isDone = !!progress?.completed_at;
   }
 
   let sidebarLessons: Array<{ id: string; title: string; module_title: string; isCompleted: boolean }> = [];
@@ -74,20 +65,21 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
       .order("sort_order", { ascending: true });
 
     const lessonIds = (allLessons ?? []).map((l) => l.id);
-    let allProgress: { lesson_id: string; completed_at: string | null }[] = [];
+    let allProgress: { lesson_id: string }[] = [];
     if (user) {
       const { data: progressData } = await supabase
         .from("lesson_progress")
-        .select("lesson_id,completed_at")
+        .select("lesson_id")
         .eq("user_id", user.id)
         .in("lesson_id", lessonIds.length ? lessonIds : ["00000000-0000-0000-0000-000000000000"]);
       allProgress = progressData ?? [];
     }
-    const completedMap = new Map(allProgress.map((p) => [p.lesson_id, !!p.completed_at]));
+    // Progress = "reached" = lessons the user has opened (last_seen_at set)
+    const reachedSet = new Set(allProgress.map((p) => p.lesson_id));
 
     courseProgress = {
       total: allLessons?.length ?? 0,
-      completed: allProgress.filter((p) => p.completed_at !== null).length,
+      completed: allProgress.length,
     };
 
     if (allLessons && modules) {
@@ -104,7 +96,7 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
           id: l.id,
           title: l.title,
           module_title: module?.title ?? "",
-          isCompleted: completedMap.get(l.id) ?? false,
+          isCompleted: reachedSet.has(l.id),
         };
       });
       const currentIndex = sortedLessons.findIndex((l) => l.id === lessonId);
@@ -210,13 +202,6 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
               </div>
             )}
 
-            {user && (
-              <CompleteButton
-                lessonId={lessonId}
-                isDone={isDone}
-                nextLessonId={nextLessonId}
-              />
-            )}
           </div>
         </main>
       </div>

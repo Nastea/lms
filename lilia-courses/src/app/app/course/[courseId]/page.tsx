@@ -31,19 +31,20 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
     .order("sort_order", { ascending: true });
 
   const lessonIds = (lessons ?? []).map((l) => l.id);
-  let progress: { lesson_id: string; completed_at: string | null; last_seen_at: string | null }[] = [];
+  let progress: { lesson_id: string; last_seen_at: string | null }[] = [];
   if (user) {
     const { data: progressData } = await supabase
       .from("lesson_progress")
-      .select("lesson_id,completed_at,last_seen_at")
+      .select("lesson_id,last_seen_at")
       .eq("user_id", user.id)
       .in("lesson_id", lessonIds.length ? lessonIds : ["00000000-0000-0000-0000-000000000000"]);
     progress = progressData ?? [];
   }
 
-  const completedLessons = new Map(progress.map((p) => [p.lesson_id, p.completed_at]));
+  // Progress = "reached" = lessons the user has opened (has progress row)
+  const reachedLessonIds = new Set(progress.map((p) => p.lesson_id));
   const totalLessons = lessons?.length ?? 0;
-  const completedCount = progress.filter((p) => p.completed_at !== null).length;
+  const completedCount = progress.length;
   const percentage = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
 
   // Determine next lesson and current lesson
@@ -51,10 +52,9 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
   let currentLessonId: string | null = null;
   
   if (progress && progress.length > 0) {
-    // Find lesson with latest last_seen_at (or completed_at if last_seen_at is null)
     const latestProgress = progress.reduce((latest, current) => {
-      const latestTime = latest.last_seen_at || latest.completed_at;
-      const currentTime = current.last_seen_at || current.completed_at;
+      const latestTime = latest.last_seen_at;
+      const currentTime = current.last_seen_at;
       return currentTime && (!latestTime || currentTime > latestTime) ? current : latest;
     });
     
@@ -91,6 +91,8 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
     }
   }
 
+  const baseUrl = (process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://www.liliadubita.md").replace(/\/$/, "");
+
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <Link href="/app" className="text-sm opacity-80 hover:opacity-100">← Înapoi</Link>
@@ -124,8 +126,9 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
               {(lessons ?? [])
                 .filter((l) => l.module_id === m.id)
                 .map((l) => {
-                  const isCompleted = !!completedLessons.get(l.id);
+                  const isCompleted = reachedLessonIds.has(l.id);
                   const isCurrent = l.id === currentLessonId;
+                  const lessonUrl = `${baseUrl}/app/lesson/${l.id}`;
                   return (
                     <LessonListItem
                       key={l.id}
@@ -133,6 +136,7 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
                       title={l.title}
                       isCompleted={isCompleted}
                       isCurrent={isCurrent}
+                      lessonUrl={lessonUrl}
                     />
                   );
                 })}
