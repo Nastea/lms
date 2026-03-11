@@ -33,6 +33,7 @@ export async function sendPostPaymentTelegramEmail(
 ): Promise<{ ok: boolean; error?: string }> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
+    console.error('[PostPaymentEmail] RESEND_API_KEY is not set – cannot send email');
     return { ok: false, error: 'RESEND_API_KEY not set' };
   }
 

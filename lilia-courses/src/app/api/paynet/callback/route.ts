@@ -5,14 +5,26 @@ import { ensureOrderHasTelegramToken } from '@/lib/orderTelegramToken';
 import { sendPostPaymentTelegramEmail } from '@/lib/postPaymentEmail';
 import { createHash } from 'crypto';
 
+/** GET: verify endpoint is reachable (e.g. open in browser). Paynet must call POST. */
+export async function GET() {
+  return NextResponse.json({
+    ok: true,
+    message: 'Paynet callback endpoint. Paynet should POST here.',
+    env: {
+      hasNotifySecret: !!getNotifySecret(),
+      hasResendApiKey: !!process.env.RESEND_API_KEY,
+      paynetEnv: process.env.PAYNET_ENV ?? '(not set)',
+    },
+  });
+}
+
 export async function POST(req: Request) {
+  console.log('[Paynet] POST /api/paynet/callback invoked');
   try {
     const payload = await req.json();
     const hashHeader = req.headers.get('Hash');
 
-    // Log received payload for debugging
-    console.log('Paynet callback received:', JSON.stringify(payload, null, 2));
-    console.log('Hash header:', hashHeader);
+    console.log('[Paynet] payload keys:', Object.keys(payload || {}), 'EventType:', payload?.EventType ?? payload?.eventType);
 
     const notifySecret = getNotifySecret();
     const isTest = process.env.PAYNET_ENV === 'test';
@@ -70,8 +82,9 @@ export async function POST(req: Request) {
           .single();
 
         if (findError) {
-          console.error('Order not found for invoice:', externalId, findError);
+          console.error('[Paynet] Order not found for invoice:', externalId, findError.message ?? findError);
         } else if (order) {
+          console.log('[Paynet] Order found:', order.id, 'email:', order.customer_email ?? '(empty)', 'invite_sent_at:', order.invite_sent_at ?? 'null');
           const updateData: any = {
             status: 'paid',
             paid_at: new Date().toISOString(),
