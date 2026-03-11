@@ -88,9 +88,14 @@ export const QUIZ_1: QuizDefinition = {
   },
   // Direct SmartSender deep links per rezultat (pentru botul @liliadubita_bot)
   resultLinks: {
-    // Rezultatul A – „de ce nu te aude partenerul” → linkul tău din SmartSender
+    // Rezultatul A – „de ce nu te aude partenerul”
     A: "https://t.me/liliadubita_bot?start=ZGw6MzE4MzQx",
-    // B, C, D pot fi completate ulterior când ai linkurile
+    // Rezultatul B
+    B: "https://t.me/liliadubita_bot?start=ZGw6MzE4MzUw",
+    // Rezultatul C
+    C: "https://t.me/liliadubita_bot?start=ZGw6MzE4MzUz",
+    // Rezultatul D
+    D: "https://t.me/liliadubita_bot?start=ZGw6MzE4MzU5",
   },
 };
 
