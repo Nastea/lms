@@ -45,8 +45,12 @@ export default function QuizRunner({ quiz, telegramQuizBotBase }: QuizRunnerProp
 
   if (completed && finalResult) {
     const result = finalResult;
-    const telegramStart = `quiz_${quiz.shortId}_${result}`;
-    const telegramUrl = `${telegramQuizBotBase}?start=${encodeURIComponent(telegramStart)}`;
+
+    // Dacă quiz-ul are link direct configurat pentru acest rezultat, îl folosim exact așa cum e.
+    const directLink = quiz.resultLinks?.[result];
+    const telegramUrl = directLink
+      ? directLink
+      : `${telegramQuizBotBase}?start=${encodeURIComponent(`quiz_${quiz.shortId}_${result}`)}`;
 
     return (
       <div

@@ -34,6 +34,8 @@ export interface QuizDefinition {
   questions: QuizQuestion[];
   /** Internal only: for Telegram delivery. Not displayed on site. */
   results: QuizResultLabels;
+  /** Optional: direct Telegram deep links per result (overrides quiz_<shortId>_<result> pattern). */
+  resultLinks?: Partial<Record<ResultKey, string>>;
   /** If true, quiz is fully implemented. Else placeholder. */
   ready: boolean;
 }

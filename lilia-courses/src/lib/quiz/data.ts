@@ -86,6 +86,12 @@ export const QUIZ_1: QuizDefinition = {
     C: "Te aude greu pentru că îl prinzi când deja e închis",
     D: "Te aude greu pentru că spui problema, dar nu și nevoia reală",
   },
+  // Direct SmartSender deep links per rezultat (pentru botul @liliadubita_bot)
+  resultLinks: {
+    // Rezultatul A – „de ce nu te aude partenerul” → linkul tău din SmartSender
+    A: "https://t.me/liliadubita_bot?start=ZGw6MzE4MzQx",
+    // B, C, D pot fi completate ulterior când ai linkurile
+  },
 };
 
 export const QUIZ_2: QuizDefinition = {
