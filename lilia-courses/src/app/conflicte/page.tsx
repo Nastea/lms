@@ -384,14 +384,8 @@ export default function Relatia360Page() {
       <section className="py-20 md:py-32" style={{ background: "linear-gradient(to bottom, #f5ede3, #ebdfce, #e5d9c8)" }}>
         <div className="mx-auto px-4 sm:px-6 max-w-6xl w-full">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden order-2 md:order-1 bg-white/30" style={{ boxShadow: "0 8px 24px rgba(0,0,0,0.12)" }}>
-              <HeroImage
-                src="/api/img/IMG_0646.JPG"
-                alt="Lilia Dubița - Psiholog"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </div>
-            <div className="space-y-8 order-1 md:order-2">
+            {/* Text first so that on mobile descrierea apare deasupra imaginii */}
+            <div className="space-y-8">
               <h2 
                 className="text-3xl md:text-4xl lg:text-5xl font-bold uppercase"
                 style={{ 
@@ -425,6 +419,14 @@ export default function Relatia360Page() {
                   <span className="font-semibold" style={{ color: "#1F2933" }}>baza oricărei relații este comunicarea.</span>
                 </p>
               </div>
+            </div>
+            {/* Image column – shown under text on mobile, în dreapta pe desktop */}
+            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-white/30" style={{ boxShadow: "0 8px 24px rgba(0,0,0,0.12)" }}>
+              <HeroImage
+                src="/api/img/IMG_0646.JPG"
+                alt="Lilia Dubița - Psiholog"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>

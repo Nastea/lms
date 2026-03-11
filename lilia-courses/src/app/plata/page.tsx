@@ -73,8 +73,8 @@ export default function PlataPage() {
       <section className="py-10 md:py-0 md:h-full md:min-h-0 md:flex md:flex-col">
         <div className="mx-auto max-w-5xl flex-1 px-4 sm:px-6 md:flex md:min-h-0">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 md:min-h-0 md:flex-1">
-            {/* Coloana stânga: imagine full height pe desktop */}
-            <div className="relative flex flex-col md:h-full md:min-h-0">
+            {/* Coloana stânga: imagine full height doar pe desktop (ascunsă pe mobile) */}
+            <div className="relative hidden md:flex md:h-full md:min-h-0">
               <div className="overflow-hidden rounded-2xl shadow-lg md:absolute md:inset-0 md:rounded-l-2xl" style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}>
                 <img
                   src="/api/img/IMG_0646.JPG"
