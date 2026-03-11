@@ -14,7 +14,6 @@ function MultumimContent() {
   const [paynetEnv, setPaynetEnv] = useState<string>('test');
   const [supportUrl, setSupportUrl] = useState<string>('');
   const [smartSenderPaidDeepLink, setSmartSenderPaidDeepLink] = useState<string>('');
-  const [confirming, setConfirming] = useState(false);
 
   // Fetch config (SmartSender deep link, Paynet env, support URL)
   useEffect(() => {
@@ -87,29 +86,7 @@ function MultumimContent() {
     };
   }, [orderId, status]);
 
-  const handleConfirmTest = async () => {
-    if (!orderId || confirming) return;
-    setConfirming(true);
-    setError(null);
-    try {
-      const res = await fetch('/api/paynet/confirm-test', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || 'Nu s-a putut confirma plata');
-        setConfirming(false);
-        return;
-      }
-      setStatus('paid');
-      setIsLoading(false);
-    } catch (e) {
-      setError('Eroare la confirmare');
-    }
-    setConfirming(false);
-  };
+  // Manual confirm test button removed; rely on automatic Paynet callback + polling
 
   // SmartSender deep link: adds PAID_CONFLICT, SOURCE_PAYMENT_PAGE, subscribes to TG_PAID_ONBOARDING_SUCCESS
   const telegramUrl = smartSenderPaidDeepLink || `https://t.me/liliadubita_bot?start=ZGw6MzE3NzUz`;
@@ -227,31 +204,6 @@ function MultumimContent() {
                 }}
               >
                 {error}
-              </div>
-            )}
-
-            {/* Buton confirmare manuală când Paynet nu trimite callback (vizibil mereu la pending) */}
-            {!isLoading && status === 'pending' && orderId && (
-              <div 
-                className="p-4 rounded-lg text-sm text-center"
-                style={{ 
-                  backgroundColor: "#fef3c7",
-                  color: "#92400e",
-                  border: "1px solid #f59e0b",
-                }}
-              >
-                <p className="mb-3">
-                  Nu se confirmă automat? Dacă ai finalizat deja plata, apasă butonul de mai jos.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleConfirmTest}
-                  disabled={confirming}
-                  className="px-6 py-3 rounded-lg font-semibold text-white disabled:opacity-50"
-                  style={{ backgroundColor: "#d97706" }}
-                >
-                  {confirming ? 'Se confirmă...' : 'Am plătit deja – confirmă plata'}
-                </button>
               </div>
             )}
 
