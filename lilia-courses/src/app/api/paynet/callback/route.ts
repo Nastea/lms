@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getNotifySecret } from '@/lib/paynet';
 import { ensureOrderHasTelegramToken } from '@/lib/orderTelegramToken';
+import { sendPostPaymentTelegramEmail } from '@/lib/postPaymentEmail';
 import { createHash } from 'crypto';
 
 export async function POST(req: Request) {
@@ -67,7 +68,7 @@ export async function POST(req: Request) {
         // Find order by invoice (ExternalID)
         const { data: order, error: findError } = await supabaseAdmin
           .from('orders')
-          .select('id')
+          .select('id, status, customer_email, invite_sent_at')
           .eq('invoice', externalId.toString())
           .single();
 
@@ -95,10 +96,37 @@ export async function POST(req: Request) {
           if (updateError) {
             console.error('Supabase update error:', updateError);
           } else {
-            ensureOrderHasTelegramToken(order.id).then((r) => {
-              if (!r.ok) console.error('Telegram token ensure failed:', r.error);
-            });
             console.log(`Order ${order.id} marked as paid (invoice: ${externalId})`);
+
+            // After marking as paid, ensure Telegram token + send bot access email (idempotent via invite_sent_at)
+            try {
+              if (order.customer_email && !order.invite_sent_at) {
+                const email = order.customer_email.trim();
+                if (email) {
+                  const tokenResult = await ensureOrderHasTelegramToken(order.id);
+                  if (!tokenResult.ok || !tokenResult.token) {
+                    console.error('Telegram token ensure failed for order', order.id, tokenResult.error);
+                  } else {
+                    const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'Relatia360Bot';
+                    const telegramDeepLink = `https://t.me/${botUsername}?start=${tokenResult.token}`;
+                    const sent = await sendPostPaymentTelegramEmail({
+                      to: email,
+                      telegramDeepLink,
+                    });
+                    if (!sent.ok) {
+                      console.error('Post-payment Telegram email failed for order', order.id, sent.error);
+                    } else {
+                      await supabaseAdmin
+                        .from('orders')
+                        .update({ invite_sent_at: new Date().toISOString() })
+                        .eq('id', order.id);
+                    }
+                  }
+                }
+              }
+            } catch (e) {
+              console.error('Post-payment Telegram email flow error for order', order.id, e);
+            }
           }
         }
       } else {
