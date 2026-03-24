@@ -9,9 +9,9 @@ export function optionIndexToResult(index: number): ResultKey {
 }
 
 /**
- * Computes final result from 7 answers (each 0–3).
+ * Computes final result from answers (each 0–3).
  * Rule: category with most votes wins.
- * Tie-break 1: category chosen at question 7 wins if among tied.
+ * Tie-break 1: category chosen at question 5 wins if among tied.
  * Tie-break 2: stable order A > B > C > D.
  */
 export function calculateResult(answers: number[]): ResultKey {
@@ -26,10 +26,10 @@ export function calculateResult(answers: number[]): ResultKey {
 
   if (tied.length === 1) return tied[0];
 
-  // Tie-break: question 7 (index 6) wins if among tied
-  const q7Answer = answers[6];
-  const q7Key = optionIndexToResult(q7Answer);
-  if (tied.includes(q7Key)) return q7Key;
+  // Tie-break: question 5 (index 4) wins if among tied
+  const q5Answer = answers[4];
+  const q5Key = optionIndexToResult(q5Answer);
+  if (tied.includes(q5Key)) return q5Key;
 
   // Stable order: A > B > C > D
   const order: ResultKey[] = ["A", "B", "C", "D"];

@@ -108,10 +108,19 @@ export default function Relatia360Page() {
                     boxShadow: "0 4px 12px rgba(229, 107, 111, 0.4)",
                   }}
                 >
-                  Vreau acces la curs
+                  Vreau acces la cursul complet
                 </Link>
-                <Link href="/curs/lectia-0" className="text-sm font-medium underline hover:opacity-90" style={{ color: "#1F2933" }}>
-                  Sau începe cu lecția 1 gratuită →
+                <Link
+                  href="/curs/lectia-0"
+                  className="inline-block px-6 py-3 rounded-lg text-sm font-semibold uppercase tracking-wide transition-all hover:opacity-90"
+                  style={{
+                    color: "#1F2933",
+                    backgroundColor: "rgba(255, 255, 255, 0.92)",
+                    border: "1px solid rgba(31, 41, 51, 0.15)",
+                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+                  }}
+                >
+                  Vreau acces la lecția gratuită
                 </Link>
               </div>
             </div>
@@ -176,10 +185,19 @@ export default function Relatia360Page() {
                   boxShadow: "0 4px 12px rgba(229, 107, 111, 0.4)",
                 }}
               >
-                Vreau acces la curs
+                Vreau acces la cursul complet
               </Link>
-              <Link href="/curs/lectia-0" className="text-sm font-medium underline hover:opacity-90 w-fit" style={{ color: "#1F2933" }}>
-                Sau începe cu lecția 1 gratuită →
+              <Link
+                href="/curs/lectia-0"
+                className="inline-block px-8 py-4 rounded-lg text-base font-semibold uppercase tracking-wide transition-all hover:opacity-90 w-fit"
+                style={{
+                  color: "#1F2933",
+                  backgroundColor: "rgba(255, 255, 255, 0.92)",
+                  border: "1px solid rgba(31, 41, 51, 0.15)",
+                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+                }}
+              >
+                Vreau acces la lecția gratuită
               </Link>
             </div>
             </div>

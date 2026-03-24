@@ -5,13 +5,13 @@ export const QUIZ_1: QuizDefinition = {
   slug: "de-ce-nu-te-aude-partenerul",
   shortId: "aude",
   title: "De ce nu te aude partenerul?",
-  description: "Descoperă ce blochează comunicarea dintre voi și de ce mesajul tău nu ajunge.",
-  intro: "Răspunde sincer la câteva întrebări și vei vedea ce împiedică, de fapt, partenerul să te audă.",
+  description: "Află clar ce blochează comunicarea dintre voi.",
+  intro: "Află rapid ce blochează, de fapt, comunicarea dintre voi.",
   ready: true,
   questions: [
     {
       id: "q1",
-      question: "Când încerci să spui ceva important, cel mai des…",
+      question: "Când încerc să spun ceva important, cel mai des…",
       options: [
         "simt că tonul meu urcă fără să vreau",
         "explic mult, cu multe detalii",
@@ -21,7 +21,7 @@ export const QUIZ_1: QuizDefinition = {
     },
     {
       id: "q2",
-      question: "Partenerul tău reacționează cel mai des prin faptul că…",
+      question: "Partenerul meu reacționează cel mai des prin faptul că…",
       options: [
         "se aprinde de la felul în care spun",
         "pare că nu mai înțelege esența",
@@ -31,36 +31,16 @@ export const QUIZ_1: QuizDefinition = {
     },
     {
       id: "q3",
-      question: "Când nu te simți auzită, tu tind să…",
+      question: "Când nu te simți auzită, cum reacționezi cel mai des?",
       options: [
-        "insist cu mai multă intensitate",
+        "insist și mai mult",
         "explic și mai mult",
         "forțez discuția pe loc",
-        "repet problema, nu nevoia din spatele ei",
+        "repet problema, dar nu spun clar de ce am nevoie",
       ],
     },
     {
       id: "q4",
-      question: "După o discuție tensionată, cel mai des simți că…",
-      options: [
-        "totul a degenerat prea repede",
-        "ai spus prea multe și tot n-ai fost înțeleasă",
-        "ai rămas singură în discuție",
-        "ați vorbit despre suprafață, nu despre ce doare",
-      ],
-    },
-    {
-      id: "q5",
-      question: "Când începi o conversație grea, de obicei pornești de la…",
-      options: [
-        "emoția deja ridicată",
-        "tot ce s-a adunat în timp",
-        "momentul în care nu mai poți ține în tine",
-        "ce face el greșit",
-      ],
-    },
-    {
-      id: "q6",
       question: "Ce te frustrează cel mai tare?",
       options: [
         "că reacționează la ton, nu la mesaj",
@@ -70,21 +50,21 @@ export const QUIZ_1: QuizDefinition = {
       ],
     },
     {
-      id: "q7",
-      question: "Care frază te descrie cel mai bine?",
+      id: "q5",
+      question: "Care frază descrie cel mai bine situația voastră?",
       options: [
         "nu mă aude pentru că reacționează la tonul meu",
-        "nu mă aude pentru că spun prea mult",
+        "nu mă aude pentru că spun prea multe deodată",
         "nu mă aude pentru că se închide imediat",
         "nu mă aude pentru că nu spun clar ce am nevoie",
       ],
     },
   ],
   results: {
-    A: "Te aude greu pentru că aude mai întâi tensiunea, nu mesajul",
-    B: "Te aude greu pentru că mesajul tău se pierde în prea multe explicații",
-    C: "Te aude greu pentru că îl prinzi când deja e închis",
-    D: "Te aude greu pentru că spui problema, dar nu și nevoia reală",
+    A: "Ce blochează comunicarea dintre voi: tonul și tensiunea",
+    B: "Ce blochează comunicarea dintre voi: prea multe explicații",
+    C: "Ce blochează comunicarea dintre voi: închiderea și evitarea",
+    D: "Ce blochează comunicarea dintre voi: nevoia nespusă",
   },
   // Direct SmartSender deep links per rezultat (pentru botul @liliadubita_bot)
   resultLinks: {
@@ -104,8 +84,8 @@ export const QUIZ_2: QuizDefinition = {
   slug: "de-ce-repetati-mereu-aceleasi-certuri",
   shortId: "certuri",
   title: "De ce repetați mereu aceleași certuri?",
-  description: "Înțelege ce reaprinde același conflict între voi și cum îl poți descurca.",
-  intro: "Răspunde la câteva întrebări și vei vedea ce menține același ciclu de certuri.",
+  description: "Află ce reaprinde între voi același conflict, iar și iar.",
+  intro: "Vezi rapid ce reaprinde între voi același conflict.",
   ready: true,
   questions: [
     {
@@ -150,26 +130,6 @@ export const QUIZ_2: QuizDefinition = {
     },
     {
       id: "q5",
-      question: "Ce te enervează cel mai tare la partener?",
-      options: [
-        "lipsa de claritate și responsabilitate",
-        "că nu face loc real relației",
-        "că este vag sau defensiv",
-        "că vrea să aibă mereu dreptate sau control",
-      ],
-    },
-    {
-      id: "q6",
-      question: "Când reapare conflictul, în adânc simți mai degrabă…",
-      options: [
-        "nu mă simt în siguranță cu tine",
-        "nu mă simt importantă pentru tine",
-        "mi-e frică să nu te pierd sau să fiu mințită",
-        "nu simt că ai încredere în mine",
-      ],
-    },
-    {
-      id: "q7",
       question: "Care propoziție seamănă cel mai mult cu adevărul dintre voi?",
       options: [
         "nu ne simțim în siguranță împreună",
@@ -180,61 +140,154 @@ export const QUIZ_2: QuizDefinition = {
     },
   ],
   results: {
-    A: "Repetați aceleași certuri pentru că în spate este lupta pentru siguranță",
-    B: "Repetați aceleași certuri pentru că unul nu se simte ales",
-    C: "Repetați aceleași certuri pentru că între voi s-a instalat nesiguranța",
-    D: "Repetați aceleași certuri pentru că între voi s-a format o luptă pentru control",
+    A: "Ce reaprinde aceleași certuri: lupta pentru siguranță",
+    B: "Ce reaprinde aceleași certuri: lipsa de prioritate",
+    C: "Ce reaprinde aceleași certuri: nesiguranța dintre voi",
+    D: "Ce reaprinde aceleași certuri: lupta pentru control",
   },
 };
 
-const PLACEHOLDER_QUIZ = (
-  slug: string,
-  shortId: string,
-  title: string,
-  description: string
-): QuizDefinition => ({
-  id: `quiz-${slug}`,
-  slug,
-  shortId,
-  title,
-  description,
-  intro: "Acest quiz va fi disponibil în curând.",
-  ready: false,
-  questions: [],
-  results: { A: "", B: "", C: "", D: "" },
-});
+export const QUIZ_3: QuizDefinition = {
+  id: "quiz-3",
+  slug: "de-ce-va-certati-atat-de-des",
+  shortId: "des",
+  title: "De ce vă certați atât de des?",
+  description: "Află de ce tensiunea dintre voi apare atât de frecvent.",
+  intro: "Vezi de ce tensiunea dintre voi apare atât de des.",
+  ready: true,
+  questions: [
+    {
+      id: "q1",
+      question: "Cel mai des, certurile dintre voi pornesc pentru că…",
+      options: [
+        "vă aprindeți foarte repede",
+        "se adună prea multe lucruri nespuse",
+        "unul evită până când celălalt explodează",
+        "vă atingeți unul altuia punctele sensibile",
+      ],
+    },
+    {
+      id: "q2",
+      question: "Cum începe, de obicei, o ceartă între voi?",
+      options: [
+        "dintr-un lucru mic, totul escaladează repede",
+        "după o perioadă în care s-au adunat multe",
+        "unul vrea să vorbească, celălalt se retrage",
+        "unul spune ceva care îl rănește profund pe celălalt",
+      ],
+    },
+    {
+      id: "q3",
+      question: "Ce se întâmplă cel mai des între voi?",
+      options: [
+        "reacționați prea impulsiv",
+        "lăsați prea multe nerezolvate",
+        "nu sunteți disponibili în același timp pentru discuție",
+        "vă activați reciproc dureri mai vechi",
+      ],
+    },
+    {
+      id: "q4",
+      question: "După ce vă certați, cel mai des simți că…",
+      options: [
+        "totul a scăpat de sub control prea repede",
+        "problema era mai veche, nu doar cea de acum",
+        "iar n-ați reușit să vorbiți în același ritm",
+        "v-ați rănit mai mult decât era cazul",
+      ],
+    },
+    {
+      id: "q5",
+      question: "Care frază descrie cel mai bine situația voastră?",
+      options: [
+        "ne aprindem prea repede",
+        "lăsăm prea multe să se adune",
+        "unul vrea să rezolve, altul evită",
+        "ne lovim exact unde doare mai tare",
+      ],
+    },
+  ],
+  results: {
+    A: "De ce vă certați atât de des: reacționați prea impulsiv",
+    B: "De ce vă certați atât de des: se adună prea multe lucruri",
+    C: "De ce vă certați atât de des: unul insistă, altul evită",
+    D: "De ce vă certați atât de des: vă activați unul altuia rănile",
+  },
+};
 
-export const QUIZ_PLACEHOLDERS: QuizDefinition[] = [
-  PLACEHOLDER_QUIZ(
-    "ce-joc-jucati-cand-va-certati",
-    "joc",
-    "Ce joc jucați când vă certați?",
-    "Descoperă dinamica ascunsă din certurile voastre."
-  ),
-  PLACEHOLDER_QUIZ(
-    "de-ce-va-certati-atat-de-des",
-    "des",
-    "De ce vă certați atât de des?",
-    "Înțelege frecvența conflictelor și ce o alimentează."
-  ),
-  PLACEHOLDER_QUIZ(
-    "cum-va-certati-de-fapt",
-    "cum",
-    "Cum vă certați, de fapt?",
-    "Vezi stilul vostru de conflict și cum îl poți schimba."
-  ),
-  PLACEHOLDER_QUIZ(
-    "care-este-tiparul-vostru-de-conflict",
-    "tipar",
-    "Care este tiparul vostru de conflict?",
-    "Identifică tiparul care se repetă între voi."
-  ),
-];
+export const QUIZ_4: QuizDefinition = {
+  id: "quiz-4",
+  slug: "care-este-tiparul-vostru-de-conflict",
+  shortId: "tipar",
+  title: "Care este tiparul vostru de conflict?",
+  description: "Află dinamica ce se repetă între voi în momentele tensionate.",
+  intro: "Identifică tiparul care se repetă între voi în conflict.",
+  ready: true,
+  questions: [
+    {
+      id: "q1",
+      question: "Când apare tensiunea între voi, cel mai des…",
+      options: [
+        "amândoi ridicați intensitatea",
+        "vorbiți mult, dar nu ajungeți nicăieri",
+        "unul insistă, celălalt se retrage",
+        "vă răniți subtil, apoi rămâne distanță",
+      ],
+    },
+    {
+      id: "q2",
+      question: "În timpul unei certuri, cel mai des simți că…",
+      options: [
+        "totul se transformă rapid în confruntare",
+        "discuția se învârte în cerc",
+        "alergi după o conversație care nu se întâmplă",
+        "rămân lucruri spuse care dor mult",
+      ],
+    },
+    {
+      id: "q3",
+      question: "Cum se termină, de obicei, conflictul dintre voi?",
+      options: [
+        "prin explozie, oboseală sau ruptură de moment",
+        "fără concluzie clară, după multe explicații",
+        "prin retragere, tăcere sau amânare",
+        "aparent se oprește, dar rămâne rece între voi",
+      ],
+    },
+    {
+      id: "q4",
+      question: "Ce se repetă cel mai des în certurile voastre?",
+      options: [
+        "reacții puternice și escaladare",
+        "aceleași discuții fără rezolvare",
+        "alergare după celălalt și evitare",
+        "înțepături, răni și distanță",
+      ],
+    },
+    {
+      id: "q5",
+      question: "Care formulare vă descrie cel mai bine?",
+      options: [
+        "vă confruntați prea intens",
+        "vă pierdeți în discuții fără sfârșit",
+        "unul urmărește, altul fuge",
+        "vă răniți și apoi vă îndepărtați",
+      ],
+    },
+  ],
+  results: {
+    A: "Tiparul vostru de conflict: confruntare și escaladare",
+    B: "Tiparul vostru de conflict: discuții în cerc",
+    C: "Tiparul vostru de conflict: unul urmărește, altul evită",
+    D: "Tiparul vostru de conflict: răni și distanță",
+  },
+};
 
 const ALL_QUIZZES: QuizDefinition[] = [
   QUIZ_1,
   QUIZ_2,
-  ...QUIZ_PLACEHOLDERS,
+  QUIZ_3,
+  QUIZ_4,
 ];
 
 export function getQuizBySlug(slug: string): QuizDefinition | undefined {

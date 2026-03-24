@@ -1,10 +1,10 @@
 /**
  * Prețul cursului – o singură sursă pentru afișare și pentru plată.
- * Test: 1 leu (MDL). Pentru producție: schimbă amount și label.
+ * Producție: 49 EUR.
  */
 export const COURSE_PRICE = {
-  amount: 1,
-  currency: "MDL" as const,
-  /** Text afișat utilizatorului (ex: "1 leu") */
-  label: "1 leu",
+  amount: 49,
+  currency: "EUR" as const,
+  /** Text afișat utilizatorului (ex: "49 EUR") */
+  label: "49 EUR",
 };

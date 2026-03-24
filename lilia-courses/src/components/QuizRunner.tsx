@@ -10,38 +10,36 @@ type QuizRunnerProps = {
   telegramQuizBotBase: string;
 };
 
-const TOTAL = 7;
-
 export default function QuizRunner({ quiz, telegramQuizBotBase }: QuizRunnerProps) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [completed, setCompleted] = useState(false);
   const [finalResult, setFinalResult] = useState<ResultKey | null>(null);
 
+  const total = quiz.questions.length;
   const currentAnswer = step < answers.length ? answers[step] : undefined;
-  const isLastQuestion = step === TOTAL - 1;
+  const isLastQuestion = step === total - 1;
 
-  const handleSelect = useCallback(
-    (optionIndex: number) => {
-      setAnswers((prev) => {
-        const next = [...prev];
-        next[step] = optionIndex;
+  const handleSelect = useCallback((optionIndex: number) => {
+    setAnswers((prev) => {
+      const next = [...prev];
+      next[step] = optionIndex;
+      return next;
+    });
+  }, [step]);
 
-        // Advance immediately on click
-        if (step === TOTAL - 1) {
-          const allAnswers = [...next];
-          const result = calculateResult(allAnswers);
-          setFinalResult(result);
-          setCompleted(true);
-        } else {
-          setStep(step + 1);
-        }
+  const handleNext = useCallback(() => {
+    if (currentAnswer === undefined) return;
 
-        return next;
-      });
-    },
-    [step]
-  );
+    if (isLastQuestion) {
+      const result = calculateResult(answers);
+      setFinalResult(result);
+      setCompleted(true);
+      return;
+    }
+
+    setStep((prev) => prev + 1);
+  }, [answers, currentAnswer, isLastQuestion]);
 
   if (completed && finalResult) {
     const result = finalResult;
@@ -101,8 +99,8 @@ export default function QuizRunner({ quiz, telegramQuizBotBase }: QuizRunnerProp
   const question = quiz.questions[step];
   if (!question) return null;
 
-  const progressLabel = `${step + 1}/${TOTAL}`;
-  const isFirstStep = step === 0;
+  const progressLabel = `${step + 1}/${total}`;
+  const progressPercent = Math.round(((step + 1) / total) * 100);
 
   return (
     <div
@@ -144,6 +142,15 @@ export default function QuizRunner({ quiz, telegramQuizBotBase }: QuizRunnerProp
               {progressLabel}
             </p>
           </div>
+          <div className="mb-4 h-2 w-full rounded-full bg-[#f0e7dc] overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-300"
+              style={{
+                width: `${progressPercent}%`,
+                background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
+              }}
+            />
+          </div>
 
           <h2
             className="text-base md:text-lg font-semibold mb-3 leading-snug"
@@ -172,6 +179,18 @@ export default function QuizRunner({ quiz, telegramQuizBotBase }: QuizRunnerProp
               );
             })}
           </div>
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={currentAnswer === undefined}
+            className="mt-5 w-full rounded-xl py-3.5 px-5 text-base font-semibold text-white transition-all disabled:cursor-not-allowed disabled:opacity-50"
+            style={{
+              background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
+              boxShadow: "0 4px 12px rgba(229, 107, 111, 0.35)",
+            }}
+          >
+            {isLastQuestion ? "Vezi rezultatul pe Telegram" : "Continuă"}
+          </button>
         </div>
       </div>
     </div>
