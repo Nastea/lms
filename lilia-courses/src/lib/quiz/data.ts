@@ -145,6 +145,13 @@ export const QUIZ_2: QuizDefinition = {
     C: "Ce reaprinde aceleași certuri: nesiguranța dintre voi",
     D: "Ce reaprinde aceleași certuri: lupta pentru control",
   },
+  resultLinks: {
+    A: "https://t.me/liliadubita_bot?start=ZGw6MzIwMjgy",
+    B: "https://t.me/liliadubita_bot?start=ZGw6MzIwMjg1",
+    C: "https://t.me/liliadubita_bot?start=ZGw6MzIwMjg4",
+    // Rezultat D – inbox Instagram (SmartSender)
+    D: "https://ig.me/m/liliadubita.psiholog?ref=ZGw6MzIwMjkx",
+  },
 };
 
 export const QUIZ_3: QuizDefinition = {
@@ -213,6 +220,12 @@ export const QUIZ_3: QuizDefinition = {
     C: "De ce vă certați atât de des: unul insistă, altul evită",
     D: "De ce vă certați atât de des: vă activați unul altuia rănile",
   },
+  resultLinks: {
+    A: "https://t.me/liliadubita_bot?start=ZGw6MzIwMjk0",
+    B: "https://t.me/liliadubita_bot?start=ZGw6MzIwMzAw",
+    C: "https://t.me/liliadubita_bot?start=ZGw6MzIwMjk3",
+    D: "https://t.me/liliadubita_bot?start=ZGw6MzIwMzAz",
+  },
 };
 
 export const QUIZ_4: QuizDefinition = {
@@ -280,6 +293,12 @@ export const QUIZ_4: QuizDefinition = {
     B: "Tiparul vostru de conflict: discuții în cerc",
     C: "Tiparul vostru de conflict: unul urmărește, altul evită",
     D: "Tiparul vostru de conflict: răni și distanță",
+  },
+  resultLinks: {
+    A: "https://t.me/liliadubita_bot?start=ZGw6MzIwMzA5",
+    B: "https://t.me/liliadubita_bot?start=ZGw6MzIwMzEy",
+    C: "https://t.me/liliadubita_bot?start=ZGw6MzIwMzE1",
+    D: "https://t.me/liliadubita_bot?start=ZGw6MzIwMzE4",
   },
 };
 
