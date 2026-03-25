@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { getFirstLessonPublicData } from "@/lib/lesson-zero-public";
 import { notFound } from "next/navigation";
-import { getFunnelBotUrl } from "@/lib/funnel";
 import { COURSE_PRICE } from "@/lib/coursePrice";
 
 const COURSE_ID =
@@ -61,7 +60,8 @@ export default async function LessonZeroPublicPage() {
   const data = await getFirstLessonPublicData(COURSE_ID);
   if (!data) notFound();
 
-  const botUrl = getFunnelBotUrl();
+  // Link Telegram specific pentru lecția gratuită (start param).
+  const botUrl = "https://t.me/liliadubita_bot?start=ZGw6MzIwNzE3";
 
   return (
     <div
