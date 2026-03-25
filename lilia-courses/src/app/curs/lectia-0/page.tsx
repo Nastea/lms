@@ -15,6 +15,9 @@ export const metadata = {
     "9 tehnici practice pentru o comunicare mai bună în cuplu. Lecție gratuită din programul Relația 360.",
 };
 
+// Video-ul pentru lecția gratuită (ignoram `data.video_url` ca să se poată actualiza rapid UI-ul).
+const FREE_LESSON_VIDEO_SRC = "https://www.youtube.com/embed/Dl4nWskUuTs";
+
 const PROGRAM_FEATURES = [
   "5 lecții video practice",
   "Explicații clare despre dinamica conflictelor",
@@ -126,7 +129,7 @@ export default async function LessonZeroPublicPage() {
 
       <main className="mx-auto max-w-[760px] px-4 pb-20 pt-12 sm:px-6">
         {/* Video */}
-        {data.video_url ? (
+        {FREE_LESSON_VIDEO_SRC ? (
           <div
             className="mb-12 overflow-hidden rounded-xl shadow-lg"
             style={{ boxShadow: "0 12px 40px rgba(44, 33, 24, 0.12)" }}
@@ -134,7 +137,7 @@ export default async function LessonZeroPublicPage() {
             <div className="aspect-video bg-[#2C2118]">
               <iframe
                 className="h-full w-full"
-                src={data.video_url}
+                src={FREE_LESSON_VIDEO_SRC}
                 title={data.title}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
