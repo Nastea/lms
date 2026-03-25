@@ -3,8 +3,10 @@
  * Producție: 49 EUR.
  */
 export const COURSE_PRICE = {
-  amount: 49,
-  currency: "EUR" as const,
+  // Paynet afișează suma exact din `amount` (în MDL în integrarea curentă).
+  // Pe site afișăm în continuare 49 EUR (label), dar la Paynet trimitem echivalentul în MDL.
+  amount: 995,
+  currency: "MDL" as const,
   /** Text afișat utilizatorului (ex: "49 EUR") */
   label: "49 EUR",
 };
