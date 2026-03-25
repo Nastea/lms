@@ -153,6 +153,24 @@ export default async function LessonZeroPublicPage() {
           </div>
         )}
 
+        {/* CTA secondary: next lesson in Telegram */}
+        <div className="mb-8 flex justify-center">
+          <a
+            href={botUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center rounded-xl px-8 py-3 text-base font-semibold transition hover:opacity-95 active:scale-[0.99]"
+            style={{
+              background: "rgba(255,255,255,0.92)",
+              color: "#1F2933",
+              border: "1px solid rgba(31, 41, 51, 0.15)",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
+            }}
+          >
+            Vezi lecția următoare
+          </a>
+        </div>
+
         {/* About this lesson */}
         <p className="mb-2 text-[11px] font-medium uppercase tracking-[0.1em] text-[#C2735A]">
           Despre această lecție
