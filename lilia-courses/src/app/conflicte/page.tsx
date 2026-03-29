@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { AuthErrorBanner } from "@/components/AuthErrorBanner";
 import { HeroImage } from "@/components/HeroImage";
@@ -10,21 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function Relatia360Page() {
-  const deployId =
-    process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ||
-    process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ||
-    "dev";
-
   return (
     <div className="min-h-screen w-full overflow-x-hidden" style={{ background: "linear-gradient(to bottom, #f5ede3, #ebdfce)" }}>
       <AuthErrorBanner />
-      {/* Deployment version — top right, changes every deploy */}
-      <div
-        className="fixed top-3 right-3 z-50 px-2.5 py-1 rounded text-xs font-mono bg-black/70 text-white/90"
-        title={`Deploy: ${deployId}`}
-      >
-        {deployId}
-      </div>
       {/* Hero Section - Full Background Image */}
       <section className="relative overflow-hidden pt-8 pb-20 md:py-32 min-h-screen md:min-h-[700px] flex items-start md:items-center">
         {/* Background Image - Mobile (fallback: gradient when image missing) */}
@@ -755,8 +742,10 @@ export default function Relatia360Page() {
             COMUNICAȚI?
           </h2>
           <div className="mt-12">
-            <Link
-              href="/plata"
+            <a
+              href={WAITLIST_BOT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block px-10 py-5 rounded-lg text-lg font-semibold uppercase tracking-wide transition-all hover:opacity-90"
               style={{
                 background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
@@ -765,8 +754,8 @@ export default function Relatia360Page() {
               }}
             >
               👉 Vreau cursul „Relația 360<br />
-              De la conflict la conectare"
-            </Link>
+              De la conflict la conectare{`"`}
+            </a>
           </div>
         </div>
       </section>
