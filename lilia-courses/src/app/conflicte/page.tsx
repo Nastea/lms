@@ -13,7 +13,16 @@ export default function Relatia360Page() {
     <div className="min-h-screen w-full overflow-x-hidden" style={{ background: "linear-gradient(to bottom, #f5ede3, #ebdfce)" }}>
       <AuthErrorBanner />
       {/* Hero Section - Full Background Image */}
-      <section className="relative overflow-hidden pt-8 pb-20 md:py-32 min-h-0 md:min-h-[700px] flex items-start md:items-center">
+      <section className="relative overflow-hidden pt-8 pb-20 md:py-32 min-h-screen md:min-h-[700px] flex items-start md:items-center">
+        {/* Background Image - Mobile (fallback: gradient when image missing) */}
+        <div className="absolute inset-0 z-0 md:hidden">
+          <HeroImage
+            src="/api/img/mobile-hero-2.png"
+            alt="Lilia Dubița - Background"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+            priority
+          />
+        </div>
         {/* Background Image - Desktop */}
         <div className="absolute inset-0 z-0 hidden md:block">
           <HeroImage
@@ -27,7 +36,7 @@ export default function Relatia360Page() {
         {/* Content */}
         <div className="relative z-10 mx-auto px-4 sm:px-6 max-w-7xl w-full h-full flex items-start md:items-center pt-4 md:pt-0">
           <div className="max-w-2xl w-full md:w-auto md:max-w-2xl">
-            {/* Mobile */}
+            {/* Mobile: Center content above person */}
             <div className="md:hidden text-center">
               {/* Badge */}
               <div className="flex items-center justify-center gap-3 mb-4">
@@ -76,38 +85,29 @@ export default function Relatia360Page() {
                 Descoperă ce se întâmplă <strong>DE FAPT</strong> în comunicare când apare conflictul — și de ce tot ce ai încercat până acum nu a funcționat.
               </p>
 
-              {/* CTA — tot rândul */}
-              <a
-                href={WAITLIST_BOT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full rounded-lg px-4 py-3.5 text-center text-[12px] font-semibold uppercase tracking-wide transition-all hover:opacity-90 sm:text-[13px] sm:py-4"
-                style={{
-                  background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
-                  color: "#FFFFFF",
-                  boxShadow: "0 4px 12px rgba(229, 107, 111, 0.4)",
-                }}
-              >
-                Intră pe lista de așteptare în Telegram
-              </a>
-
-              {/* Sub buton: text promo stânga, poză dreapta (fără suprapunere). mix-blend-screen: negru → „transparent” pe fundalul paginii */}
-              <div className="mt-5 flex flex-row items-end gap-3 sm:gap-4">
+              {/* CTA — listă de așteptare (Telegram); microcopy dreapta (spațiu liber față de portret) */}
+              <div className="w-full max-w-lg mx-auto px-2">
+                <div className="flex justify-center">
+                  <a
+                    href={WAITLIST_BOT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block w-full max-w-sm rounded-lg px-6 py-3.5 text-center text-sm font-semibold uppercase tracking-wide transition-all hover:opacity-90 sm:text-[15px]"
+                    style={{
+                      background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
+                      color: "#FFFFFF",
+                      boxShadow: "0 4px 12px rgba(229, 107, 111, 0.4)",
+                    }}
+                  >
+                    Intră pe lista de așteptare în Telegram
+                  </a>
+                </div>
                 <p
-                  className="min-w-0 flex-1 self-center text-left text-[11px] leading-snug sm:text-sm sm:leading-relaxed"
+                  className="mt-2 ml-auto max-w-[13rem] sm:max-w-[15rem] text-right text-[11px] sm:text-xs leading-snug"
                   style={{ color: "#4B5563" }}
                 >
-                  Primești toate detaliile despre lansare pe{" "}
-                  <strong style={{ color: "#1F2933" }}>3 aprilie (vineri)</strong>, direct în Telegram.
+                  Primești detaliile lansării direct în Telegram. Vineri, 3 aprilie.
                 </p>
-                <div className="w-[44%] max-w-[200px] shrink-0">
-                  <HeroImage
-                    src="/api/img/lilia-hero-portrait.png"
-                    alt="Lilia Dubița"
-                    className="h-auto w-full max-h-[min(52vw,260px)] object-contain object-bottom mix-blend-screen"
-                    priority
-                  />
-                </div>
               </div>
             </div>
 
@@ -176,7 +176,7 @@ export default function Relatia360Page() {
                 Intră pe lista de așteptare în Telegram
               </a>
               <p className="text-sm max-w-xl" style={{ color: "#4B5563" }}>
-                Primești detaliile lansării direct în Telegram.
+                Primești detaliile lansării direct în Telegram. Vineri, 3 aprilie.
               </p>
             </div>
             </div>
