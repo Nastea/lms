@@ -15,7 +15,7 @@ export const metadata = {
 };
 
 // Video-ul pentru lecția gratuită (ignoram `data.video_url` ca să se poată actualiza rapid UI-ul).
-const FREE_LESSON_VIDEO_SRC = "https://www.youtube.com/embed/Dl4nWskUuTs";
+const FREE_LESSON_VIDEO_SRC = "https://www.youtube.com/embed/kfszA7TdjVE";
 
 const TECHNIQUE_GROUPS = [
   {
