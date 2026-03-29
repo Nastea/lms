@@ -279,39 +279,6 @@ export default async function LessonZeroPublicPage() {
           </Link>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t bg-white px-4 py-9 text-center sm:px-8" style={{ borderColor: "#E0D5C8" }}>
-        <div
-          className="mb-3 text-lg italic text-[#2C2118]"
-          style={{ fontFamily: "var(--font-heading), Georgia, serif" }}
-        >
-          Relația 360
-        </div>
-        <div className="mb-4 text-[13px] leading-relaxed text-[#8C7A6A]">
-          Danex Prim SRL
-          <br />
-          mun. Chișinău, sec. Buiucani, str. Calea Ieșilor, 11
-          <br />
-          Tel: 067102290 · danexprim@liliadubita.md
-        </div>
-        <div className="mb-5 flex flex-wrap justify-center gap-5">
-          <Link href="/termeni" className="text-xs text-[#8C7A6A] hover:text-[#C2735A]">
-            Termeni și Condiții
-          </Link>
-          <Link href="/confidentialitate" className="text-xs text-[#8C7A6A] hover:text-[#C2735A]">
-            Politică de Confidențialitate
-          </Link>
-        </div>
-        <div className="mb-5 flex justify-center gap-2">
-          <span className="rounded bg-[#1A1F71] px-2.5 py-1 text-[11px] font-bold italic tracking-wide text-white">
-            VISA
-          </span>
-        </div>
-        <p className="text-xs" style={{ color: "#E0D5C8" }}>
-          © {new Date().getFullYear()} Danex Prim SRL. Toate drepturile rezervate.
-        </p>
-      </footer>
     </div>
   );
 }
