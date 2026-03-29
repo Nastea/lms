@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { AuthErrorBanner } from "@/components/AuthErrorBanner";
 import { HeroImage } from "@/components/HeroImage";
+import { WAITLIST_BOT_URL } from "@/lib/waitlistBotUrl";
 
 export const metadata: Metadata = {
   title: "RELAȚIA 360 - De la conflict la conectare | Mini-curs practic",
@@ -97,31 +98,24 @@ export default function Relatia360Page() {
                 Descoperă ce se întâmplă <strong>DE FAPT</strong> în comunicare când apare conflictul — și de ce tot ce ai încercat până acum nu a funcționat.
               </p>
 
-              {/* CTA Button */}
-              <div className="flex flex-col items-center gap-3">
-                <Link
-                  href="/plata"
-                  className="inline-block px-6 py-3 rounded-lg text-sm font-semibold uppercase tracking-wide transition-all hover:opacity-90"
+              {/* CTA — listă de așteptare (Telegram) */}
+              <div className="flex flex-col items-center gap-2.5 px-2">
+                <a
+                  href={WAITLIST_BOT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block w-full max-w-sm rounded-lg px-6 py-3.5 text-center text-sm font-semibold uppercase tracking-wide transition-all hover:opacity-90 sm:text-[15px]"
                   style={{
                     background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
                     color: "#FFFFFF",
                     boxShadow: "0 4px 12px rgba(229, 107, 111, 0.4)",
                   }}
                 >
-                  Vreau acces la cursul complet
-                </Link>
-                <Link
-                  href="/curs/lectia-0"
-                  className="inline-block px-6 py-3 rounded-lg text-sm font-semibold uppercase tracking-wide transition-all hover:opacity-90"
-                  style={{
-                    color: "#1F2933",
-                    backgroundColor: "rgba(255, 255, 255, 0.92)",
-                    border: "1px solid rgba(31, 41, 51, 0.15)",
-                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
-                  }}
-                >
-                  Vreau acces la lecția gratuită
-                </Link>
+                  Intră pe lista de așteptare în Telegram
+                </a>
+                <p className="text-center text-xs sm:text-sm px-2" style={{ color: "#4B5563" }}>
+                  Primești detaliile lansării direct în Telegram.
+                </p>
               </div>
             </div>
 
@@ -174,31 +168,24 @@ export default function Relatia360Page() {
                 Descoperă ce se întâmplă <strong>DE FAPT</strong> în comunicare când apare conflictul — și de ce tot ce ai încercat până acum nu a funcționat.
               </p>
 
-            {/* CTA Button */}
-            <div className="flex flex-col gap-3">
-              <Link
-                href="/plata"
-                className="inline-block px-8 py-4 rounded-lg text-base font-semibold uppercase tracking-wide transition-all hover:opacity-90 w-fit"
+            {/* CTA — listă de așteptare (Telegram) */}
+            <div className="flex flex-col gap-2">
+              <a
+                href={WAITLIST_BOT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-lg px-10 py-4 text-base font-semibold uppercase tracking-wide transition-all hover:opacity-90 w-fit"
                 style={{
                   background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
                   color: "#FFFFFF",
                   boxShadow: "0 4px 12px rgba(229, 107, 111, 0.4)",
                 }}
               >
-                Vreau acces la cursul complet
-              </Link>
-              <Link
-                href="/curs/lectia-0"
-                className="inline-block px-8 py-4 rounded-lg text-base font-semibold uppercase tracking-wide transition-all hover:opacity-90 w-fit"
-                style={{
-                  color: "#1F2933",
-                  backgroundColor: "rgba(255, 255, 255, 0.92)",
-                  border: "1px solid rgba(31, 41, 51, 0.15)",
-                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
-                }}
-              >
-                Vreau acces la lecția gratuită
-              </Link>
+                Intră pe lista de așteptare în Telegram
+              </a>
+              <p className="text-sm max-w-xl" style={{ color: "#4B5563" }}>
+                Primești detaliile lansării direct în Telegram.
+              </p>
             </div>
             </div>
 

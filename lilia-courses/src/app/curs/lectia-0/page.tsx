@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getFirstLessonPublicData } from "@/lib/lesson-zero-public";
 import { notFound } from "next/navigation";
-import { COURSE_PRICE } from "@/lib/coursePrice";
+import { WAITLIST_BOT_URL } from "@/lib/waitlistBotUrl";
 
 const COURSE_ID =
   process.env.PAYMENT_COURSE_ID || "6b8bc0bf-d5b9-4914-b980-b728199d809b";
@@ -11,20 +11,11 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Lecția 1 – RELAȚIA 360 | De la conflict la conectare",
   description:
-    "9 tehnici practice pentru o comunicare mai bună în cuplu. Lecție gratuită din programul Relația 360.",
+    "Intră pe lista de așteptare pentru detaliile lansării. Înscrierile se deschid pe 3 aprilie (doar 2 zile). Materiale practice pentru comunicare în cuplu.",
 };
 
 // Video-ul pentru lecția gratuită (ignoram `data.video_url` ca să se poată actualiza rapid UI-ul).
 const FREE_LESSON_VIDEO_SRC = "https://www.youtube.com/embed/Dl4nWskUuTs";
-
-const PROGRAM_FEATURES = [
-  "5 lecții video practice",
-  "Explicații clare despre dinamica conflictelor",
-  "Exerciții aplicate pentru relația ta",
-  "Caiet PDF de lucru",
-  "Acces online imediat",
-  "Acces pentru 6 luni",
-] as const;
 
 const TECHNIQUE_GROUPS = [
   {
@@ -60,9 +51,6 @@ export default async function LessonZeroPublicPage() {
   const data = await getFirstLessonPublicData(COURSE_ID);
   if (!data) notFound();
 
-  // Link Telegram specific pentru lecția gratuită (start param).
-  const botUrl = "https://t.me/liliadubita_bot?start=ZGw6MzIwNzE3";
-
   return (
     <div
       className="min-h-screen w-full overflow-x-hidden text-[#2C2118]"
@@ -73,7 +61,7 @@ export default async function LessonZeroPublicPage() {
         className="px-4 py-2.5 text-center text-[13px] font-medium tracking-wide text-white"
         style={{ backgroundColor: "#C2735A" }}
       >
-        ⏳ Ofertă specială disponibilă pentru următoarele 24 de ore – {COURSE_PRICE.label}
+        Înscrierile se deschid pe 3 aprilie și vor fi deschise doar 2 zile. Intră pe lista de așteptare în Telegram.
       </div>
 
       {/* Header */}
@@ -110,24 +98,23 @@ export default async function LessonZeroPublicPage() {
             borderColor: "#E0D5C8",
           }}
         >
-          Lecția 1 din programul „Relația 360”
+          Lista de așteptare
         </div>
         <h1
           className="mx-auto mb-5 max-w-[700px] text-[clamp(28px,5vw,48px)] leading-[1.2]"
           style={{ fontFamily: "var(--font-heading), Georgia, serif" }}
         >
-          9 tehnici practice pentru o comunicare{" "}
-          <em className="italic" style={{ color: "#C2735A" }}>
-            mai bună
-          </em>{" "}
-          în cuplu
+          Intră pe lista de așteptare pentru a primi detaliile lansării
         </h1>
         <p className="mx-auto max-w-[560px] text-base leading-relaxed text-[#5C4A38]">
-          Descoperă tehnicile pe care le poți folosi chiar astăzi — ușor de implementat, cu rezultat imediat vizibil în relația ta.
+          Înscrierile se deschid pe 3 aprilie și vor fi deschise doar 2 zile. Intră în Telegram ca să primești prima toate detaliile.
         </p>
       </section>
 
       <main className="mx-auto max-w-[760px] px-4 pb-20 pt-12 sm:px-6">
+        <p className="mb-4 text-center text-[13px] leading-relaxed text-[#8C7A6A]">
+          Mai jos găsești lecția de lucru ca material video — detaliile despre lansare le primești pe lista de așteptare.
+        </p>
         {/* Video */}
         {FREE_LESSON_VIDEO_SRC ? (
           <div
@@ -153,21 +140,19 @@ export default async function LessonZeroPublicPage() {
           </div>
         )}
 
-        {/* CTA secondary: next lesson in Telegram */}
+        {/* CTA principal — listă de așteptare */}
         <div className="mb-8 flex justify-center">
           <a
-            href={botUrl}
+            href={WAITLIST_BOT_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-xl px-8 py-3 text-base font-semibold transition hover:opacity-95 active:scale-[0.99]"
+            className="inline-flex items-center justify-center rounded-xl px-10 py-3.5 text-base font-semibold text-white transition hover:opacity-95 active:scale-[0.99]"
             style={{
-              background: "rgba(255,255,255,0.92)",
-              color: "#1F2933",
-              border: "1px solid rgba(31, 41, 51, 0.15)",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
+              backgroundColor: "#C2735A",
+              boxShadow: "0 4px 14px rgba(194, 115, 90, 0.35)",
             }}
           >
-            Vezi lecția următoare
+            Intră
           </a>
         </div>
 
@@ -255,7 +240,7 @@ export default async function LessonZeroPublicPage() {
 
         <hr className="mb-12 border-0 border-t" style={{ borderColor: "#E0D5C8" }} />
 
-        {/* Program CTA block */}
+        {/* Program CTA block — listă de așteptare */}
         <div
           className="mb-12 rounded-2xl px-7 py-10 text-white sm:px-9"
           style={{ backgroundColor: "#2C2118" }}
@@ -267,56 +252,25 @@ export default async function LessonZeroPublicPage() {
             className="mb-4 text-2xl leading-snug text-white"
             style={{ fontFamily: "var(--font-heading), Georgia, serif" }}
           >
-            Programul complet „Relația 360 – De la conflict la conectare”
+            Intră pe lista de așteptare
           </h2>
-          <p className="mb-7 text-[15px] leading-relaxed text-white/70">
-            Programul merge mai departe și îți arată cum să transformi aceste tipare de comunicare în conexiune autentică. Fiecare lecție construiește pe ce ai învățat în lecția anterioară.
+          <p className="mb-8 text-[15px] leading-relaxed text-white/75">
+            Înscrierile pentru programul „Relația 360 – De la conflict la conectare” se deschid pe{" "}
+            <strong className="text-white/95">3 aprilie</strong>, iar vânzările vor fi deschise doar{" "}
+            <strong className="text-white/95">2 zile</strong>. În Telegram primești toate detaliile despre lansare.
           </p>
-
-          <ul className="mb-9 grid list-none grid-cols-1 gap-2.5 sm:grid-cols-2">
-            {PROGRAM_FEATURES.map((item) => (
-              <li
-                key={item}
-                className="flex items-start gap-2 text-[14px] leading-snug text-white/85"
-              >
-                <span className="mt-0.5 shrink-0 text-[12px] text-[#E8A48E]">✦</span>
-                {item}
-              </li>
-            ))}
-          </ul>
-
-          <div
-            className="rounded-xl border px-6 py-6"
-            style={{
-              backgroundColor: "rgba(255,255,255,0.08)",
-              borderColor: "rgba(255,255,255,0.15)",
-            }}
+          <a
+            href={WAITLIST_BOT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full rounded-lg py-4 text-center text-base font-medium text-white transition hover:-translate-y-px"
+            style={{ backgroundColor: "#C2735A" }}
           >
-            <div className="mb-1 flex flex-wrap items-baseline gap-3">
-              <span
-                className="text-4xl text-white"
-                style={{ fontFamily: "var(--font-heading), Georgia, serif" }}
-              >
-                {COURSE_PRICE.label}
-              </span>
-              <span className="text-[13px] text-white/55">acces complet · 6 luni</span>
-            </div>
-            <p className="mb-5 text-[13px] text-[#E8A48E]">
-              ⏳ Preț special disponibil pentru următoarele 24 de ore
-            </p>
-            <a
-              href={botUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full rounded-lg py-4 text-center text-base font-medium text-white transition hover:-translate-y-px"
-              style={{ backgroundColor: "#C2735A" }}
-            >
-              Intră în program →
-            </a>
-            <p className="mt-2.5 text-center text-[12px] text-white/45">
-              Vei fi dus în Telegram pentru pașii următori
-            </p>
-          </div>
+            Intră
+          </a>
+          <p className="mt-3 text-center text-[12px] text-white/45">
+            Deschide linkul în Telegram pentru lista de așteptare
+          </p>
         </div>
 
         <div className="text-center">
