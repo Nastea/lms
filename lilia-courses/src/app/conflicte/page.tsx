@@ -13,19 +13,7 @@ export default function Relatia360Page() {
     <div className="min-h-screen w-full overflow-x-hidden" style={{ background: "linear-gradient(to bottom, #f5ede3, #ebdfce)" }}>
       <AuthErrorBanner />
       {/* Hero Section - Full Background Image */}
-      <section className="relative overflow-hidden pt-8 pb-20 md:py-32 min-h-screen md:min-h-[700px] flex items-start md:items-center">
-        {/* Mobile: portret ancorat jos (sub text/buton); conținutul e z-10 ca butonul să rămână deasupra la suprapunere) */}
-        <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[min(58vh,440px)] md:hidden"
-          aria-hidden
-        >
-          <HeroImage
-            src="/api/img/lilia-hero-portrait.png"
-            alt=""
-            className="h-full w-full object-cover object-bottom"
-            priority
-          />
-        </div>
+      <section className="relative overflow-hidden pt-8 pb-20 md:py-32 min-h-0 md:min-h-[700px] flex items-start md:items-center">
         {/* Background Image - Desktop */}
         <div className="absolute inset-0 z-0 hidden md:block">
           <HeroImage
@@ -88,27 +76,38 @@ export default function Relatia360Page() {
                 Descoperă ce se întâmplă <strong>DE FAPT</strong> în comunicare când apare conflictul — și de ce tot ce ai încercat până acum nu a funcționat.
               </p>
 
-              {/* CTA — frază în stânga (spațiul deschis), buton dreapta; conținut deasupra stratului cu poză */}
-              <div className="flex flex-row items-start gap-3 px-2">
+              {/* CTA — tot rândul */}
+              <a
+                href={WAITLIST_BOT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full rounded-lg px-4 py-3.5 text-center text-[12px] font-semibold uppercase tracking-wide transition-all hover:opacity-90 sm:text-[13px] sm:py-4"
+                style={{
+                  background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
+                  color: "#FFFFFF",
+                  boxShadow: "0 4px 12px rgba(229, 107, 111, 0.4)",
+                }}
+              >
+                Intră pe lista de așteptare în Telegram
+              </a>
+
+              {/* Sub buton: text promo stânga, poză dreapta (fără suprapunere). mix-blend-screen: negru → „transparent” pe fundalul paginii */}
+              <div className="mt-5 flex flex-row items-end gap-3 sm:gap-4">
                 <p
-                  className="max-w-[132px] shrink-0 pt-1 text-left text-[10px] leading-snug sm:max-w-[150px] sm:text-[11px]"
+                  className="min-w-0 flex-1 self-center text-left text-[11px] leading-snug sm:text-sm sm:leading-relaxed"
                   style={{ color: "#4B5563" }}
                 >
-                  Primești detaliile lansării direct în Telegram.
+                  Primești toate detaliile despre lansare pe{" "}
+                  <strong style={{ color: "#1F2933" }}>3 aprilie (vineri)</strong>, direct în Telegram.
                 </p>
-                <a
-                  href={WAITLIST_BOT_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="min-w-0 flex-1 rounded-lg px-3 py-3.5 text-center text-[11px] font-semibold uppercase tracking-wide transition-all hover:opacity-90 sm:px-4 sm:text-[13px] sm:py-3.5"
-                  style={{
-                    background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
-                    color: "#FFFFFF",
-                    boxShadow: "0 4px 12px rgba(229, 107, 111, 0.4)",
-                  }}
-                >
-                  Intră pe lista de așteptare în Telegram
-                </a>
+                <div className="w-[44%] max-w-[200px] shrink-0">
+                  <HeroImage
+                    src="/api/img/lilia-hero-portrait.png"
+                    alt="Lilia Dubița"
+                    className="h-auto w-full max-h-[min(52vw,260px)] object-contain object-bottom mix-blend-screen"
+                    priority
+                  />
+                </div>
               </div>
             </div>
 
