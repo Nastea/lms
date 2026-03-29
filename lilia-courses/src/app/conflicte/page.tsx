@@ -13,16 +13,8 @@ export default function Relatia360Page() {
     <div className="min-h-screen w-full overflow-x-hidden" style={{ background: "linear-gradient(to bottom, #f5ede3, #ebdfce)" }}>
       <AuthErrorBanner />
       {/* Hero Section - Full Background Image */}
-      <section className="relative overflow-hidden pt-8 pb-20 md:py-32 min-h-screen md:min-h-[700px] flex items-start md:items-center">
-        {/* Background Image - Mobile (fallback: gradient when image missing) */}
-        <div className="absolute inset-0 z-0 md:hidden">
-          <HeroImage
-            src="/api/img/mobile-hero-2.png"
-            alt="Lilia Dubița - Background"
-            className="absolute inset-0 w-full h-full object-cover object-center"
-            priority
-          />
-        </div>
+      <section className="relative overflow-hidden pt-8 pb-20 md:py-32 min-h-0 md:min-h-[700px] flex items-start md:items-center">
+        {/* Background Image - Desktop only (mobile: imagine în bloc, deasupra CTA) */}
         {/* Background Image - Desktop */}
         <div className="absolute inset-0 z-0 hidden md:block">
           <HeroImage
@@ -75,7 +67,7 @@ export default function Relatia360Page() {
 
               {/* Sub-headline */}
               <p 
-                className="text-base sm:text-lg leading-relaxed mb-6 px-4"
+                className="text-base sm:text-lg leading-relaxed mb-5 px-4"
                 style={{ 
                   color: "#1F2933",
                   lineHeight: "1.6",
@@ -85,13 +77,23 @@ export default function Relatia360Page() {
                 Descoperă ce se întâmplă <strong>DE FAPT</strong> în comunicare când apare conflictul — și de ce tot ce ai încercat până acum nu a funcționat.
               </p>
 
-              {/* CTA — listă de așteptare (Telegram) */}
-              <div className="flex flex-col items-center gap-2.5 px-2">
+              {/* Poză Lilia — deasupra butonului (fără overlap pe textul secundar) */}
+              <div className="mb-5 w-full max-w-sm mx-auto overflow-hidden rounded-2xl shadow-md">
+                <HeroImage
+                  src="/api/img/mobile-hero-2.png"
+                  alt="Lilia Dubița"
+                  className="h-[min(52vw,220px)] w-full object-cover object-[center_12%]"
+                  priority
+                />
+              </div>
+
+              {/* CTA — buton + frază secundară în dreapta */}
+              <div className="flex flex-row items-start gap-2.5 px-1 sm:px-2">
                 <a
                   href={WAITLIST_BOT_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block w-full max-w-sm rounded-lg px-6 py-3.5 text-center text-sm font-semibold uppercase tracking-wide transition-all hover:opacity-90 sm:text-[15px]"
+                  className="min-w-0 flex-1 rounded-lg px-3 py-3.5 text-center text-[11px] font-semibold uppercase tracking-wide transition-all hover:opacity-90 sm:px-4 sm:text-[13px] sm:py-3.5"
                   style={{
                     background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
                     color: "#FFFFFF",
@@ -100,7 +102,10 @@ export default function Relatia360Page() {
                 >
                   Intră pe lista de așteptare în Telegram
                 </a>
-                <p className="text-center text-xs sm:text-sm px-2" style={{ color: "#4B5563" }}>
+                <p
+                  className="w-[34%] max-w-[118px] shrink-0 pt-0.5 text-left text-[10px] leading-snug sm:text-[11px]"
+                  style={{ color: "#4B5563" }}
+                >
                   Primești detaliile lansării direct în Telegram.
                 </p>
               </div>
