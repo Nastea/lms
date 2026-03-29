@@ -13,7 +13,7 @@ export default function Relatia360Page() {
     <div className="min-h-screen w-full overflow-x-hidden" style={{ background: "linear-gradient(to bottom, #f5ede3, #ebdfce)" }}>
       <AuthErrorBanner />
       {/* Hero Section - Full Background Image */}
-      <section className="relative overflow-hidden pt-8 pb-20 md:py-32 min-h-screen md:min-h-[700px] flex items-start md:items-center">
+      <section className="relative overflow-hidden pt-6 pb-20 md:py-32 min-h-screen md:min-h-[700px] flex items-start md:items-center">
         {/* Background Image - Mobile (fallback: gradient when image missing) */}
         <div className="absolute inset-0 z-0 md:hidden">
           <HeroImage
@@ -34,7 +34,7 @@ export default function Relatia360Page() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 mx-auto px-4 sm:px-6 max-w-7xl w-full h-full flex items-start md:items-center pt-4 md:pt-0">
+        <div className="relative z-10 mx-auto px-4 sm:px-6 max-w-7xl w-full h-full flex items-start md:items-center pt-2 md:pt-0">
           <div className="max-w-2xl w-full md:w-auto md:max-w-2xl">
             {/* Mobile: Center content above person */}
             <div className="md:hidden text-center">
