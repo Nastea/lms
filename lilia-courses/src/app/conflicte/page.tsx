@@ -13,8 +13,19 @@ export default function Relatia360Page() {
     <div className="min-h-screen w-full overflow-x-hidden" style={{ background: "linear-gradient(to bottom, #f5ede3, #ebdfce)" }}>
       <AuthErrorBanner />
       {/* Hero Section - Full Background Image */}
-      <section className="relative overflow-hidden pt-8 pb-20 md:py-32 min-h-0 md:min-h-[700px] flex items-start md:items-center">
-        {/* Background Image - Desktop only (mobile: imagine în bloc, deasupra CTA) */}
+      <section className="relative overflow-hidden pt-8 pb-20 md:py-32 min-h-screen md:min-h-[700px] flex items-start md:items-center">
+        {/* Mobile: portret ancorat jos (sub text/buton); conținutul e z-10 ca butonul să rămână deasupra la suprapunere) */}
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[min(58vh,440px)] md:hidden"
+          aria-hidden
+        >
+          <HeroImage
+            src="/api/img/lilia-hero-portrait.png"
+            alt=""
+            className="h-full w-full object-cover object-bottom"
+            priority
+          />
+        </div>
         {/* Background Image - Desktop */}
         <div className="absolute inset-0 z-0 hidden md:block">
           <HeroImage
@@ -28,7 +39,7 @@ export default function Relatia360Page() {
         {/* Content */}
         <div className="relative z-10 mx-auto px-4 sm:px-6 max-w-7xl w-full h-full flex items-start md:items-center pt-4 md:pt-0">
           <div className="max-w-2xl w-full md:w-auto md:max-w-2xl">
-            {/* Mobile: Center content above person */}
+            {/* Mobile */}
             <div className="md:hidden text-center">
               {/* Badge */}
               <div className="flex items-center justify-center gap-3 mb-4">
@@ -67,7 +78,7 @@ export default function Relatia360Page() {
 
               {/* Sub-headline */}
               <p 
-                className="text-base sm:text-lg leading-relaxed mb-5 px-4"
+                className="text-base sm:text-lg leading-relaxed mb-6 px-4"
                 style={{ 
                   color: "#1F2933",
                   lineHeight: "1.6",
@@ -77,18 +88,14 @@ export default function Relatia360Page() {
                 Descoperă ce se întâmplă <strong>DE FAPT</strong> în comunicare când apare conflictul — și de ce tot ce ai încercat până acum nu a funcționat.
               </p>
 
-              {/* Poză Lilia — deasupra butonului (fără overlap pe textul secundar) */}
-              <div className="mb-5 w-full max-w-sm mx-auto overflow-hidden rounded-2xl shadow-md">
-                <HeroImage
-                  src="/api/img/mobile-hero-2.png"
-                  alt="Lilia Dubița"
-                  className="h-[min(52vw,220px)] w-full object-cover object-[center_12%]"
-                  priority
-                />
-              </div>
-
-              {/* CTA — buton + frază secundară în dreapta */}
-              <div className="flex flex-row items-start gap-2.5 px-1 sm:px-2">
+              {/* CTA — frază în stânga (spațiul deschis), buton dreapta; conținut deasupra stratului cu poză */}
+              <div className="flex flex-row items-start gap-3 px-2">
+                <p
+                  className="max-w-[132px] shrink-0 pt-1 text-left text-[10px] leading-snug sm:max-w-[150px] sm:text-[11px]"
+                  style={{ color: "#4B5563" }}
+                >
+                  Primești detaliile lansării direct în Telegram.
+                </p>
                 <a
                   href={WAITLIST_BOT_URL}
                   target="_blank"
@@ -102,12 +109,6 @@ export default function Relatia360Page() {
                 >
                   Intră pe lista de așteptare în Telegram
                 </a>
-                <p
-                  className="w-[34%] max-w-[118px] shrink-0 pt-0.5 text-left text-[10px] leading-snug sm:text-[11px]"
-                  style={{ color: "#4B5563" }}
-                >
-                  Primești detaliile lansării direct în Telegram.
-                </p>
               </div>
             </div>
 
