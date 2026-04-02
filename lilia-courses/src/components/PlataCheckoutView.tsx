@@ -2,7 +2,13 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { COURSE_PRICE } from '@/lib/coursePrice';
+import { COURSE_PRICE, type CoursePrice } from '@/lib/coursePrice';
+
+export type PlataCheckoutViewProps = {
+  /** Implicit: preț producție (`COURSE_PRICE`) */
+  price?: CoursePrice;
+  productId?: string;
+};
 
 const CE_CONTINE = [
   '5 lecții video practice',
@@ -50,19 +56,22 @@ function IconCheck() {
   );
 }
 
-export default function PlataCheckoutView() {
+export default function PlataCheckoutView({
+  price = COURSE_PRICE,
+  productId = 'relatia360_conflicte',
+}: PlataCheckoutViewProps) {
   const [email, setEmail] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const priceDisplay = useMemo(() => {
-    const parts = COURSE_PRICE.label.trim().split(/\s+/);
+    const parts = price.label.trim().split(/\s+/);
     if (parts.length >= 2) {
       return { amount: parts[0], currency: parts.slice(1).join(' ') };
     }
-    return { amount: COURSE_PRICE.label, currency: '' };
-  }, []);
+    return { amount: price.label, currency: '' };
+  }, [price]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,9 +84,9 @@ export default function PlataCheckoutView() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        productId: 'relatia360_conflicte',
-        amount: COURSE_PRICE.amount,
-        currency: COURSE_PRICE.currency,
+        productId,
+        amount: price.amount,
+        currency: price.currency,
         customer_email: email.trim(),
       }),
     });
@@ -212,7 +221,7 @@ export default function PlataCheckoutView() {
                   </>
                 ) : (
                   <span className="text-[52px] font-semibold leading-none text-white" style={serif}>
-                    {COURSE_PRICE.label}
+                    {price.label}
                   </span>
                 )}
               </div>
@@ -283,7 +292,7 @@ export default function PlataCheckoutView() {
                   className="w-full rounded-lg py-4 text-[15px] font-medium tracking-wide text-white transition hover:-translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
                   style={{ backgroundColor: '#E56B6F' }}
                 >
-                  {isLoading ? 'Se pregătește plata...' : `Merg la plată → ${COURSE_PRICE.label}`}
+                  {isLoading ? 'Se pregătește plata...' : 'Merg la plată'}
                 </button>
 
                 <div className="flex items-center justify-center gap-2 pt-1 text-xs text-[#9C7E6F]">

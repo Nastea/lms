@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
     // Product configuration (can be moved to a config file later)
     const productConfig: Record<string, { amount: number; currency: string }> = {
-      relatia360: { amount: 1, currency: 'MDL' },
+      relatia360: { amount: 995, currency: 'MDL' },
     };
 
     const config = productConfig[productId];
