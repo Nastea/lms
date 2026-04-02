@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-/** URL vechi de test — același flux ca /plata2 */
+/** URL vechi — redirecționare către pagina principală de plată */
 export default function PlataTestRedirect() {
-  redirect('/plata2');
+  redirect('/plata');
 }
