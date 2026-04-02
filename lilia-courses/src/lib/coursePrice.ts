@@ -1,12 +1,11 @@
 /**
  * Prețul cursului – o singură sursă pentru afișare și pentru plată.
- * Producție: 49 EUR.
+ * Temporar: 1 leu (MDL) pentru testare plată — revino la prețul real înainte de producție.
  */
 export const COURSE_PRICE = {
-  // Paynet afișează suma exact din `amount` (în MDL în integrarea curentă).
-  // Pe site afișăm în continuare 49 EUR (label), dar la Paynet trimitem echivalentul în MDL.
-  amount: 995,
+  /** Sumă trimisă la Paynet (MDL). */
+  amount: 1,
   currency: "MDL" as const,
-  /** Text afișat utilizatorului (ex: "49 EUR") */
-  label: "49 EUR",
+  /** Text afișat utilizatorului */
+  label: "1 leu",
 };
