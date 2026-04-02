@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { AuthErrorBanner } from "@/components/AuthErrorBanner";
 import { HeroImage } from "@/components/HeroImage";
-import { WAITLIST_BOT_URL } from "@/lib/waitlistBotUrl";
 
 export const metadata: Metadata = {
   title: "RELAȚIA 360 - De la conflict la conectare | Mini-curs practic",
@@ -85,13 +85,11 @@ export default function Relatia360Page() {
                 Descoperă ce se întâmplă <strong>DE FAPT</strong> în comunicare când apare conflictul — și de ce tot ce ai încercat până acum nu a funcționat.
               </p>
 
-              {/* CTA — listă de așteptare (Telegram); microcopy dreapta (spațiu liber față de portret) */}
+              {/* CTA — plată; microcopy dreapta (spațiu liber față de portret) */}
               <div className="w-full max-w-lg mx-auto px-2">
                 <div className="flex justify-center">
-                  <a
-                    href={WAITLIST_BOT_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    href="/plata"
                     className="inline-block w-full max-w-sm rounded-lg px-6 py-3.5 text-center text-sm font-semibold uppercase tracking-wide transition-all hover:opacity-90 sm:text-[15px]"
                     style={{
                       background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
@@ -99,14 +97,14 @@ export default function Relatia360Page() {
                       boxShadow: "0 4px 12px rgba(229, 107, 111, 0.4)",
                     }}
                   >
-                    Intră pe lista de așteptare în Telegram
-                  </a>
+                    Vreau cursul
+                  </Link>
                 </div>
                 <p
                   className="mt-2 ml-auto max-w-[13rem] sm:max-w-[15rem] text-right text-[11px] sm:text-xs leading-snug"
                   style={{ color: "#4B5563" }}
                 >
-                  Primești detaliile lansării direct în Telegram. Vineri, 3 aprilie.
+                  Plată securizată. După confirmare primești accesul la curs.
                 </p>
               </div>
             </div>
@@ -160,12 +158,10 @@ export default function Relatia360Page() {
                 Descoperă ce se întâmplă <strong>DE FAPT</strong> în comunicare când apare conflictul — și de ce tot ce ai încercat până acum nu a funcționat.
               </p>
 
-            {/* CTA — listă de așteptare (Telegram) */}
+            {/* CTA — plată */}
             <div className="flex flex-col gap-2">
-              <a
-                href={WAITLIST_BOT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/plata"
                 className="inline-block rounded-lg px-10 py-4 text-base font-semibold uppercase tracking-wide transition-all hover:opacity-90 w-fit"
                 style={{
                   background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
@@ -173,10 +169,10 @@ export default function Relatia360Page() {
                   boxShadow: "0 4px 12px rgba(229, 107, 111, 0.4)",
                 }}
               >
-                Intră pe lista de așteptare în Telegram
-              </a>
+                Vreau cursul
+              </Link>
               <p className="text-sm max-w-xl" style={{ color: "#4B5563" }}>
-                Primești detaliile lansării direct în Telegram. Vineri, 3 aprilie.
+                Plată securizată. După confirmare primești accesul la curs.
               </p>
             </div>
             </div>
@@ -747,10 +743,8 @@ export default function Relatia360Page() {
             COMUNICAȚI?
           </h2>
           <div className="mt-12">
-            <a
-              href={WAITLIST_BOT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/plata"
               className="inline-block px-10 py-5 rounded-lg text-lg font-semibold uppercase tracking-wide transition-all hover:opacity-90"
               style={{
                 background: "linear-gradient(135deg, #E56B6F 0%, #D84A4E 100%)",
@@ -760,7 +754,7 @@ export default function Relatia360Page() {
             >
               👉 Vreau cursul „Relația 360<br />
               De la conflict la conectare{`"`}
-            </a>
+            </Link>
           </div>
         </div>
       </section>
