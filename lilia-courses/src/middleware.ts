@@ -17,6 +17,7 @@ export async function middleware(request: NextRequest) {
     "/conflicte",
     "/inscriere",
     "/plata",
+    "/plata2",
     "/multumim",
     "/termeni",
     "/confidentialitate",
