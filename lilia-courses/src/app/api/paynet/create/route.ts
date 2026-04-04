@@ -446,9 +446,10 @@ export async function POST(req: Request) {
         const cancelUrl = `${baseUrl}/plata?cancel=1&order=${orderId}`;
         const expiryDate = formatPaynetDate(new Date(Date.now() + 2 * 60 * 60 * 1000));
         const redirectAction = `${portalHost}/acquiring/getecom`;
+        // Must match Payments/Send field names: LinkUrlSuccess (not LinkUrlSucces), or getecom may 302 to CustomException
         const paynet_redirect_params: Record<string, string> = {
           operation: paymentId.toString(),
-          LinkUrlSucces: successUrl,
+          LinkUrlSuccess: successUrl,
           LinkUrlCancel: cancelUrl,
           ExpiryDate: expiryDate,
           Lang: 'ro',
