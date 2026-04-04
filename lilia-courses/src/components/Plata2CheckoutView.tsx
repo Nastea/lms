@@ -40,7 +40,9 @@ export default function Plata2CheckoutView() {
       return;
     }
 
-    if (json.ok && json.paynet_redirect_action && json.paynet_redirect_params) {
+    if (json.ok && json.payment_url) {
+      window.location.assign(json.payment_url);
+    } else if (json.ok && json.paynet_redirect_action && json.paynet_redirect_params) {
       const form = document.createElement('form');
       form.method = 'POST';
       form.action = json.paynet_redirect_action;
@@ -53,8 +55,6 @@ export default function Plata2CheckoutView() {
       });
       document.body.appendChild(form);
       form.submit();
-    } else if (json.ok && json.payment_url) {
-      window.location.assign(json.payment_url);
     } else if (json.ok && json.payment_id && json.redirect_base) {
       window.location.assign(`${json.redirect_base}?operation=${json.payment_id}&Lang=ro`);
     } else {

@@ -428,6 +428,18 @@ export async function POST(req: Request) {
           continue;
         }
 
+        // If Paynet returns a ready payment page URL, use it (avoids fragile getecom form binding).
+        const directPaymentUrl =
+          typeof paymentData.PaymentPageUrl === 'string' && paymentData.PaymentPageUrl.startsWith('http')
+            ? paymentData.PaymentPageUrl
+            : typeof paymentData.PaymentUrl === 'string' && paymentData.PaymentUrl.startsWith('http')
+              ? paymentData.PaymentUrl
+              : typeof paymentData.RedirectUrl === 'string' && paymentData.RedirectUrl.startsWith('http')
+                ? paymentData.RedirectUrl
+                : typeof paymentData.Url === 'string' && paymentData.Url.startsWith('http')
+                  ? paymentData.Url
+                  : null;
+
         // Update order with paynet_payment_id and signature
         const updateData: any = {
           paynet_payment_id: Number(paymentId),
@@ -447,14 +459,26 @@ export async function POST(req: Request) {
           // Continue anyway, payment was created
         }
 
-        // Paynet getecom expects POST (form), not GET (per psp-redirect.html)
         const successUrl = `${baseUrl}/multumim?order=${orderId}`;
         const cancelUrl = `${baseUrl}/plata?cancel=1&order=${orderId}`;
         const expiryDate = formatPaynetDate(new Date(Date.now() + 2 * 60 * 60 * 1000));
+
+        if (directPaymentUrl) {
+          return NextResponse.json({
+            ok: true,
+            orderId: orderId,
+            invoice: String(invoice),
+            payment_id: paymentId.toString(),
+            signature: signature || null,
+            attempt: attempt.id,
+            payment_url: directPaymentUrl,
+          });
+        }
+
+        // Paynet getecom: use Operation (PascalCase); lowercase "operation" often fails ASP.NET model binding → CustomException.
         const redirectAction = `${portalHost}/acquiring/getecom`;
-        // Must match Payments/Send field names: LinkUrlSuccess (not LinkUrlSucces), or getecom may 302 to CustomException
         const paynet_redirect_params: Record<string, string> = {
-          operation: paymentId.toString(),
+          Operation: paymentId.toString(),
           LinkUrlSuccess: successUrl,
           LinkUrlCancel: cancelUrl,
           ExpiryDate: expiryDate,
