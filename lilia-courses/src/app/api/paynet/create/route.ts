@@ -253,8 +253,14 @@ export async function POST(req: Request) {
       );
     }
 
-    // Build base URL for callbacks
-    const baseUrl = callbackUrl.replace('/api/paynet/callback', '');
+    // Public URLs for success/cancel must match the canonical site host (e.g. www) — Paynet may reject
+    // getecom if LinkUrl* differ from the merchant-registered domain. Prefer SITE_URL over callback host.
+    const baseUrlFromCallback = callbackUrl.replace('/api/paynet/callback', '').replace(/\/$/, '');
+    const baseUrl = (
+      process.env.SITE_URL ||
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      baseUrlFromCallback
+    ).replace(/\/$/, '');
 
     // Define attempts: PHP SDK structure (NO Signature, SignVersion, MoneyType, WITH Lang) vs Reg.json structure (WITH them, NO Lang)
     // Also test JSON vs form-urlencoded
