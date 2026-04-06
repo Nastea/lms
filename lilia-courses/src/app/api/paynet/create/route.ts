@@ -87,7 +87,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const { productId, amount, currency = 'MDL', customer_name, customer_email, customer_phone } = body;
+    const { productId, amount, currency = 'MDL' } = body;
 
     // Body validation
     if (!productId || typeof productId !== 'string' || productId.trim() === '') {
@@ -110,6 +110,53 @@ export async function POST(req: Request) {
       );
     }
 
+    const customerFirstName =
+      typeof body.customer_first_name === 'string' ? body.customer_first_name.trim() : '';
+    const customerLastName =
+      typeof body.customer_last_name === 'string' ? body.customer_last_name.trim() : '';
+    const customerEmail =
+      typeof body.customer_email === 'string' ? body.customer_email.trim().toLowerCase() : '';
+    const customerPhoneRaw =
+      typeof body.customer_phone === 'string' ? body.customer_phone.trim() : '';
+    const customerPhoneDigits = customerPhoneRaw.replace(/\D/g, '');
+
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail);
+    if (!customerFirstName || !customerLastName || !emailOk || customerPhoneDigits.length < 8) {
+      return NextResponse.json(
+        {
+          error: 'BAD_REQUEST',
+          details:
+            'Sunt necesare prenume, nume, email valid și telefon (minim 8 cifre).',
+        },
+        { status: 400 }
+      );
+    }
+
+    if (customerFirstName.length > 80 || customerLastName.length > 80) {
+      return NextResponse.json(
+        {
+          error: 'BAD_REQUEST',
+          details: 'Prenumele și numele sunt prea lungi.',
+        },
+        { status: 400 }
+      );
+    }
+
+    const customerFullName = `${customerFirstName} ${customerLastName}`.trim();
+
+    /** Paynet Customer / Payer — only real payer data (no placeholder emails or generic names). */
+    const paynetCustomerBlock = {
+      Code: customerEmail,
+      Name: customerFullName,
+      NameFirst: customerFirstName,
+      NameLast: customerLastName,
+      email: customerEmail,
+      Country: 'Moldova',
+      City: '-',
+      Address: '-',
+      PhoneNumber: customerPhoneDigits,
+    };
+
     // Generate invoice ONCE (reuse for all attempts)
     // Generate invoice as small integer (10 digits max) matching Reg.json style
     const invoice = Math.floor(Date.now() / 1000);
@@ -127,9 +174,9 @@ export async function POST(req: Request) {
           status: 'pending',
           invoice: String(invoice),
           access_token: randomBytes(24).toString('base64url'),
-          ...(customer_name != null && { customer_name: String(customer_name).trim() || null }),
-          ...(customer_email != null && { customer_email: String(customer_email).trim() || null }),
-          ...(customer_phone != null && { customer_phone: String(customer_phone).trim() || null }),
+          customer_name: customerFullName,
+          customer_email: customerEmail,
+          customer_phone: customerPhoneDigits,
         })
         .select()
         .single();
@@ -316,17 +363,7 @@ export async function POST(req: Request) {
         MerchantCode: merchantCode, // STRING "982657"
         LinkUrlSuccess: `${baseUrl}/multumim?order=${orderId}`,
         LinkUrlCancel: `${baseUrl}/plata?cancel=1&order=${orderId}`,
-        Customer: {
-          Code: 'no-reply@liliadubita.md', // Email-like as in Reg.json
-          Name: 'Customer',
-          NameFirst: 'Customer',
-          NameLast: 'Customer',
-          email: 'no-reply@liliadubita.md',
-          Country: 'Moldova',
-          City: 'Chisinau',
-          Address: 'Online',
-          PhoneNumber: '79306530', // 8-digit numeric string
-        },
+        Customer: { ...paynetCustomerBlock },
         Currency: 498, // int 498 for MDL
         ExternalDate: formatPaynetDate(new Date()), // today in Moldova timezone
         ExpiryDate: formatPaynetDate(new Date(Date.now() + 2 * 60 * 60 * 1000)), // +2 hours
@@ -346,17 +383,7 @@ export async function POST(req: Request) {
         ...basePayload,
         ...(attempt.usePhpSdkStructure ? {
           // PHP SDK structure
-          Payer: {
-            Code: 'no-reply@liliadubita.md',
-            Name: 'Customer',
-            NameFirst: 'Customer',
-            NameLast: 'Customer',
-            email: 'no-reply@liliadubita.md',
-            Country: 'Moldova',
-            City: 'Chisinau',
-            Address: 'Online',
-            PhoneNumber: '79306530',
-          },
+          Payer: { ...paynetCustomerBlock },
           Lang: 'ro', // PHP SDK includes Lang
           // NO Signature, SignVersion, MoneyType
         } : {

@@ -50,8 +50,15 @@ function IconCheck() {
   );
 }
 
+function isValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+}
+
 export default function PlataCheckoutView() {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,7 +73,20 @@ export default function PlataCheckoutView() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim() || !acceptedTerms || isLoading) return;
+    const fn = firstName.trim();
+    const ln = lastName.trim();
+    const em = email.trim();
+    const ph = phone.trim();
+    if (!fn || !ln || !em || !ph || !acceptedTerms || isLoading) return;
+    if (!isValidEmail(em)) {
+      setError('Introdu o adresă de email validă.');
+      return;
+    }
+    const phoneDigits = ph.replace(/\D/g, '');
+    if (phoneDigits.length < 8) {
+      setError('Introdu un număr de telefon valid (minim 8 cifre).');
+      return;
+    }
 
     setIsLoading(true);
     setError(null);
@@ -78,7 +98,10 @@ export default function PlataCheckoutView() {
         productId: 'relatia360_conflicte',
         amount: COURSE_PRICE.amount,
         currency: COURSE_PRICE.currency,
-        customer_email: email.trim(),
+        customer_first_name: fn,
+        customer_last_name: ln,
+        customer_email: em.toLowerCase(),
+        customer_phone: ph,
       }),
     });
 
@@ -233,6 +256,42 @@ export default function PlataCheckoutView() {
               </ul>
 
               <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="firstName" className="mb-1.5 block text-xs font-medium tracking-wide text-[#6B5245]">
+                      Prenume
+                    </label>
+                    <input
+                      id="firstName"
+                      type="text"
+                      required
+                      autoComplete="given-name"
+                      maxLength={80}
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#2A1F18] outline-none transition-colors focus:border-[#E56B6F] focus:bg-white"
+                      style={{ borderColor: '#DDD4C4', backgroundColor: '#FAF7F2' }}
+                      placeholder="Prenume"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="lastName" className="mb-1.5 block text-xs font-medium tracking-wide text-[#6B5245]">
+                      Nume
+                    </label>
+                    <input
+                      id="lastName"
+                      type="text"
+                      required
+                      autoComplete="family-name"
+                      maxLength={80}
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#2A1F18] outline-none transition-colors focus:border-[#E56B6F] focus:bg-white"
+                      style={{ borderColor: '#DDD4C4', backgroundColor: '#FAF7F2' }}
+                      placeholder="Nume"
+                    />
+                  </div>
+                </div>
                 <div>
                   <label htmlFor="email" className="mb-1.5 block text-xs font-medium tracking-wide text-[#6B5245]">
                     Adresă de email
@@ -241,6 +300,7 @@ export default function PlataCheckoutView() {
                     id="email"
                     type="email"
                     required
+                    autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#2A1F18] outline-none transition-colors focus:border-[#E56B6F] focus:bg-white"
@@ -248,6 +308,23 @@ export default function PlataCheckoutView() {
                     placeholder="adresa@email.com"
                   />
                   <p className="mt-1.5 text-[11px] text-[#9C7E6F]">La acest email vei primi link-ul de acces după plată.</p>
+                </div>
+                <div>
+                  <label htmlFor="phone" className="mb-1.5 block text-xs font-medium tracking-wide text-[#6B5245]">
+                    Telefon
+                  </label>
+                  <input
+                    id="phone"
+                    type="tel"
+                    required
+                    autoComplete="tel"
+                    inputMode="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#2A1F18] outline-none transition-colors focus:border-[#E56B6F] focus:bg-white"
+                    style={{ borderColor: '#DDD4C4', backgroundColor: '#FAF7F2' }}
+                    placeholder="ex. 069123456 sau +37369123456"
+                  />
                 </div>
 
                 <div className="flex items-start gap-2.5">
@@ -279,7 +356,14 @@ export default function PlataCheckoutView() {
 
                 <button
                   type="submit"
-                  disabled={!acceptedTerms || !email.trim() || isLoading}
+                  disabled={
+                    !firstName.trim() ||
+                    !lastName.trim() ||
+                    !email.trim() ||
+                    !phone.trim() ||
+                    !acceptedTerms ||
+                    isLoading
+                  }
                   className="w-full rounded-lg py-4 text-[15px] font-medium tracking-wide text-white transition hover:-translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
                   style={{ backgroundColor: '#E56B6F' }}
                 >
