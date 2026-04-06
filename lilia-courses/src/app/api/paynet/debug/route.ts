@@ -93,7 +93,7 @@ export async function POST(req: Request) {
           Signature: null,
           SignVersion: 'v01',
           Customer: {
-            Code: 'paynet.debug.test@example.com',
+            Code: 'debug-order-' + String(testInvoice),
             Name: 'Test Client',
             NameFirst: 'Test',
             NameLast: 'Client',

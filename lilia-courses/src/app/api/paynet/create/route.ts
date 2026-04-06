@@ -144,19 +144,6 @@ export async function POST(req: Request) {
 
     const customerFullName = `${customerFirstName} ${customerLastName}`.trim();
 
-    /** Paynet Customer / Payer — only real payer data (no placeholder emails or generic names). */
-    const paynetCustomerBlock = {
-      Code: customerEmail,
-      Name: customerFullName,
-      NameFirst: customerFirstName,
-      NameLast: customerLastName,
-      email: customerEmail,
-      Country: 'Moldova',
-      City: '-',
-      Address: '-',
-      PhoneNumber: customerPhoneDigits,
-    };
-
     // Generate invoice ONCE (reuse for all attempts)
     // Generate invoice as small integer (10 digits max) matching Reg.json style
     const invoice = Math.floor(Date.now() / 1000);
@@ -216,6 +203,19 @@ export async function POST(req: Request) {
     }
 
     const orderId = data.id; // Use the auto-generated UUID
+
+    /** Paynet Customer / Payer: Name/email/phone from form; Code = unique id per order (not email). */
+    const paynetCustomerBlock = {
+      Code: orderId,
+      Name: customerFullName,
+      NameFirst: customerFirstName,
+      NameLast: customerLastName,
+      email: customerEmail,
+      Country: 'Moldova',
+      City: '-',
+      Address: '-',
+      PhoneNumber: customerPhoneDigits,
+    };
 
     const apiHost = getApiHost();
     const portalHost = getPortalHost();
