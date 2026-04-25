@@ -88,6 +88,9 @@ export default function Plata2CheckoutView() {
 
   return (
     <div className="flex min-h-screen w-full flex-col overflow-x-hidden text-[#2A1F18]" style={{ backgroundColor: '#FAF7F2' }}>
+      {/* Keep dark background visible in mobile safe-area/status bar zone */}
+      <div style={{ height: 'env(safe-area-inset-top)', backgroundColor: '#1F2933' }} />
+
       <header className="flex items-center justify-center px-4 py-[18px] sm:px-8" style={{ backgroundColor: '#1F2933' }}>
         <div className="text-[20px] font-medium tracking-wide text-[#EFE8DF]" style={serif}>
           Lilia Dubița <span className="text-[#B89880]">·</span> Relația{' '}
