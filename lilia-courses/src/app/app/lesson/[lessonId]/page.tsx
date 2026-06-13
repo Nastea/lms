@@ -14,11 +14,15 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
   const user = userRes?.user ?? null;
 
   // Fetch lesson (admin so it works with or without auth / RLS)
-  const { data: lesson } = await supabaseAdmin
+  const { data: lesson, error: lessonError } = await supabaseAdmin
     .from("lesson_full")
     .select("*")
     .eq("id", lessonId)
-    .single();
+    .maybeSingle();
+
+  if (lessonError) {
+    console.error("[lesson-page] Supabase error:", lessonError.message, lessonError.code);
+  }
 
   if (!lesson) {
     notFound();

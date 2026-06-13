@@ -53,9 +53,15 @@ export async function getFirstLessonId(courseId: string): Promise<string | null>
  * Uses FIRST_LESSON_ID env if set (reliable fallback when RPC fails or isn't deployed).
  */
 export async function getFirstLessonUrl(courseId: string): Promise<string | null> {
-  const fromEnv = process.env.FIRST_LESSON_ID;
-  if (fromEnv && fromEnv.trim()) {
-    return `/app/lesson/${fromEnv.trim()}`;
+  const fromEnv = process.env.FIRST_LESSON_ID?.trim();
+  if (fromEnv) {
+    const { data, error } = await supabaseAdmin
+      .from("lessons")
+      .select("id")
+      .eq("id", fromEnv)
+      .maybeSingle();
+    if (!error && data?.id) return `/app/lesson/${data.id}`;
+    console.warn("[first-lesson] FIRST_LESSON_ID not found in DB, falling back:", fromEnv);
   }
   const lessonId = await getFirstLessonId(courseId);
   return lessonId ? `/app/lesson/${lessonId}` : null;

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { getFirstLessonPublicData } from "@/lib/lesson-zero-public";
-import { notFound } from "next/navigation";
 import { WAITLIST_BOT_URL } from "@/lib/waitlistBotUrl";
 
 const COURSE_ID =
@@ -49,7 +48,7 @@ const TECHNIQUE_GROUPS = [
 
 export default async function LessonZeroPublicPage() {
   const data = await getFirstLessonPublicData(COURSE_ID);
-  if (!data) notFound();
+  const lessonTitle = data?.title ?? "Lecția 1 – RELAȚIA 360";
 
   return (
     <div
@@ -125,7 +124,7 @@ export default async function LessonZeroPublicPage() {
               <iframe
                 className="h-full w-full"
                 src={FREE_LESSON_VIDEO_SRC}
-                title={data.title}
+                title={lessonTitle}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
