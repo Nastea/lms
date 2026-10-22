@@ -514,6 +514,9 @@ export async function POST(req: Request) {
         const redirectAction = `${portalHost}/acquiring/getecom`;
         const paynet_redirect_params: Record<string, string> = {
           Operation: paymentId.toString(),
+          // Paynet's getecom form spells this field "LinkUrlSucces" (one s); without it the
+          // receipt page has no way back to the site. Keep both spellings.
+          LinkUrlSucces: successUrl,
           LinkUrlSuccess: successUrl,
           LinkUrlCancel: cancelUrl,
           ExpiryDate: expiryDate,
