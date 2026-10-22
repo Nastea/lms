@@ -25,12 +25,11 @@ export default function PaidStatus({ orderId }: { orderId: string | null }) {
       } catch {
         // retry below
       }
-      // ~3 minute de verificări, apoi arătăm mesajul de așteptare.
-      if (tries >= 60) {
-        setState('pending');
-        return;
-      }
-      timer = setTimeout(poll, 3000);
+      // Paynet trimite cumpărătorul aici și când plata nu a trecut. După ~30 s fără
+      // confirmare arătăm „nu a fost confirmată”, dar mai verificăm încă ~5 minute.
+      if (tries === 10) setState('pending');
+      if (tries >= 70) return;
+      timer = setTimeout(poll, tries < 10 ? 3000 : 5000);
     };
     poll();
     return () => clearTimeout(timer);
@@ -62,19 +61,22 @@ export default function PaidStatus({ orderId }: { orderId: string | null }) {
     return (
       <>
         <h1 className="ix-cover-title">
-          <span>Mulțumim</span>
-          <span>pentru înscriere</span>
+          <span>Plata nu a fost</span>
+          <span>confirmată</span>
         </h1>
         <p className="ix-cover-sub">
           {state === 'missing'
-            ? 'Nu am găsit comanda în link.'
-            : 'Confirmarea plății durează puțin mai mult decât de obicei.'}{' '}
-          Dacă ai plătit, primești pe email linkul spre grupul participanților în câteva minute. Verifică
-          și dosarul Spam sau Promoții.
+            ? 'Nu am găsit comanda ta în link.'
+            : 'Nu am primit confirmarea plății de la bancă.'}{' '}
+          Dacă plata nu a trecut, poți încerca din nou.
         </p>
+        <a href="/intensiv#inscriere" className="ix-btn ix-btn-big">
+          Încearcă din nou
+        </a>
         <p className="ix-cover-sub">
-          Nu a ajuns? Scrie-ne la <a href="mailto:danexprim@liliadubita.md">danexprim@liliadubita.md</a> sau
-          sună la 067 102 290.
+          Dacă banii au fost retrași, nu plăti a doua oară: confirmarea poate întârzia câteva minute și
+          vine pe email. Scrie-ne la <a href="mailto:danexprim@liliadubita.md">danexprim@liliadubita.md</a>{' '}
+          sau sună la 067 102 290.
         </p>
       </>
     );
