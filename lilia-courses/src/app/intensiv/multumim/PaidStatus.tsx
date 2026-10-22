@@ -44,8 +44,9 @@ export default function PaidStatus({ orderId }: { orderId: string | null }) {
         </h1>
         <p className="ix-cover-by">Plata a fost confirmată. Ne vedem pe 7 noiembrie.</p>
         <p className="ix-cover-sub">
-          Intră acum în grupul de Telegram al participanților. Acolo primești caietul de lucru și
-          reminder-ele. Linkul de Zoom și toate detaliile ți le-am trimis și pe email.
+          Ți-am trimis pe email caietul de lucru (printează-l înainte de intensiv), linkul de Zoom și
+          toate detaliile. Intră acum și în grupul de Telegram al participanților, pentru anunțuri și
+          reminder-e.
         </p>
         <a href={INTENSIV.telegramGroupUrl} className="ix-btn ix-btn-big" target="_blank" rel="noopener noreferrer">
           Intră în grupul de Telegram

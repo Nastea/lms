@@ -1,5 +1,27 @@
+import fs from 'fs';
+import path from 'path';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { INTENSIV } from '@/lib/intensiv';
+
+/** Caietul de lucru (PDF), trimis ca atașament. Stă în `private/`, nu e public. */
+function workbookAttachment(): { filename: string; content: string } | null {
+  const candidates = [
+    path.join(process.cwd(), 'private', 'caiet-intensiv.pdf'),
+    path.join(process.cwd(), 'lilia-courses', 'private', 'caiet-intensiv.pdf'),
+  ];
+  for (const p of candidates) {
+    try {
+      return {
+        filename: 'Caiet de lucru - Am un plan pentru viata mea.pdf',
+        content: fs.readFileSync(p).toString('base64'),
+      };
+    } catch {
+      // try next location
+    }
+  }
+  console.error('INTENSIV_WORKBOOK_MISSING', candidates);
+  return null;
+}
 
 function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
@@ -13,8 +35,9 @@ function emailHtml(firstName: string): string {
 <p>Bună${firstName ? `, ${escapeHtml(firstName)}` : ''}!</p>
 <p>Plata a fost confirmată și ești înscris la intensivul <strong>„Am un plan pentru viața mea"</strong>.</p>
 <p><strong>Când:</strong> ${INTENSIV.dateText}, ${INTENSIV.timeText}<br><strong>Unde:</strong> online, pe Zoom</p>
+<p><strong>Caietul de lucru e atașat la acest email.</strong> Te rugăm să-l <strong>printezi înainte de intensiv</strong> (7 pagini A4) și să-l ai lângă tine pe 7 noiembrie, împreună cu un pix. Îl completăm împreună, pas cu pas.</p>
 <p><strong>1. Intră în grupul de Telegram al participanților</strong><br>
-Acolo primești caietul de lucru, anunțurile și reminder-ele.<br>
+Acolo primești anunțurile și reminder-ele.<br>
 <a href="${INTENSIV.telegramGroupUrl}">${INTENSIV.telegramGroupUrl}</a></p>
 ${zoom}
 <p>Ai întrebări? Scrie-ne la <a href="mailto:danexprim@liliadubita.md">danexprim@liliadubita.md</a> sau sună la 067 102 290.</p>
@@ -44,6 +67,7 @@ export async function sendIntensivPaidEmail(orderId: string): Promise<{ ok: bool
     if (!apiKey) return { ok: false, error: 'RESEND_API_KEY not set' };
 
     const firstName = (order.customer_name || '').trim().split(/\s+/)[0] || '';
+    const attachment = workbookAttachment();
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -59,6 +83,7 @@ export async function sendIntensivPaidEmail(orderId: string): Promise<{ ok: bool
         to,
         subject: 'Ești înscris la intensivul „Am un plan pentru viața mea"',
         html: emailHtml(firstName),
+        attachments: attachment ? [attachment] : undefined,
       }),
     });
     if (!res.ok) {
