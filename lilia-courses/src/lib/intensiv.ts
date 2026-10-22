@@ -8,9 +8,9 @@ export const INTENSIV = {
   productId: 'intensiv_plan',
   /** Numele de pe factura Paynet. */
   invoiceName: 'INTENSIV – Am un plan pentru viața mea',
-  // TEST atașament: 1 leu. Revino la: amount: 400, label: '20 €'.
-  amount: 1,
-  label: '1 leu',
+  // Preînscriere: 400 lei la Paynet, afișat „20 €”.
+  amount: 400,
+  label: '20 €',
   /** Prețul anunțat după închiderea preînscrierilor (null = nu se afișează). */
   laterLabel: '30 €' as string | null,
   dateText: 'sâmbătă, 7 noiembrie 2026',
