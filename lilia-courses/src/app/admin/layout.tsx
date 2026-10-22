@@ -13,6 +13,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <div className="font-semibold">Administrator</div>
           <div className="flex gap-4 text-sm opacity-80">
             <Link className="hover:opacity-100" href="/admin">Cursuri</Link>
+            <Link className="hover:opacity-100" href="/admin/intensiv">Înscrieri intensiv</Link>
             <Link className="hover:opacity-100" href="/app">Vedere student</Link>
           </div>
         </div>

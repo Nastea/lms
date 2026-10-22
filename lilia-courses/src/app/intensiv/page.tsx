@@ -33,32 +33,32 @@ export const metadata: Metadata = {
 const MODULES = [
   {
     title: 'GPS-ul vieții mele: unde mă aflu acum?',
-    text: 'Îți analizezi viața personală, profesională, emoțională și de sănătate. Descoperi ce funcționează, care sunt zonele tale forte, zonele de deficit și ce direcții merită atenție în următoarele 60 de zile.',
+    text: 'Ne uităm la viața ta așa cum e acum: relații, muncă, sănătate, cum te simți. Vezi ce merge deja bine, ce te apasă și unde merită să-ți pui atenția în următoarele 60 de zile.',
     exercise: 'Coordonatele mele GPS',
   },
   {
     title: 'Ce mă ține pe loc?',
-    text: 'Identifici obstacolul tău principal: lipsa energiei, procrastinarea, perfecționismul, sindromul impostorului, haosul comportamental, dubiile și criticul interior. Înțelegi cum îți consumă energia și primești strategii practice ca să le depășești.',
+    text: 'Uneori știi foarte bine ce vrei și totuși nu te miști. Afli ce te oprește pe tine (amânarea, perfecționismul, vocea critică din cap, oboseala) și ce poți face concret cu asta.',
     exercise: 'Piatra din drumul meu',
   },
   {
     title: 'Îmi construiesc traseul: priorități și planificare',
-    text: 'Îți organizezi viața în patru domenii esențiale, îți stabilești obiective clare și realiste, le prioritizezi și le transformi în acțiuni concrete. Înveți să le pui în calendar, în agenda electronică și în cea fizică.',
+    text: 'Transformăm „aș vrea” în câteva obiective clare și realiste. Le împărțim în pași mici și le punem în calendar, ca să nu rămână doar pe hârtie.',
     exercise: 'Din patru cadrane în calendar',
   },
   {
     title: 'Motivația mea: combustibilul pentru drum',
-    text: 'Îți descoperi dorințele reale, construiești motivația, lucrezi cu harta dorințelor și cu vizualizarea rezultatului. Te conectezi cu motivele profunde ale schimbării și înveți să-ți păstrezi focusul.',
+    text: 'Ne întrebăm de ce vrei, de fapt, schimbarea asta. Când știi răspunsul, îți e mai ușor să mergi mai departe și în zilele în care nu prea ai chef.',
     exercise: 'Destinația mea',
   },
   {
     title: 'Ritmul meu: disciplină, fiziologie și recuperare',
-    text: 'Înțelegi ritmurile fiziologice și nivelul tău de energie. Afli ce te epuizează și ce te încarcă, îți descoperi stilurile de odihnă și construiești obiceiuri sustenabile, un ritm care te susține, nu te epuizează.',
+    text: 'Un plan bun ține cont de energia ta, de somn și de odihnă. Afli ce te încarcă și ce te stoarce și îți faci un ritm pe care chiar îl poți duce, fără să te epuizezi.',
     exercise: 'Ritmul meu de funcționare',
   },
   {
     title: 'Planul meu de 60 de zile: de la idei la acțiune',
-    text: 'Îți identifici valorile, stabilești zonele de creștere și de menținere și integrezi toate deciziile într-un singur plan. Pleci cu un plan scris, concret și realist, cu obiective, acțiuni și termene.',
+    text: 'Punem totul cap la cap. Alegi ce contează cu adevărat pentru tine și scrii planul pe 60 de zile: ce faci, până când și după ce îți dai seama că avansezi.',
     exercise: 'Contractul meu cu mine',
   },
 ] as const;
@@ -74,7 +74,7 @@ const SIFA = [
 const SHEETS = [
   {
     title: 'Planul pe 60 de zile',
-    text: 'Nu o listă de dorințe, ci pași concreți, împărțiți pe intervale, pe care îi scrii tu, cu mâna ta, în timpul intensivului.',
+    text: 'Nu o listă de dorințe, ci pași mici pe care îi scrii tu, cu mâna ta. Știi ce faci mâine, săptămâna viitoare și peste o lună.',
     photo: '/api/img/IMG_0650.JPG',
     alt: 'Lilia Dubița citind, așezată pe podea printre caiete și foi deschise',
     pos: 'center 40%',
@@ -82,15 +82,15 @@ const SHEETS = [
   },
   {
     title: 'Caietul de lucru',
-    text: 'O pagină pentru fiecare modul. Îl primești pe email după plată, îl printezi și îl completăm împreună.',
+    text: 'Șapte pagini pe care le primești pe email imediat după plată. Le printezi, le ai lângă tine și le completăm împreună, pe rând.',
     photo: '/api/img/462581361_1836053763900029_7874199193613626130_n.jpg',
     alt: 'Lilia Dubița într-un costum crem, pe un scaun',
     pos: 'center 25%',
     tone: 'frost',
   },
   {
-    title: 'Instrumente practice',
-    text: 'Pleci cu instrumente practice și începi să acționezi chiar de a doua zi. Nu rămâi cu slide-uri copiate pe care le uiți undeva.',
+    title: 'Ceva ce folosești a doua zi',
+    text: 'Pleci cu exerciții pe care le poți relua oricând, nu cu slide-uri pe care le uiți într-un folder. A doua zi știi deja ce ai de făcut.',
     photo: '/api/img/IMG_0651.JPG',
     alt: 'Lilia Dubița lângă o ușă de lemn, în costum închis',
     pos: 'center 30%',
@@ -130,8 +130,8 @@ export default function IntensivPage() {
               </h1>
               <p className="ix-cover-by">Intensiv online cu Lilia Dubița, psiholog</p>
               <p className="ix-cover-line">
-                7 noiembrie 2026 <i className="ix-diamond" aria-hidden /> 5 ore pe Zoom{' '}
-                <i className="ix-diamond" aria-hidden /> caiet de lucru inclus
+                Sâmbătă, 7 noiembrie <i className="ix-diamond" aria-hidden /> online, pe Zoom{' '}
+                <i className="ix-diamond" aria-hidden /> cu caiet de lucru
               </p>
               <p className="ix-cover-sub">
                 Nu trebuie să-ți schimbi toată viața într-o singură zi. Dar poți crea un plan care să
@@ -158,16 +158,16 @@ export default function IntensivPage() {
           <div className="ix-intro-top">
             <h2 className="ix-h">Cinci ore. Un plan.</h2>
             <p className="ix-intro-note">
-              Pentru cine vrea să ia decizii, nu să mai amâne. De la „nu știu încotro merg” la claritate,
-              obiective reale și un plan concret de acțiune, pe care îl scrii tu, în timpul
-              intensivului.
+              Poate ai multe în cap și nu știi de unde să începi. Sau știi ce vrei, dar tot amâni. În
+              cele cinci ore nu notăm teorie: ne uităm împreună la viața ta așa cum e acum și pleci cu
+              un plan scris de mâna ta, pe care chiar îl poți urma.
             </p>
           </div>
           <dl className="ix-facts">
-            <div><dt>7 noiembrie</dt><dd>sâmbătă, 10:00–16:00</dd></div>
-            <div><dt>5 ore</dt><dd>practice, cu o pauză la prânz</dd></div>
-            <div><dt>6 module</dt><dd>un traseu, de la A la Z</dd></div>
-            <div><dt>{price}</dt><dd>{later ? `la preînscriere, apoi ${later}` : 'caietul inclus'}</dd></div>
+            <div><dt>7 noiembrie</dt><dd>sâmbătă, de la 10 la 16</dd></div>
+            <div><dt>5 ore</dt><dd>cu o oră de pauză la prânz</dd></div>
+            <div><dt>6 module</dt><dd>de la unde ești la ce faci mâine</dd></div>
+            <div><dt>{price}</dt><dd>{later ? `acum, la preînscriere, apoi ${later}` : 'cu tot cu caiet'}</dd></div>
           </dl>
         </section>
 
@@ -176,9 +176,9 @@ export default function IntensivPage() {
           <div className="ix-modules-head" data-reveal>
             <h2 className="ix-h">Șase module, un traseu</h2>
             <p className="ix-modules-note">
-              Intensivul e construit ca un GPS personal: afli unde ești, scoți obstacolul, trasezi
-              drumul, găsești combustibilul, prinzi ritmul și pornești. Firul care le leagă e metoda
-              SIFA.
+              E ca la un GPS: ca să ajungi undeva, trebuie să știi întâi unde ești. Apoi vedem ce te
+              încurcă, alegem drumul, găsim ce te motivează și un ritm pe care îl poți ține. Ne ghidăm
+              după patru întrebări simple.
             </p>
           </div>
           <dl className="ix-sifa" data-reveal aria-label="Metoda SIFA">
@@ -194,7 +194,6 @@ export default function IntensivPage() {
               <li key={m.title} className="ix-module" data-reveal>
                 <h3>{m.title}</h3>
                 <p className="ix-module-out">{m.text}</p>
-                <p className="ix-module-ex">În caiet: „{m.exercise}”</p>
               </li>
             ))}
           </ol>
@@ -243,7 +242,7 @@ export default function IntensivPage() {
                 <div className="ix-menu-row">
                   <div>
                     <p className="ix-menu-name">După închiderea preînscrierilor</p>
-                    <p className="ix-menu-desc">Același intensiv, același caiet</p>
+                    <p className="ix-menu-desc">Același intensiv, doar mai târziu</p>
                   </div>
                   <p className="ix-menu-price">{later}</p>
                 </div>
@@ -267,19 +266,19 @@ export default function IntensivPage() {
             </ul>
             <details>
               <summary>Ce am nevoie să pregătesc?</summary>
-              <p>Caietul de lucru printat: îl primești pe email imediat după plată (7 pagini A4). Plus un pix și cinci ore doar pentru tine.</p>
+              <p>Doar caietul, printat. Îl primești pe email imediat după plată și are 7 pagini A4. Ia și un pix și încearcă să-ți păstrezi ziua liberă, fără alte treburi pe fundal.</p>
             </details>
             <details>
               <summary>Pentru cine e intensivul?</summary>
-              <p>Pentru cine vrea să ia decizii, nu să mai amâne. Nu ai nevoie de pregătire: pornim din punctul în care te afli acum și construim totul, de la harta vieții tale până la planul de 60 de zile, pas cu pas.</p>
+              <p>Pentru tine, dacă simți că amâni lucruri importante, că te învârți în cerc sau că ai nevoie de puțină ordine în viață. Nu trebuie să vii cu nimic pregătit: pornim de unde ești acum.</p>
             </details>
             <details>
               <summary>Cum primesc linkul de Zoom?</summary>
-              <p>Imediat după plată primești pe email linkul de Zoom și linkul spre grupul participanților de pe Telegram. Le găsești și în grup înainte de intensiv.</p>
+              <p>Imediat după plată îți vine un email cu linkul de Zoom, caietul și linkul spre grupul de Telegram. Le găsești și în grup înainte de 7 noiembrie.</p>
             </details>
             <details>
               <summary>Nu am primit emailul. Ce fac?</summary>
-              <p>Verifică dosarul Spam sau Promoții. Dacă nu e acolo, scrie-ne la danexprim@liliadubita.md sau sună la 067 102 290.</p>
+              <p>Uită-te și în Spam sau Promoții. Dacă nici acolo nu e, scrie-ne la danexprim@liliadubita.md sau sună la 067 102 290 și te ajutăm.</p>
             </details>
             <a href="#inscriere" className="ix-btn">Mă înscriu — {price}</a>
           </div>
@@ -312,7 +311,7 @@ export default function IntensivPage() {
         <div className="ix-back-panel">
           <div>
             <p className="ix-back-sign">Ne vedem pe 7 noiembrie</p>
-            <p>Adu-ți caietul, un pix și cinci ore doar pentru tine. Restul îl facem împreună.</p>
+            <p>Pune-ți deoparte ziua, printează caietul și ia un pix. De restul ne ocupăm împreună.</p>
           </div>
           <div className="ix-back-address">
             <a href="mailto:danexprim@liliadubita.md">danexprim@liliadubita.md</a>
