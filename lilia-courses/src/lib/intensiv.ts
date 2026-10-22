@@ -8,11 +8,11 @@ export const INTENSIV = {
   productId: 'intensiv_plan',
   /** Numele de pe factura Paynet. */
   invoiceName: 'INTENSIV – Am un plan pentru viața mea',
-  // TEST REAL: 1 leu. După test: suma în MDL pentru 20 € și label: '20 €'.
-  amount: 1,
-  label: '1 leu',
+  // Preînscriere: 400 lei la Paynet, afișat „20 €”.
+  amount: 400,
+  label: '20 €',
   /** Prețul anunțat după închiderea preînscrierilor (null = nu se afișează). */
-  laterLabel: null as string | null,
+  laterLabel: '30 €' as string | null,
   dateText: 'sâmbătă, 7 noiembrie 2026',
   timeText: '10:00–16:00, cu pauză de prânz 12:00–13:00',
   telegramGroupUrl: 'https://t.me/+bOjSEN9TGAEyYTVi',
