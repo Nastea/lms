@@ -24,6 +24,7 @@ export async function middleware(request: NextRequest) {
     "/plan",
     "/mock",
     "/quiz",
+    "/intensiv",
   ];
   const isPublic =
     pathname.startsWith("/api") ||

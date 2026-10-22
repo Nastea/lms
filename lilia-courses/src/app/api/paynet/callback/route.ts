@@ -3,6 +3,8 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getNotifySecret } from '@/lib/paynet';
 import { ensureOrderHasTelegramToken } from '@/lib/orderTelegramToken';
 import { sendPostPaymentTelegramEmail } from '@/lib/postPaymentEmail';
+import { INTENSIV } from '@/lib/intensiv';
+import { sendIntensivPaidEmail } from '@/lib/intensivEmail';
 import { createHash } from 'crypto';
 
 /** GET: verify endpoint is reachable (e.g. open in browser). Paynet must call POST. */
@@ -77,7 +79,7 @@ export async function POST(req: Request) {
         // Find order by invoice (ExternalID)
         const { data: order, error: findError } = await supabaseAdmin
           .from('orders')
-          .select('id, status, customer_email, invite_sent_at')
+          .select('id, status, product_id, customer_email, invite_sent_at')
           .eq('invoice', externalId.toString())
           .single();
 
@@ -108,6 +110,11 @@ export async function POST(req: Request) {
           } else {
             console.log(`Order ${order.id} marked as paid (invoice: ${externalId})`);
 
+            // Intensivul are emailul lui (link spre grupul de Telegram), nu emailul cursului.
+            if (order.product_id === INTENSIV.productId) {
+              const sent = await sendIntensivPaidEmail(order.id);
+              if (!sent.ok) console.error('Intensiv email failed for order', order.id, sent.error);
+            } else {
             // After marking as paid, ensure Telegram token + send bot access email (idempotent via invite_sent_at)
             try {
               if (order.customer_email && !order.invite_sent_at) {
@@ -158,6 +165,7 @@ export async function POST(req: Request) {
               }
             } catch (e) {
               console.error('Post-payment Telegram email flow error for order', order.id, e);
+            }
             }
           }
         }

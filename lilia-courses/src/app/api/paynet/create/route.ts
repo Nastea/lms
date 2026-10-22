@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { INTENSIV } from '@/lib/intensiv';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getApiHost, getPortalHost, formatPaynetDate } from '@/lib/paynet';
 import { randomUUID, randomBytes } from 'crypto';
@@ -87,7 +88,14 @@ export async function POST(req: Request) {
       );
     }
 
-    const { productId, amount, currency = 'MDL' } = body;
+    const { productId, currency = 'MDL' } = body;
+    // Intensivul are prețul impus pe server; restul produselor păstrează comportamentul existent.
+    const isIntensiv = productId === INTENSIV.productId;
+    const amount: number = isIntensiv ? INTENSIV.amount : body.amount;
+    const invoiceName = isIntensiv ? INTENSIV.invoiceName : 'RELAȚIA 360 – De la conflict la conectare';
+    const invoiceShortName = isIntensiv ? 'INTENSIV' : 'RELAȚIA 360';
+    const successPath = isIntensiv ? '/intensiv/multumim' : '/multumim';
+    const cancelPath = isIntensiv ? '/intensiv?cancel=1' : '/plata?cancel=1';
 
     // Body validation
     if (!productId || typeof productId !== 'string' || productId.trim() === '') {
@@ -346,7 +354,7 @@ export async function POST(req: Request) {
         GroupId: null,
         Code: 'relatia360',
         Barcode: 3601,
-        Name: 'RELAȚIA 360 – De la conflict la conectare',
+        Name: invoiceName,
         Description: 'Acces online',
         UnitPrice: chosenAmount, // int
         UnitProduct: null,
@@ -361,15 +369,15 @@ export async function POST(req: Request) {
       const basePayload: any = {
         Invoice: invoiceNumber, // NUMBER (small integer, ~10 digits)
         MerchantCode: merchantCode, // STRING "982657"
-        LinkUrlSuccess: `${baseUrl}/multumim?order=${orderId}`,
-        LinkUrlCancel: `${baseUrl}/plata?cancel=1&order=${orderId}`,
+        LinkUrlSuccess: `${baseUrl}${successPath}?order=${orderId}`,
+        LinkUrlCancel: `${baseUrl}${cancelPath}&order=${orderId}`,
         Customer: { ...paynetCustomerBlock },
         Currency: 498, // int 498 for MDL
         ExternalDate: formatPaynetDate(new Date()), // today in Moldova timezone
         ExpiryDate: formatPaynetDate(new Date(Date.now() + 2 * 60 * 60 * 1000)), // +2 hours
         Services: [
           {
-            Name: 'RELAȚIA 360',
+            Name: invoiceShortName,
             Description: 'Curs practic de comunicare în relații',
             Amount: chosenAmount, // Uppercase Amount (matching Reg.json)
             Products: [product], // Uppercase Products (matching Reg.json)
@@ -486,8 +494,8 @@ export async function POST(req: Request) {
           // Continue anyway, payment was created
         }
 
-        const successUrl = `${baseUrl}/multumim?order=${orderId}`;
-        const cancelUrl = `${baseUrl}/plata?cancel=1&order=${orderId}`;
+        const successUrl = `${baseUrl}${successPath}?order=${orderId}`;
+        const cancelUrl = `${baseUrl}${cancelPath}&order=${orderId}`;
         const expiryDate = formatPaynetDate(new Date(Date.now() + 2 * 60 * 60 * 1000));
 
         if (directPaymentUrl) {
