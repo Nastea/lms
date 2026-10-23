@@ -17,5 +17,5 @@ export const INTENSIV = {
   timeText: '10:00–16:00, cu pauză de prânz 12:00–13:00',
   telegramGroupUrl: 'https://t.me/+bOjSEN9TGAEyYTVi',
   /** Gol până avem linkul: atunci emailul spune că linkul vine în grup. */
-  zoomUrl: 'https://us06web.zoom.us/j/2162537144?pwd=4HqFuRGQnsgXSGFwvpSxEYYWyJ5WOJ.1',
+  zoomUrl: 'https://us05web.zoom.us/j/3669097947?pwd=OUh0YlFLeldjOXEyMzA5b3o3ZER4QT09',
 };
