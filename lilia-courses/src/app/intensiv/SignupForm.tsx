@@ -82,7 +82,7 @@ async function startCheckout(c: { first: string; last: string; email: string; ph
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         productId: INTENSIV.productId,
-        amount: INTENSIV.amount,
+        amount: 1, // ignorat: serverul impune prețul intensivului
         currency: 'MDL',
         customer_first_name: c.first,
         customer_last_name: c.last,

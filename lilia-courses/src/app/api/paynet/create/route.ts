@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { INTENSIV } from '@/lib/intensiv';
+import { INTENSIV, currentIntensivPrice } from '@/lib/intensiv';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getApiHost, getPortalHost, formatPaynetDate } from '@/lib/paynet';
 import { randomUUID, randomBytes } from 'crypto';
@@ -91,7 +91,7 @@ export async function POST(req: Request) {
     const { productId, currency = 'MDL' } = body;
     // Intensivul are prețul impus pe server; restul produselor păstrează comportamentul existent.
     const isIntensiv = productId === INTENSIV.productId;
-    const amount: number = isIntensiv ? INTENSIV.amount : body.amount;
+    const amount: number = isIntensiv ? currentIntensivPrice().amount : body.amount;
     const invoiceName = isIntensiv ? INTENSIV.invoiceName : 'RELAȚIA 360 – De la conflict la conectare';
     const invoiceShortName = isIntensiv ? 'INTENSIV' : 'RELAȚIA 360';
     const successPath = isIntensiv ? '/intensiv/multumim' : '/multumim';

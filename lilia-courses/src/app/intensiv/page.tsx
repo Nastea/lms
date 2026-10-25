@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import { Archivo } from 'next/font/google';
-import { INTENSIV } from '@/lib/intensiv';
+import { currentIntensivPrice } from '@/lib/intensiv';
 import SignupForm from './SignupForm';
 import Reveal from './Reveal';
 import './intensiv.css';
@@ -13,6 +13,9 @@ import './intensiv.css';
  *  Conceptul: GPS personal — 6 module, un traseu, un plan scris pe 60 de zile.
  *  Prețul, data și linkurile vin din lib/intensiv.ts (INTENSIV).
  * ========================================================================== */
+
+// Prețul se schimbă la o oră fixă (lib/intensiv.ts), deci pagina se randează la fiecare cerere.
+export const dynamic = 'force-dynamic';
 
 const archivo = Archivo({
   subsets: ['latin', 'latin-ext'],
@@ -100,8 +103,7 @@ const SHEETS = [
 
 
 export default function IntensivPage() {
-  const price = INTENSIV.label;
-  const later = INTENSIV.laterLabel;
+  const { label: price, laterLabel: later, isPre } = currentIntensivPrice();
 
   return (
     <div className={`ix ${archivo.variable}`}>
@@ -138,7 +140,7 @@ export default function IntensivPage() {
                 schimbe următoarele 60 de zile.
               </p>
               <a href="#inscriere" className="ix-btn ix-btn-big">
-                Mă preînscriu — {price}
+                {isPre ? 'Mă preînscriu' : 'Mă înscriu'} — {price}
               </a>
             </div>
             <div className="ix-cover-photo">
@@ -231,9 +233,9 @@ export default function IntensivPage() {
               <p className="ix-menu-group">Intensivul + caietul de lucru</p>
               <div className="ix-menu-row" data-current="">
                 <div>
-                  <p className="ix-menu-name">Preînscriere</p>
+                  <p className="ix-menu-name">{isPre ? 'Preînscriere' : 'Participare'}</p>
                   <p className="ix-menu-desc">
-                    Prețul de acum, cât sunt deschise preînscrierile
+                    {isPre ? 'Prețul de acum, cât sunt deschise preînscrierile' : '5 ore pe Zoom, cu caietul de lucru'}
                   </p>
                 </div>
                 <p className="ix-menu-price">{price}</p>
