@@ -1,0 +1,294 @@
+/* Pagina principală corporate — direcția A „Masa de discuție”.
+   Totul e sub .corp ca să nu atingă site-ul de cursuri. Tokenii sunt sursa unică. */
+.corp {
+  --paper: #e6e3dc;
+  --paper-2: #dad6ce;
+  --paper-3: #cfcac0;
+  --ink: #2a1d17;
+  --ink-2: #5f5047;
+  --action: #3f6634;
+  --action-press: #345629;
+  --on-action: #ffffff;
+  --error: #9b2c1f;
+
+  --font-display: var(--font-corp-display), Georgia, 'Times New Roman', serif;
+  --font-text: var(--font-corp-text), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-lead: clamp(1.1875rem, 1.05rem + 0.6vw, 1.5rem);
+  --step-h2: clamp(2rem, 1.4rem + 2vw, 3rem);
+  --step-h1: clamp(2.25rem, 1.4rem + 2.6vw, 3.5rem);
+  --measure: 34em;
+
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
+  --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 128px;
+  --gutter: clamp(20px, 4.4vw, 72px);
+  --section-gap: clamp(96px, 10vw, 160px);
+  --bar-h: 72px;
+  --rule: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-fast: 160ms;
+  --dur-base: 280ms;
+  --dur-slow: 600ms;
+  --stagger: 80ms;
+
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 var(--step-body)/1.55 var(--font-text);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+html:has(.corp) { scroll-behavior: smooth; scroll-padding-top: var(--bar-h, 72px); background: #e6e3dc; }
+body:has(.corp) { background: #e6e3dc; }
+@media (prefers-reduced-motion: reduce) { html:has(.corp) { scroll-behavior: auto; } }
+
+.corp a { color: inherit; text-underline-offset: 5px; }
+.corp :focus-visible { outline: 2px solid var(--action); outline-offset: 3px; }
+.corp h1, .corp h2, .corp h3, .corp p, .corp figure, .corp dl, .corp dd { margin: 0; }
+.corp .skip { position: absolute; left: var(--s-4); top: -80px; background: var(--ink); color: var(--paper); padding: var(--s-3) var(--s-4); z-index: 20; }
+.corp .skip:focus { top: var(--s-4); }
+.corp .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Scena: coloana de citit | fotografia fixă */
+.corp .stage { display: grid; grid-template-columns: 52fr 48fr; }
+.corp .read { padding: 0 var(--gutter); min-width: 0; }
+.corp .stage-photo { position: sticky; top: 0; height: 100vh; height: 100svh; background: var(--paper-3); overflow: hidden; }
+.corp .frame { position: absolute; inset: 0; opacity: 0; transition: opacity var(--dur-slow) var(--ease-in-out); }
+.corp .frame.is-on { opacity: 1; }
+.corp .frame img, .corp .band img { object-fit: cover; }
+.corp .crop-strip img { transform: scale(1.07); transform-origin: 50% 0; } /* banda neagră din fișierul sursă */
+.corp .placeholder { display: grid; align-items: end; background: var(--paper-3); color: var(--ink-2); padding: var(--s-6); font-size: var(--step-small); }
+.corp .placeholder span { max-width: 26ch; }
+
+/* Bara */
+.corp .bar { position: sticky; top: 0; z-index: 10; background: var(--paper); height: var(--bar-h); display: flex; align-items: center; justify-content: space-between; gap: var(--s-5); }
+.corp .mark { text-decoration: none; line-height: 1.2; }
+.corp .mark b { font: 400 1.375rem/1 var(--font-display); display: block; }
+.corp .mark span { font-size: var(--step-small); color: var(--ink-2); white-space: nowrap; }
+.corp .nav { display: flex; align-items: center; gap: var(--s-4); font-size: var(--step-small); white-space: nowrap; }
+.corp .nav a { text-decoration: none; }
+.corp .nav a:hover { text-decoration: underline; }
+.corp .nav .talk { background: var(--action); color: var(--on-action); padding: 10px 16px; font-weight: 600; }
+.corp .nav .talk:hover { background: var(--action-press); text-decoration: none; }
+.corp .menu { display: none; }
+
+/* Elemente comune */
+.corp .btn { display: inline-block; background: var(--action); color: var(--on-action); font: 600 var(--step-body)/1.2 var(--font-text); padding: 20px 26px; text-decoration: none; border: 0; border-radius: 0; cursor: pointer; transition: background-color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out); }
+.corp .btn:hover { background: var(--action-press); }
+.corp .btn:active { transform: scale(0.97); }
+.corp .btn:disabled { opacity: 0.7; cursor: progress; }
+.corp .link { font-weight: 600; text-decoration: underline; }
+.corp .chapter { padding-top: var(--section-gap); max-width: var(--measure); }
+.corp h1 { font: 350 var(--step-h1)/1.04 var(--font-display); letter-spacing: -0.025em; text-wrap: balance; }
+.corp h2 { font: 400 var(--step-h2)/1.08 var(--font-display); letter-spacing: -0.02em; text-wrap: balance; }
+.corp h3 { font: 600 var(--step-body)/1.35 var(--font-text); }
+.corp .intro { margin-top: var(--s-4); }
+.corp .band { display: none; }
+.corp .pending { outline: 2px dashed var(--error); outline-offset: 2px; }
+.corp .pending::after { content: ' [DE VERIFICAT]'; color: var(--error); font: 600 var(--step-small)/1 var(--font-text); }
+
+/* Erou */
+.corp .hero { min-height: calc(100svh - var(--bar-h)); display: flex; flex-direction: column; justify-content: center; padding-bottom: var(--s-9); max-width: var(--measure); }
+.corp .hero .lead { font-size: var(--step-lead); line-height: 1.45; margin-top: var(--s-5); }
+.corp .actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-4) var(--s-6); margin-top: var(--s-6); }
+.corp .topics { margin-top: var(--s-8); color: var(--ink-2); font-size: var(--step-small); }
+
+/* Selector */
+.corp .checks { list-style: none; padding: 0; margin: var(--s-6) 0 0; }
+.corp .checks label { display: grid; grid-template-columns: 22px 1fr; gap: 14px; padding: 14px 16px; margin: 0 -16px; cursor: pointer; transition: background-color var(--dur-fast) ease; }
+.corp .checks label:hover { background: var(--paper-2); }
+.corp .check { appearance: none; width: 22px; height: 22px; margin: 3px 0 0; border: 2px solid var(--ink); border-radius: 0; display: grid; place-content: center; cursor: pointer; background: transparent; }
+.corp .check::after { content: ''; width: 10px; height: 10px; background: var(--action); opacity: 0; transform: scale(0.5); transition: transform var(--dur-fast) var(--ease-out), opacity var(--dur-fast) ease; }
+.corp .check:checked { border-color: var(--action); }
+.corp .check:checked::after { transform: scale(1); opacity: 1; }
+.corp .result { margin-top: var(--s-5); background: var(--action); color: var(--on-action); padding: var(--s-6); }
+.corp .result p { font: 400 1.5rem/1.2 var(--font-display); }
+.corp .result ul { margin: var(--s-3) 0 var(--s-5); padding-left: 1.1em; list-style: disc; }
+.corp .result li + li { margin-top: var(--s-1); }
+.corp .result .btn { background: var(--paper); color: var(--ink); }
+.corp .result .btn:hover { background: #fff; }
+.corp .hint { margin-top: var(--s-4); color: var(--ink-2); font-size: var(--step-small); }
+
+/* Etape și secvențe numerotate (ordine reală) */
+.corp .steps { list-style: none; padding: 0; margin: var(--s-7) 0 0; counter-reset: s; }
+.corp .steps > li { counter-increment: s; display: grid; grid-template-columns: 3.2rem 1fr; gap: var(--s-4); padding: var(--s-5) 0; border-top: var(--rule); }
+.corp .steps > li::before { content: counter(s); font: 350 2.5rem/0.9 var(--font-display); color: var(--action); }
+.corp .steps p { margin-top: var(--s-2); }
+.corp .note { margin-top: var(--s-4); background: var(--paper-2); padding: var(--s-4) var(--s-5); font-size: var(--step-small); }
+
+/* Programe */
+.corp .programs { margin-top: var(--s-7); }
+.corp .programs details { border-top: var(--rule); }
+.corp .programs details:last-child { border-bottom: var(--rule); }
+.corp .programs summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr 24px; gap: var(--s-4); padding: var(--s-5) 0; }
+.corp .programs summary::-webkit-details-marker { display: none; }
+.corp .programs summary h3 { font: 400 1.5rem/1.2 var(--font-display); letter-spacing: -0.01em; }
+.corp .programs summary span { display: block; margin-top: var(--s-1); color: var(--ink-2); font-size: var(--step-small); }
+.corp .programs summary::after { content: ''; width: 14px; height: 14px; margin-top: 10px; justify-self: end; border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); transform: rotate(45deg); transition: transform var(--dur-base) var(--ease-out); }
+.corp .programs details[open] summary::after { transform: rotate(-135deg) translate(-4px, -4px); }
+.corp .programs summary:hover h3 { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1px; }
+.corp .program-body { padding: 0 0 var(--s-6); display: grid; gap: var(--s-4); }
+.corp .programs details[open] .program-body { animation: corp-open var(--dur-base) var(--ease-out); }
+@keyframes corp-open { from { opacity: 0; transform: translateY(-6px); } }
+.corp .program-body dt { font-weight: 600; }
+.corp .program-body ul { padding-left: 1.1em; margin: 0; list-style: disc; }
+.corp .care { color: var(--ink-2); font-size: var(--step-small); }
+.corp .program-body .btn { justify-self: start; padding: 16px 22px; }
+.corp .custom { margin-top: var(--s-6); }
+
+/* Metoda */
+.corp .sources { margin-top: var(--s-6); color: var(--ink-2); }
+.corp .ratio { margin-top: var(--s-5); font: 400 var(--step-lead)/1.4 var(--font-display); }
+
+/* Formate: tabel real pe desktop, rânduri stivuite pe telefon */
+.corp .formats { width: 100%; border-collapse: collapse; margin-top: var(--s-7); }
+.corp .formats th { text-align: left; font-size: var(--step-small); color: var(--ink-2); font-weight: 600; padding: 0 var(--s-4) var(--s-3) 0; }
+.corp .formats td { border-top: var(--rule); padding: var(--s-4) var(--s-4) var(--s-4) 0; vertical-align: top; }
+.corp .formats td:first-child { font: 400 1.375rem/1.2 var(--font-display); }
+.corp .formats td:nth-child(2) { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.corp .after-formats { margin-top: var(--s-5); }
+
+/* Despre */
+.corp .bio { display: grid; gap: var(--s-4); margin-top: var(--s-5); }
+.corp .creds { list-style: none; padding: 0; margin: var(--s-6) 0 0; display: grid; gap: var(--s-2); }
+.corp .creds li { padding-left: var(--s-5); position: relative; }
+.corp .creds li::before { content: ''; position: absolute; left: 0; top: 0.7em; width: 10px; height: 2px; background: var(--action); }
+
+/* Organizații și studii de caz (apar doar cu date confirmate) */
+.corp .orgs { list-style: none; padding: 0; margin: var(--s-6) 0 0; display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6); font: 400 1.5rem/1.2 var(--font-display); }
+.corp .case { margin-top: var(--s-6); display: grid; gap: var(--s-4); }
+.corp .case dt { font-weight: 600; }
+.corp .case .waiting { color: var(--ink-2); font-style: italic; }
+
+/* Contact */
+.corp .next { list-style: none; padding: 0; margin: var(--s-6) 0 0; counter-reset: n; display: grid; gap: var(--s-3); }
+.corp .next li { counter-increment: n; display: grid; grid-template-columns: 2rem 1fr; }
+.corp .next li::before { content: counter(n); font: 400 1.375rem/1.2 var(--font-display); color: var(--action); }
+.corp .form { margin-top: var(--s-7); display: grid; gap: var(--s-5); }
+.corp .row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); }
+.corp .field { display: grid; gap: var(--s-2); align-content: start; }
+.corp .field label { font-weight: 600; font-size: var(--step-small); }
+.corp .field label i { font-style: normal; font-weight: 400; color: var(--ink-2); }
+.corp .field input, .corp .field select, .corp .field textarea { font: inherit; color: var(--ink); background: var(--paper); border: 2px solid var(--ink); border-radius: 0; padding: 12px 14px; width: 100%; transition: border-color var(--dur-fast) ease, background-color var(--dur-fast) ease; }
+.corp .field textarea { min-height: 7.5em; resize: vertical; }
+.corp .field input:focus, .corp .field select:focus, .corp .field textarea:focus { outline: none; border-color: var(--action); background: #efede8; }
+.corp .field [aria-invalid='true'] { border-color: var(--error); }
+.corp .err { color: var(--error); font-size: var(--step-small); font-weight: 600; }
+.corp .consent { display: grid; grid-template-columns: 22px 1fr; gap: 14px; font-size: var(--step-small); }
+.corp .consent .check { margin-top: 1px; }
+.corp .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.corp .form-status { padding: var(--s-5); background: var(--paper-2); }
+.corp .form-status.ok { background: var(--action); color: var(--on-action); }
+.corp .form-status.ok p:first-child { font: 400 1.5rem/1.2 var(--font-display); margin-bottom: var(--s-2); }
+.corp .form-status.fail { border-left: 4px solid var(--error); }
+.corp .contact-end { padding-bottom: var(--section-gap); }
+
+/* Footer: numele revine pe toată lățimea */
+.corp .foot { background: var(--ink); color: var(--paper); padding: var(--s-9) var(--gutter) var(--s-6); }
+.corp .foot .big { font: 350 clamp(3rem, 1rem + 8vw, 9rem)/0.95 var(--font-display); letter-spacing: -0.03em; }
+.corp .foot .cols { display: flex; flex-wrap: wrap; gap: var(--s-5) var(--s-8); margin-top: var(--s-7); font-size: var(--step-small); }
+.corp .foot .cols div { display: grid; gap: var(--s-1); align-content: start; }
+.corp .foot .cols b { font-weight: 600; }
+.corp .foot a { text-decoration: none; }
+.corp .foot a:hover { text-decoration: underline; }
+.corp .foot .muted { color: #c9c1b8; }
+
+/* Intrare la încărcare */
+.corp .rise { animation: corp-rise var(--dur-slow) var(--ease-out) both; }
+.corp .rise:nth-child(2) { animation-delay: calc(var(--stagger) * 1); }
+.corp .rise:nth-child(3) { animation-delay: calc(var(--stagger) * 2); }
+.corp .rise:nth-child(4) { animation-delay: calc(var(--stagger) * 3); }
+.corp .rise:nth-child(5) { animation-delay: calc(var(--stagger) * 4); }
+@keyframes corp-rise { from { opacity: 0; transform: translateY(18px); } }
+@media (prefers-reduced-motion: reduce) {
+  .corp .rise, .corp .programs details[open] .program-body { animation: none; }
+  .corp .frame { transition: none; }
+}
+
+@media (min-width: 821px) and (max-width: 1240px) { .corp .bar .nav a:not(.talk):nth-child(4) { display: none; } }
+
+/* Telefon și tabletă îngustă */
+@media (max-width: 820px) {
+  .corp .stage { display: block; }
+  .corp .stage-photo { display: none; }
+  .corp .read { padding: 0 20px; }
+  .corp .bar .nav { display: none; }
+  .corp .menu { display: block; position: relative; font-size: var(--step-small); font-weight: 600; }
+  .corp .menu summary { list-style: none; cursor: pointer; padding: var(--s-2) 0; }
+  .corp .menu summary::-webkit-details-marker { display: none; }
+  .corp .menu .nav { display: grid; position: absolute; right: 0; top: 100%; background: var(--paper); padding: var(--s-4) var(--s-5); gap: var(--s-3); min-width: 200px; box-shadow: 0 12px 32px rgb(42 29 23 / 0.18); font-size: var(--step-body); font-weight: 400; }
+  .corp .band { display: block; position: relative; margin: 0 -20px var(--s-6); height: 42svh; background: var(--paper-3); overflow: hidden; }
+  .corp .hero .band { height: 40svh; }
+  .corp .hero { min-height: 0; justify-content: flex-start; padding: 0 0 var(--s-8); }
+  .corp .btn { width: 100%; text-align: center; }
+  .corp .chapter { padding-top: var(--s-9); }
+  .corp .steps > li { grid-template-columns: 2.4rem 1fr; }
+  .corp .steps > li::before { font-size: 2rem; }
+  .corp .result { position: sticky; bottom: 0; margin: var(--s-5) -20px 0; padding: var(--s-5) 20px; }
+  .corp .result ul { margin-bottom: var(--s-4); }
+  .corp .row { grid-template-columns: 1fr; }
+  .corp .formats thead { display: none; }
+  .corp .formats tr { display: grid; grid-template-columns: 1fr auto; gap: var(--s-1) var(--s-4); border-top: var(--rule); padding: var(--s-4) 0; }
+  .corp .formats td { border: 0; padding: 0; }
+  .corp .formats td:nth-child(3) { grid-column: 1 / -1; color: var(--ink-2); }
+  .corp .foot { padding: var(--s-8) 20px var(--s-6); }
+}
+
+/* ——— Modelul B ——— */
+
+/* Motivul întrebărilor: curiozitatea și metoda, în serif la mărimea lead */
+.corp .questions { list-style: none; padding: 0; margin: var(--s-4) 0 0; display: grid; gap: var(--s-2); }
+.corp .questions li { font: 400 var(--step-lead)/1.3 var(--font-display); letter-spacing: -0.01em; }
+
+/* Explorarea situațiilor */
+.corp .explorer { margin-top: var(--s-6); }
+.corp .situations { border: 0; padding: 0; margin: 0; display: grid; }
+.corp .situations label { display: grid; grid-template-columns: 22px 1fr; gap: 14px; padding: 14px 16px; margin: 0 -16px; cursor: pointer; transition: background-color var(--dur-fast) ease; }
+.corp .situations label:hover { background: var(--paper-2); }
+.corp .situations label.is-on { background: var(--paper-2); }
+.corp .situations input { appearance: none; width: 22px; height: 22px; margin: 3px 0 0; border: 2px solid var(--ink); border-radius: 50%; display: grid; place-content: center; cursor: pointer; background: transparent; }
+.corp .situations input::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--action); opacity: 0; transform: scale(0.5); transition: transform var(--dur-fast) var(--ease-out), opacity var(--dur-fast) ease; }
+.corp .situations input:checked { border-color: var(--action); }
+.corp .situations input:checked::after { opacity: 1; transform: scale(1); }
+.corp .explore-panel { margin-top: var(--s-5); background: var(--paper-2); padding: var(--s-6); display: grid; gap: var(--s-6); scroll-margin-top: calc(var(--bar-h) + var(--s-4)); }
+.corp .explore-empty { color: var(--ink-2); }
+.corp .explore-part { display: grid; gap: var(--s-2); animation: corp-open var(--dur-base) var(--ease-out); }
+.corp .explore-part h3 { font-size: var(--step-small); font-weight: 600; color: var(--ink-2); }
+.corp .explore-part > ul:not(.questions) { margin: 0; padding-left: 1.1em; list-style: disc; display: grid; gap: var(--s-1); }
+.corp .explore-part .questions { margin-top: 0; }
+.corp .explore-part a { font-weight: 600; }
+.corp .explore-note { font-size: var(--step-small); color: var(--ink-2); }
+.corp .explore-panel .btn { justify-self: start; }
+
+/* Etapele procesului */
+.corp .stage-items { display: grid; gap: var(--s-2); margin-top: var(--s-4); background: var(--paper-2); padding: var(--s-4) var(--s-5); font-size: var(--step-small); }
+.corp .stage-items dt { font-weight: 600; }
+.corp .steps.compact > li { padding: var(--s-4) 0; }
+.corp .steps.compact > li::before { font-size: 2rem; }
+
+/* Limitele trainingului */
+.corp .limits { list-style: none; padding: 0; margin: var(--s-6) 0 0; display: grid; gap: var(--s-3); }
+.corp .limits li { font: 400 var(--step-lead)/1.3 var(--font-display); padding-left: var(--s-5); position: relative; }
+.corp .limits li::before { content: ''; position: absolute; left: 0; top: 0.62em; width: 10px; height: 2px; background: var(--action); }
+.corp .close { margin-top: var(--s-6); font-weight: 600; }
+
+/* Zonele de competențe */
+.corp .program { display: grid; gap: var(--s-2); padding-bottom: var(--s-4); }
+.corp .program h4 { font: 400 1.25rem/1.25 var(--font-display); margin: 0; }
+.corp .program .for { color: var(--ink-2); font-size: var(--step-small); }
+.corp .program-body .limit { background: var(--paper-2); padding: var(--s-4) var(--s-5); font-size: var(--step-small); }
+.corp .faq summary h3 { font-size: 1.25rem; }
+
+/* Calea directă */
+.corp .direct-list { margin: var(--s-5) 0 0; padding-left: 1.1em; list-style: disc; display: grid; gap: var(--s-1); }
+
+/* Despre */
+.corp .statement { margin-top: var(--s-5); font: 400 var(--step-lead)/1.4 var(--font-display); }
+
+@media (max-width: 820px) {
+  .corp .explore-panel { margin-left: -20px; margin-right: -20px; padding: var(--s-5) 20px; }
+  .corp .questions li, .corp .limits li { font-size: 1.1875rem; }
+}
+@media (prefers-reduced-motion: reduce) { .corp .explore-part { animation: none; } }

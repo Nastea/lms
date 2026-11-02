@@ -137,6 +137,30 @@ export default function ConfidentialitatePage() {
               </div>
             </section>
 
+            {/* Formularul pentru companii (pagina principală) */}
+            <section id="formular-corporate">
+              <h2 
+                className="text-2xl md:text-3xl font-bold mb-4 uppercase"
+                style={{ color: "#1F2933" }}
+              >
+                Formularul de contact pentru companii
+              </h2>
+              <div className="space-y-3 text-lg" style={{ color: "#6B7280" }}>
+                <p>
+                  Prin formularul de pe pagina principală colectăm: nume, companie, funcție, email, telefon, numărul aproximativ de participanți, tipul de intervenție dorit și descrierea situației din echipă.
+                </p>
+                <ul className="list-disc list-inside space-y-2 ml-4">
+                  <li><strong style={{ color: "#1F2933" }}>Scop</strong> - pentru a vă contacta în legătură cu solicitarea și pentru a pregăti discuția inițială</li>
+                  <li><strong style={{ color: "#1F2933" }}>Temei</strong> - consimțământul exprimat în formular și demersurile făcute la cererea dumneavoastră înainte de un eventual contract</li>
+                  <li><strong style={{ color: "#1F2933" }}>Transmitere</strong> - mesajul ajunge prin email la Lilia Dubița, prin serviciul de trimitere Resend; nu este folosit în scopuri de marketing</li>
+                  <li><strong style={{ color: "#1F2933" }}>Păstrare</strong> - cel mult 2 ani de la ultima comunicare, dacă nu începe o colaborare</li>
+                </ul>
+                <p>
+                  Vă rugăm să nu includeți în formular date personale despre angajați. Detaliile despre echipă le discutăm direct.
+                </p>
+              </div>
+            </section>
+
             {/* Drepturi GDPR */}
             <section>
               <h2 

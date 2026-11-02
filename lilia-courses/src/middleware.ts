@@ -28,6 +28,7 @@ export async function middleware(request: NextRequest) {
   ];
   const isPublic =
     pathname.startsWith("/api") ||
+    pathname.startsWith("/images/") || // fișiere statice din public/images (pagina principală, landing-uri)
     pathname === "/inscriere" ||
     pathname.startsWith("/inscriere/") ||
     pathname.startsWith("/curs/") ||

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, DM_Serif_Display, Inter } from "next/font/google";
 import "./globals.css";
-import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,10 +40,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${dmSerifDisplay.variable} ${inter.variable} dark`}
       style={{ colorScheme: "light" }}
     >
-      <body className="min-h-screen antialiased flex flex-col bg-black text-white" style={{ fontFamily: "var(--font-body), Arial, sans-serif" }}>
-        <main className="flex-1">{children}</main>
-        <Footer />
-      </body>
+      <body className="min-h-screen antialiased">{children}</body>
     </html>
   );
 }
