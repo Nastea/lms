@@ -30,10 +30,10 @@ export const metadata: Metadata = {
 };
 
 const frames: Frame[] = [
-  { key: "portret", src: "/images/corporate/lilia-gri.jpg", position: "50% 30%" },
+  { key: "portret", src: "/images/corporate/lilia-crem.jpg", position: "50% 25%" },
   { key: "profil", src: "/images/corporate/lilia-profil.jpg", position: "30% 40%" },
   { key: "sacou", src: "/images/corporate/lilia-sacou.jpg", position: "62% 30%", crop: true },
-  { key: "om", src: "/images/corporate/lilia-alb.jpg", position: "50% 30%" },
+  { key: "om", src: "/images/corporate/lilia-salon.jpg", position: "45% 40%" },
   { key: "canapea", src: "/images/corporate/lilia-canapea.jpg", position: "50% 45%" },
 ];
 
@@ -93,7 +93,7 @@ export default function CorporateHome() {
             {/* 1. Erou */}
             <section className="hero" data-photo="portret">
               <figure className="band">
-                <Image src="/images/corporate/lilia-gri.jpg" alt="Lilia Dubița, într-un costum gri, așezată pe o canapea" fill sizes="100vw" priority style={{ objectPosition: "50% 22%" }} />
+                <Image src="/images/corporate/lilia-crem.jpg" alt="Lilia Dubița, într-un costum crem, așezată pe un scaun" fill sizes="100vw" priority style={{ objectPosition: "50% 20%" }} />
               </figure>
               <h1 className="rise">{hero.title}</h1>
               <p className="lead rise">{hero.lead}</p>
@@ -207,7 +207,7 @@ export default function CorporateHome() {
             {/* 8. Credibilitate */}
             <section className="chapter" id="despre" data-photo="om">
               <figure className="band">
-                <Image src="/images/corporate/lilia-alb.jpg" alt="Lilia Dubița, zâmbind, într-un costum alb" fill sizes="100vw" style={{ objectPosition: "50% 25%" }} />
+                <Image src="/images/corporate/lilia-salon.jpg" alt="Lilia Dubița, într-un costum alb, pe o canapea, într-un salon cu tablouri" fill sizes="100vw" style={{ objectPosition: "40% 45%" }} />
               </figure>
               <h2>{about.title}</h2>
               <p className="statement">{about.why}</p>
