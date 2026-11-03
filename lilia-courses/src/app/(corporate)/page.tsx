@@ -34,7 +34,7 @@ const frames: Frame[] = [
   { key: "profil", src: "/images/corporate/lilia-profil.jpg", position: "30% 40%" },
   { key: "birou", src: "/images/corporate/lilia-birou.jpg", position: "45% 30%" },
   { key: "scena", src: "/images/corporate/lilia-scena.jpg", position: "55% 60%" },
-  { key: "om", src: "/images/corporate/lilia-salon.jpg", position: "45% 40%" },
+  { key: "om", src: "/images/corporate/lilia-sacou.jpg", position: "80% 30%", crop: true },
   { key: "canapea", src: "/images/corporate/lilia-canapea.jpg", position: "50% 45%" },
 ];
 
@@ -113,9 +113,9 @@ export default function CorporateHome() {
             </section>
 
             {/* 3. Cum lucrăm: capitolul central */}
-            <section className="chapter" id="cum-lucram" data-photo="profil">
+            <section className="chapter" id="cum-lucram" data-photo="birou">
               <figure className="band">
-                <Image src="/images/corporate/lilia-profil.jpg" alt="Lilia Dubița, din profil, ascultând" fill sizes="100vw" style={{ objectPosition: "30% 35%" }} />
+                <Image src="/images/corporate/lilia-birou.jpg" alt="Lilia Dubița, în sacou negru, sprijinită de o masă de lucru, lângă fereastră" fill sizes="100vw" style={{ objectPosition: "45% 25%" }} />
               </figure>
               <h2>{approach.title}</h2>
               <p className="intro">{approach.intro}</p>
@@ -140,7 +140,7 @@ export default function CorporateHome() {
             </section>
 
             {/* 4. Limitele trainingului */}
-            <section className="chapter" id="limite" data-photo="profil">
+            <section className="chapter" id="limite" data-photo="birou">
               <h2>{boundaries.title}</h2>
               <p className="intro">{boundaries.intro}</p>
               <ul className="limits">{boundaries.examples.map((e) => <li key={e}>{e}</li>)}</ul>
@@ -148,9 +148,9 @@ export default function CorporateHome() {
             </section>
 
             {/* 5. Intervenții: competențe pe zone */}
-            <section className="chapter" id="interventii" data-photo="birou">
+            <section className="chapter" id="interventii" data-photo="profil">
               <figure className="band">
-                <Image src="/images/corporate/lilia-birou.jpg" alt="Lilia Dubița, în sacou negru, sprijinită de o masă de lucru, lângă fereastră" fill sizes="100vw" style={{ objectPosition: "45% 25%" }} />
+                <Image src="/images/corporate/lilia-profil.jpg" alt="Lilia Dubița, din profil, ascultând" fill sizes="100vw" style={{ objectPosition: "30% 35%" }} />
               </figure>
               <h2>{interventions.title}</h2>
               <p className="intro">{interventions.intro}</p>
@@ -210,8 +210,8 @@ export default function CorporateHome() {
 
             {/* 8. Credibilitate */}
             <section className="chapter" id="despre" data-photo="om">
-              <figure className="band">
-                <Image src="/images/corporate/lilia-salon.jpg" alt="Lilia Dubița, într-un costum alb, pe o canapea, într-un salon cu tablouri" fill sizes="100vw" style={{ objectPosition: "40% 45%" }} />
+              <figure className="band crop-strip">
+                <Image src="/images/corporate/lilia-sacou.jpg" alt="Lilia Dubița, zâmbind, în sacou negru, pe un fotoliu din piele" fill sizes="100vw" style={{ objectPosition: "62% 30%" }} />
               </figure>
               <h2>{about.title}</h2>
               <p className="statement">{about.why}</p>
