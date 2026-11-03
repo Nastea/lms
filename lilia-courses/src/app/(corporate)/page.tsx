@@ -31,9 +31,10 @@ export const metadata: Metadata = {
 
 const frames: Frame[] = [
   { key: "portret", src: "/images/corporate/lilia-gri.jpg", position: "50% 30%" },
-  { key: "masa", placeholder: "Fotografie: Lilia într-o discuție cu un client (se adaugă)" },
+  { key: "profil", src: "/images/corporate/lilia-profil.jpg", position: "30% 40%" },
   { key: "sacou", src: "/images/corporate/lilia-sacou.jpg", position: "62% 30%", crop: true },
   { key: "om", src: "/images/corporate/lilia-alb.jpg", position: "50% 30%" },
+  { key: "canapea", src: "/images/corporate/lilia-canapea.jpg", position: "50% 45%" },
 ];
 
 // Afirmațiile neconfirmate apar doar în previzualizare, marcate.
@@ -111,7 +112,10 @@ export default function CorporateHome() {
             </section>
 
             {/* 3. Cum lucrăm: capitolul central */}
-            <section className="chapter" id="cum-lucram" data-photo="masa">
+            <section className="chapter" id="cum-lucram" data-photo="profil">
+              <figure className="band">
+                <Image src="/images/corporate/lilia-profil.jpg" alt="Lilia Dubița, din profil, ascultând" fill sizes="100vw" style={{ objectPosition: "30% 35%" }} />
+              </figure>
               <h2>{approach.title}</h2>
               <p className="intro">{approach.intro}</p>
               <ol className="steps">
@@ -135,7 +139,7 @@ export default function CorporateHome() {
             </section>
 
             {/* 4. Limitele trainingului */}
-            <section className="chapter" id="limite" data-photo="masa">
+            <section className="chapter" id="limite" data-photo="profil">
               <h2>{boundaries.title}</h2>
               <p className="intro">{boundaries.intro}</p>
               <ul className="limits">{boundaries.examples.map((e) => <li key={e}>{e}</li>)}</ul>
@@ -257,7 +261,10 @@ export default function CorporateHome() {
             )}
 
             {/* 9. Contact */}
-            <section className="chapter contact-end" id="contact" data-photo="masa">
+            <section className="chapter contact-end" id="contact" data-photo="canapea">
+              <figure className="band">
+                <Image src="/images/corporate/lilia-canapea.jpg" alt="Lilia Dubița, pe o canapea, într-un birou cu lumină caldă" fill sizes="100vw" style={{ objectPosition: "45% 35%" }} />
+              </figure>
               <h2>{contact.title}</h2>
               <p className="intro">{contact.intro}</p>
               <ol className="next">
