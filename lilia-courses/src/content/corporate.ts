@@ -338,11 +338,11 @@ export const caseStudies: CaseStudy[] = [
 ];
 
 export const faq: { q: string; a: string; status: Status }[] = [
-  { q: 'Discuția inițială este gratuită?', a: '[Răspunsul Liliei: gratuită sau nu, durata, online sau la sediu.]', status: 'de-verificat' },
+  { q: 'Discuția inițială este gratuită?', a: 'Da, discuția inițială este gratuită.', status: 'confirmat' },
   { q: 'Faceți o diagnoză organizațională?', a: 'Nu în sensul unei evaluări clinice sau al unui audit complet. Facem o analiză orientativă a comunicării și a nevoilor de dezvoltare din echipă, cu metode stabilite împreună cu dumneavoastră.', status: 'confirmat' },
   { q: 'Putem comanda direct un anumit training?', a: 'Da. Dacă știți deja ce vă trebuie, ne spuneți tema și formatul, iar noi îl adaptăm după o scurtă discuție despre echipă.', status: 'confirmat' },
-  { q: 'Ce se întâmplă cu informațiile despre angajați?', a: 'Discuțiile individuale și chestionarele se folosesc doar cu acordul părților și rămân confidențiale. Concluziile se prezintă la nivel de echipă, nu despre persoane.', status: 'de-verificat' },
-  { q: 'Cât costă?', a: '[Răspunsul Liliei: cum se stabilește prețul.]', status: 'de-verificat' },
+  { q: 'Ce se întâmplă cu informațiile despre angajați?', a: 'Discuțiile individuale și chestionarele se folosesc doar cu acordul părților și rămân confidențiale.', status: 'confirmat' },
+  { q: 'Cât costă?', a: 'Prețul se discută individual și ține cont de mai mulți factori.', status: 'confirmat' },
 ];
 
 export const contact = {

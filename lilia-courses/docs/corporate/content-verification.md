@@ -14,6 +14,8 @@ Ultima actualizare: 3 noiembrie 2026 (livrare, Faza 7)
 - Secvența de învățare în 4 pași
 - Mențiunea: harta echipei = analiză organizațională orientativă, nu evaluare clinică
 
+- FAQ (3 nov 2026, confirmat de client): discuția inițială e gratuită; informațiile despre angajați rămân confidențiale; prețul se discută individual
+
 ## ⚠️ De verificat înainte de publicare
 | Afirmație | Ce trebuie confirmat | Sursă necesară |
 |---|---|---|
@@ -55,8 +57,6 @@ Ultima actualizare: 3 noiembrie 2026 (livrare, Faza 7)
 | Etapa 1 „Ce primiți”: „O primă lectură a situației și propunerea pasului următor” | Lilia confirmă ce primește clientul după discuția inițială |
 | Etapa 2 „Cum”: discuții cu managementul și echipa | Metodele efective ale analizei nevoilor |
 | Etapa 5 „După”: revenire la câteva săptămâni | Există follow-up? |
-| FAQ „Discuția inițială e gratuită?” și „Cât costă?” | Răspunsurile Liliei |
-| FAQ „Ce se întâmplă cu informațiile despre angajați?” | Confirmarea regulii „concluzii la nivel de echipă” |
 
 ## 🚫 Nu se publică încă
 - Orice rezultat, testimonial sau cifră pentru HiSky până la feedback verificat
