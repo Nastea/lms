@@ -5,8 +5,10 @@ import {
   about, approach, boundaries, brand, caseStudies, company, contact, CTA, directPath, faq, formats, hero,
   interventions, method, organizations, programs, showPending, visible, zones, type Status,
 } from "@/content/corporate";
+import { teamTest } from "@/content/teamTest";
 import ChallengeExplorer from "@/components/corporate/ChallengeExplorer";
 import ContactForm from "@/components/corporate/ContactForm";
+import CorporateFooter from "@/components/corporate/CorporateFooter";
 import PrefillLink from "@/components/corporate/PrefillLink";
 import StagePhoto, { type Frame } from "@/components/corporate/StagePhoto";
 
@@ -110,6 +112,9 @@ export default function CorporateHome() {
               <h2>Ce se întâmplă în echipa dumneavoastră?</h2>
               <p className="intro">Aceeași problemă poate avea cauze foarte diferite. Alegeți situația cea mai apropiată și vedeți ce am încerca să înțelegem împreună.</p>
               <ChallengeExplorer />
+              {visible(teamTest.status) && (
+                <p className="hint">Nu sunteți sigur? <Link className="link" href={`/teste/${teamTest.slug}`}>Faceți testul de 3 minute „{teamTest.title}”</Link></p>
+              )}
             </section>
 
             {/* 3. Cum lucrăm: capitolul central */}
@@ -281,15 +286,7 @@ export default function CorporateHome() {
         <StagePhoto frames={frames} />
       </div>
 
-      <footer className="foot">
-        <p className="big">{brand.name}</p>
-        <div className="cols">
-          <div><b>{brand.tagline}</b><span className="muted">{brand.positioning}</span></div>
-          <div><b>{company.legalName}</b><span className="muted">{company.address}</span><a href={`tel:${company.phone}`}>Tel: {company.phone}</a><a href={`mailto:${company.email}`}>{company.email}</a></div>
-          <div><b>Informații legale</b><Link href="/confidentialitate">Politica de confidențialitate</Link><Link href="/termeni">Termeni și condiții</Link><Link href="/conflicte">Cursul Relația 360</Link></div>
-        </div>
-        {showPending && <p className="muted" style={{ marginTop: 24 }}>Previzualizare: elementele marcate [DE VERIFICAT] nu apar în producție.</p>}
-      </footer>
+      <CorporateFooter />
     </>
   );
 }

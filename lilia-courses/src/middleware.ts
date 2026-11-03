@@ -30,6 +30,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/api") ||
     pathname.startsWith("/images/") || // fișiere statice din public/images (pagina principală, landing-uri)
     pathname === "/robots.txt" ||
+    pathname.startsWith("/teste/") ||
     pathname === "/sitemap.xml" ||
     pathname === "/inscriere" ||
     pathname.startsWith("/inscriere/") ||
