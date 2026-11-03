@@ -1,30 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, DM_Serif_Display, Inter } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const dmSerifDisplay = DM_Serif_Display({
-  variable: "--font-heading",
-  subsets: ["latin"],
-  weight: ["400"],
-});
-
-const inter = Inter({
-  variable: "--font-body",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
 export const metadata: Metadata = {
+  metadataBase: new URL("https://liliadubita.md"),
   title: "Lilia Courses | RELAȚIA 360 - De la conflict la conectare",
   description: "Platformă de cursuri. Curs practic de comunicare în relații.",
 };
@@ -35,11 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="ro"
-      className={`${geistSans.variable} ${geistMono.variable} ${dmSerifDisplay.variable} ${inter.variable} dark`}
-      style={{ colorScheme: "light" }}
-    >
+    <html lang="ro" className="dark" style={{ colorScheme: "light" }}>
       <body className="min-h-screen antialiased">{children}</body>
     </html>
   );

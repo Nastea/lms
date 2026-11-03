@@ -30,7 +30,7 @@ export default function StagePhoto({ frames }: { frames: Frame[] }) {
           </div>
         ) : (
           <div key={f.key} className={`frame${f.crop ? " crop-strip" : ""}${active === f.key ? " is-on" : ""}`}>
-            <Image src={f.src} alt="" fill sizes="48vw" priority={i === 0} style={{ objectPosition: f.position }} />
+            <Image src={f.src} alt="" fill sizes="48vw" priority={i === 0} fetchPriority={i === 0 ? "high" : undefined} style={{ objectPosition: f.position }} />
           </div>
         ),
       )}

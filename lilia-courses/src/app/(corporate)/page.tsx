@@ -30,12 +30,12 @@ export const metadata: Metadata = {
 };
 
 const frames: Frame[] = [
-  { key: "portret", src: "/images/corporate/lilia-crem.jpg", position: "50% 25%" },
-  { key: "profil", src: "/images/corporate/lilia-profil.jpg", position: "30% 40%" },
-  { key: "birou", src: "/images/corporate/lilia-birou.jpg", position: "45% 30%" },
-  { key: "scena", src: "/images/corporate/lilia-scena.jpg", position: "55% 60%" },
-  { key: "om", src: "/images/corporate/lilia-sacou.jpg", position: "80% 30%", crop: true },
-  { key: "canapea", src: "/images/corporate/lilia-canapea.jpg", position: "50% 45%" },
+  { key: "portret", src: "/images/corporate/lilia-crem.webp", position: "50% 25%" },
+  { key: "profil", src: "/images/corporate/lilia-profil.webp", position: "30% 40%" },
+  { key: "birou", src: "/images/corporate/lilia-birou.webp", position: "45% 30%" },
+  { key: "scena", src: "/images/corporate/lilia-scena.webp", position: "55% 60%" },
+  { key: "om", src: "/images/corporate/lilia-sacou.webp", position: "80% 30%", crop: true },
+  { key: "canapea", src: "/images/corporate/lilia-canapea.webp", position: "50% 45%" },
 ];
 
 // Afirmațiile neconfirmate apar doar în previzualizare, marcate.
@@ -94,7 +94,7 @@ export default function CorporateHome() {
             {/* 1. Erou */}
             <section className="hero" data-photo="portret">
               <figure className="band">
-                <Image src="/images/corporate/lilia-crem.jpg" alt="Lilia Dubița, într-un costum crem, așezată pe un scaun" fill sizes="100vw" priority style={{ objectPosition: "50% 20%" }} />
+                <Image src="/images/corporate/lilia-crem.webp" alt="Lilia Dubița, într-un costum crem, așezată pe un scaun" fill sizes="100vw" priority fetchPriority="high" style={{ objectPosition: "50% 20%" }} />
               </figure>
               <h1 className="rise">{hero.title}</h1>
               <p className="lead rise">{hero.lead}</p>
@@ -115,7 +115,7 @@ export default function CorporateHome() {
             {/* 3. Cum lucrăm: capitolul central */}
             <section className="chapter" id="cum-lucram" data-photo="birou">
               <figure className="band">
-                <Image src="/images/corporate/lilia-birou.jpg" alt="Lilia Dubița, în sacou negru, sprijinită de o masă de lucru, lângă fereastră" fill sizes="100vw" style={{ objectPosition: "45% 25%" }} />
+                <Image src="/images/corporate/lilia-birou.webp" alt="Lilia Dubița, în sacou negru, sprijinită de o masă de lucru, lângă fereastră" fill sizes="100vw" style={{ objectPosition: "45% 25%" }} />
               </figure>
               <h2>{approach.title}</h2>
               <p className="intro">{approach.intro}</p>
@@ -150,7 +150,7 @@ export default function CorporateHome() {
             {/* 5. Intervenții: competențe pe zone */}
             <section className="chapter" id="interventii" data-photo="profil">
               <figure className="band">
-                <Image src="/images/corporate/lilia-profil.jpg" alt="Lilia Dubița, din profil, ascultând" fill sizes="100vw" style={{ objectPosition: "30% 35%" }} />
+                <Image src="/images/corporate/lilia-profil.webp" alt="Lilia Dubița, din profil, ascultând" fill sizes="100vw" style={{ objectPosition: "30% 35%" }} />
               </figure>
               <h2>{interventions.title}</h2>
               <p className="intro">{interventions.intro}</p>
@@ -182,7 +182,7 @@ export default function CorporateHome() {
             {/* 6. Metoda */}
             <section className="chapter" id="metoda" data-photo="scena">
               <figure className="band">
-                <Image src="/images/corporate/lilia-scena.jpg" alt="Lilia Dubița vorbind cu microfonul în fața unui grup de participanți" fill sizes="100vw" style={{ objectPosition: "55% 72%" }} />
+                <Image src="/images/corporate/lilia-scena.webp" alt="Lilia Dubița vorbind cu microfonul în fața unui grup de participanți" fill sizes="100vw" style={{ objectPosition: "55% 72%" }} />
               </figure>
               <h2>{method.title}</h2>
               <p className="intro">{method.intro}</p>
@@ -211,7 +211,7 @@ export default function CorporateHome() {
             {/* 8. Credibilitate */}
             <section className="chapter" id="despre" data-photo="om">
               <figure className="band crop-strip">
-                <Image src="/images/corporate/lilia-sacou.jpg" alt="Lilia Dubița, zâmbind, în sacou negru, pe un fotoliu din piele" fill sizes="100vw" style={{ objectPosition: "62% 30%" }} />
+                <Image src="/images/corporate/lilia-sacou.webp" alt="Lilia Dubița, zâmbind, în sacou negru, pe un fotoliu din piele" fill sizes="100vw" style={{ objectPosition: "62% 30%" }} />
               </figure>
               <h2>{about.title}</h2>
               <p className="statement">{about.why}</p>
@@ -267,7 +267,7 @@ export default function CorporateHome() {
             {/* 9. Contact */}
             <section className="chapter contact-end" id="contact" data-photo="canapea">
               <figure className="band">
-                <Image src="/images/corporate/lilia-canapea.jpg" alt="Lilia Dubița, pe o canapea, într-un birou cu lumină caldă" fill sizes="100vw" style={{ objectPosition: "45% 35%" }} />
+                <Image src="/images/corporate/lilia-canapea.webp" alt="Lilia Dubița, pe o canapea, într-un birou cu lumină caldă" fill sizes="100vw" style={{ objectPosition: "45% 35%" }} />
               </figure>
               <h2>{contact.title}</h2>
               <p className="intro">{contact.intro}</p>
