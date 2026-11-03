@@ -32,7 +32,8 @@ export const metadata: Metadata = {
 const frames: Frame[] = [
   { key: "portret", src: "/images/corporate/lilia-crem.jpg", position: "50% 25%" },
   { key: "profil", src: "/images/corporate/lilia-profil.jpg", position: "30% 40%" },
-  { key: "sacou", src: "/images/corporate/lilia-sacou.jpg", position: "62% 30%", crop: true },
+  { key: "birou", src: "/images/corporate/lilia-birou.jpg", position: "45% 30%" },
+  { key: "scena", src: "/images/corporate/lilia-scena.jpg", position: "55% 60%" },
   { key: "om", src: "/images/corporate/lilia-salon.jpg", position: "45% 40%" },
   { key: "canapea", src: "/images/corporate/lilia-canapea.jpg", position: "50% 45%" },
 ];
@@ -147,9 +148,9 @@ export default function CorporateHome() {
             </section>
 
             {/* 5. Intervenții: competențe pe zone */}
-            <section className="chapter" id="interventii" data-photo="sacou">
-              <figure className="band crop-strip">
-                <Image src="/images/corporate/lilia-sacou.jpg" alt="Lilia Dubița, în sacou negru, pe un fotoliu din piele" fill sizes="100vw" style={{ objectPosition: "62% 30%" }} />
+            <section className="chapter" id="interventii" data-photo="birou">
+              <figure className="band">
+                <Image src="/images/corporate/lilia-birou.jpg" alt="Lilia Dubița, în sacou negru, sprijinită de o masă de lucru, lângă fereastră" fill sizes="100vw" style={{ objectPosition: "45% 25%" }} />
               </figure>
               <h2>{interventions.title}</h2>
               <p className="intro">{interventions.intro}</p>
@@ -179,7 +180,10 @@ export default function CorporateHome() {
             </section>
 
             {/* 6. Metoda */}
-            <section className="chapter" id="metoda" data-photo="sacou">
+            <section className="chapter" id="metoda" data-photo="scena">
+              <figure className="band">
+                <Image src="/images/corporate/lilia-scena.jpg" alt="Lilia Dubița vorbind cu microfonul în fața unui grup de participanți" fill sizes="100vw" style={{ objectPosition: "55% 72%" }} />
+              </figure>
               <h2>{method.title}</h2>
               <p className="intro">{method.intro}</p>
               <ol className="steps compact">
@@ -190,7 +194,7 @@ export default function CorporateHome() {
             </section>
 
             {/* 7. Calea directă + formate */}
-            <section className="chapter" id="training-direct" data-photo="sacou">
+            <section className="chapter" id="training-direct" data-photo="scena">
               <h2>{directPath.title}</h2>
               <p className="intro">{directPath.intro}</p>
               <ul className="direct-list">{programs.map((p) => <li key={p.id}>{p.title}</li>)}</ul>
@@ -229,7 +233,7 @@ export default function CorporateHome() {
             )}
 
             {cases.length > 0 && (
-              <section className="chapter" id="studii-de-caz" data-photo="sacou">
+              <section className="chapter" id="studii-de-caz" data-photo="scena">
                 <h2>Studii de caz</h2>
                 {cases.map((c) => (
                   <article key={c.client} className={`case ${pending(c.status) ?? ""}`}>
