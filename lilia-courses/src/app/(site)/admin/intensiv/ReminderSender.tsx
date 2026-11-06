@@ -61,7 +61,7 @@ export default function ReminderSender({ total }: { total: number }) {
 
   return (
     <div className="rounded-xl bg-white/5 p-5 space-y-3">
-      <p className="font-semibold">Reminder pentru mâine: noul link de Zoom + caietul atașat</p>
+      <p className="font-semibold">Reminder pentru astăzi: noul link de Zoom + caietul atașat</p>
       <div className="flex flex-wrap gap-3">
         <button onClick={sendTest} disabled={busy} className="rounded-xl border border-white/30 px-4 py-2 disabled:opacity-40">
           Trimite-mi un test
