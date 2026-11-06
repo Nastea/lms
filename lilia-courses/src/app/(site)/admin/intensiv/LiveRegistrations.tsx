@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import ReminderSender from './ReminderSender';
 
 type Order = {
   id: string;
@@ -96,6 +97,8 @@ export default function LiveRegistrations() {
               <p className="text-4xl font-semibold mt-1">{data.pendingCount}</p>
             </div>
           </div>
+
+          <ReminderSender total={data.paid.length} />
 
           <div className="overflow-x-auto rounded-xl bg-white/5">
             <table className="w-full text-sm">
