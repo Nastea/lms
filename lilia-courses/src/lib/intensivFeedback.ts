@@ -117,14 +117,14 @@ export const RECORDINGS = [
   {
     label: 'Partea 1',
     time: '10:00–12:00',
-    url: 'https://us06web.zoom.us/rec/share/I90aau4wL8AatiFn_D9XEPhWpV_6Sbu5GrVCG_0dml1f-x5CBne6BC88Sockor_t.WQ0gJr9nelKI-T2w',
-    code: '0+vY6%Hp',
+    url: 'https://us06web.zoom.us/rec/share/IRKG2Q8TxG2rJmKzUn_T1RqFwih_rwc2vt5VImz9P1nslJDBVdnueDY0O24YavL1.a8PEMSD7TQ361xyo',
+    code: '9F?i9Jf$',
   },
   {
     label: 'Partea 2',
     time: '13:00–16:00',
-    url: 'https://us06web.zoom.us/rec/share/IRKG2Q8TxG2rJmKzUn_T1RqFwih_rwc2vt5VImz9P1nslJDBVdnueDY0O24YavL1.a8PEMSD7TQ361xyo',
-    code: '9F?i9Jf$',
+    url: 'https://us06web.zoom.us/rec/share/I90aau4wL8AatiFn_D9XEPhWpV_6Sbu5GrVCG_0dml1f-x5CBne6BC88Sockor_t.WQ0gJr9nelKI-T2w',
+    code: '0+vY6%Hp',
   },
 ];
 
