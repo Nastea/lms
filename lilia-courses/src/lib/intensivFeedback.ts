@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { createHmac, timingSafeEqual } from 'crypto';
 import path from 'path';
 
 /**
@@ -49,18 +50,40 @@ export function escapeHtml(s: string) {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 }
 
-function bonusAttachment(): { filename: string; content: string } | null {
+/** Linkul de descărcare a ghidului, semnat pentru un email (doar cine a răspuns îl primește). */
+function sign(email: string) {
+  return createHmac('sha256', process.env.SUPABASE_SERVICE_ROLE_KEY || 'dev').update(`feedback-bonus:${email}`).digest('base64url');
+}
+export function bonusToken(email: string) {
+  return `${Buffer.from(email).toString('base64url')}.${sign(email)}`;
+}
+/** Întoarce emailul dacă tokenul e valid, altfel null. */
+export function verifyBonusToken(token: string): string | null {
+  const [e, sig] = token.split('.');
+  if (!e || !sig) return null;
+  const email = Buffer.from(e, 'base64url').toString();
+  const a = Buffer.from(sig);
+  const b = Buffer.from(sign(email));
+  return a.length === b.length && timingSafeEqual(a, b) ? email : null;
+}
+
+export function bonusPdf(): Buffer | null {
   for (const p of [
     path.join(process.cwd(), 'private', FEEDBACK.bonusFile),
     path.join(process.cwd(), 'lilia-courses', 'private', FEEDBACK.bonusFile),
   ]) {
     try {
-      return { filename: FEEDBACK.bonusFilename, content: fs.readFileSync(p).toString('base64') };
+      return fs.readFileSync(p);
     } catch {
       // try next location
     }
   }
   return null;
+}
+
+function bonusAttachment(): { filename: string; content: string } | null {
+  const pdf = bonusPdf();
+  return pdf ? { filename: FEEDBACK.bonusFilename, content: pdf.toString('base64') } : null;
 }
 
 async function resend(body: object, idempotencyKey: string): Promise<{ ok: boolean; error?: string }> {

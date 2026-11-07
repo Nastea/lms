@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { INTENSIV } from '@/lib/intensiv';
-import { sendBonus } from '@/lib/intensivFeedback';
+import { bonusToken, sendBonus } from '@/lib/intensivFeedback';
 import { requireAdmin } from '@/lib/admin';
 
 const MAX = 4000;
@@ -75,5 +75,5 @@ export async function POST(req: Request) {
   }
   console.log('INTENSIV_FEEDBACK_SAVED', { email, bonusSent });
 
-  return NextResponse.json({ ok: true, bonusSent });
+  return NextResponse.json({ ok: true, bonusSent, downloadUrl: `/api/intensiv/feedback/bonus?t=${bonusToken(email)}` });
 }

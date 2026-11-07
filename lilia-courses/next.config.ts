@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     '/api/paynet/**': ['./private/caiet-intensiv.pdf'],
     '/api/admin/intensiv-reminder': ['./private/caiet-intensiv.pdf'],
-    '/api/intensiv/feedback': ['./private/caiet-bonus.pdf'],
+    '/api/intensiv/**': ['./private/caiet-bonus.pdf'],
   },
   images: {
     unoptimized: true,

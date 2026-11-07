@@ -12,7 +12,7 @@ export default function FeedbackForm() {
   const [topics, setTopics] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [done, setDone] = useState<{ bonusSent: boolean } | null>(null);
+  const [done, setDone] = useState<{ bonusSent: boolean; downloadUrl: string } | null>(null);
 
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const formOk = emailOk && usefulness !== null && takeaway.trim() !== '' && improve.trim() !== '' && topics.trim() !== '';
@@ -30,7 +30,7 @@ export default function FeedbackForm() {
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.error || 'A apărut o eroare. Încearcă din nou.');
-      setDone({ bonusSent: !!json.bonusSent });
+      setDone({ bonusSent: !!json.bonusSent, downloadUrl: json.downloadUrl });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'A apărut o eroare. Încearcă din nou.');
     }
@@ -42,10 +42,12 @@ export default function FeedbackForm() {
       <div className="ix-fb-done" role="status">
         <p className="ix-cover-by">Mulțumesc din suflet! ❤️</p>
         <p className="ix-cover-sub">
-          {done.bonusSent
-            ? `Ghidul „Mai aproape de tine” e pe drum spre ${email.trim()}. Dacă nu-l vezi în câteva minute, uită-te și în Spam sau Promoții.`
-            : 'Răspunsul tău a ajuns la mine. Îți trimit ghidul pe email în curând.'}
+          Iată ghidul „Mai aproape de tine”, cadoul meu pentru tine. Îl poți descărca acum
+          {done.bonusSent ? ` și ți l-am trimis și pe email, la ${email.trim()}.` : '.'}
         </p>
+        <a href={done.downloadUrl} className="ix-btn ix-btn-big" download>
+          Descarcă ghidul (PDF)
+        </a>
       </div>
     );
   }
