@@ -8,7 +8,7 @@ const clean = (v: unknown) => (typeof v === 'string' ? v.trim().slice(0, MAX) : 
 
 /**
  * POST /api/intensiv/feedback — public.
- * { email, usefulness (1–10), takeaway, improve }
+ * { email, usefulness (1–10), takeaway, improve, topics }
  * Salvează răspunsul (unul per email; a doua oară îl actualizează) și, doar pentru
  * participanții plătiți, trimite o singură dată caietul bonus pe email.
  */
@@ -18,12 +18,13 @@ export async function POST(req: Request) {
   const usefulness = Number(body.usefulness);
   const takeaway = clean(body.takeaway);
   const improve = clean(body.improve);
+  const topics = clean(body.topics);
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ error: 'Scrie o adresă de email validă.' }, { status: 400 });
   }
-  if (!Number.isInteger(usefulness) || usefulness < 1 || usefulness > 10 || !takeaway || !improve) {
-    return NextResponse.json({ error: 'Te rog să răspunzi la toate cele 3 întrebări.' }, { status: 400 });
+  if (!Number.isInteger(usefulness) || usefulness < 1 || usefulness > 10 || !takeaway || !improve || !topics) {
+    return NextResponse.json({ error: 'Te rog să răspunzi la toate cele 4 întrebări.' }, { status: 400 });
   }
 
   const { data: orders, error: ordersError } = await supabaseAdmin
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
     .maybeSingle();
 
   const { error: saveError } = await supabaseAdmin.from('intensiv_feedback').upsert(
-    { email, name: order.customer_name, usefulness, takeaway, improve, updated_at: new Date().toISOString() },
+    { email, name: order.customer_name, usefulness, takeaway, improve, topics, updated_at: new Date().toISOString() },
     { onConflict: 'email' },
   );
   if (saveError) {

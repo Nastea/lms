@@ -9,12 +9,13 @@ export default function FeedbackForm() {
   const [usefulness, setUsefulness] = useState<number | null>(null);
   const [takeaway, setTakeaway] = useState('');
   const [improve, setImprove] = useState('');
+  const [topics, setTopics] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState<{ bonusSent: boolean } | null>(null);
 
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-  const formOk = emailOk && usefulness !== null && takeaway.trim() !== '' && improve.trim() !== '';
+  const formOk = emailOk && usefulness !== null && takeaway.trim() !== '' && improve.trim() !== '' && topics.trim() !== '';
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +26,7 @@ export default function FeedbackForm() {
       const res = await fetch('/api/intensiv/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), usefulness, takeaway, improve }),
+        body: JSON.stringify({ email: email.trim(), usefulness, takeaway, improve, topics }),
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.error || 'A apărut o eroare. Încearcă din nou.');
@@ -67,7 +68,7 @@ export default function FeedbackForm() {
       </fieldset>
 
       <label className="ix-fb-q">
-        <span><b>2.</b> Ce iei cu tine din intensiv? Ce ți-a folosit cel mai mult?</span>
+        <span><b>2.</b> Ce ți-a plăcut? Ce ți-a folosit?</span>
         <textarea value={takeaway} onChange={(e) => setTakeaway(e.target.value)} rows={4} maxLength={4000} required />
       </label>
 
@@ -77,13 +78,18 @@ export default function FeedbackForm() {
       </label>
 
       <label className="ix-fb-q">
+        <span><b>4.</b> Pe ce temă ți-ar plăcea să lucrăm împreună la următoarele workshopuri?</span>
+        <textarea value={topics} onChange={(e) => setTopics(e.target.value)} rows={3} maxLength={4000} required />
+      </label>
+
+      <label className="ix-fb-q">
         <span>Emailul cu care te-ai înscris (aici îți trimit caietul bonus)</span>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
       </label>
 
       {error && <p className="ix-form-error" role="alert">{error}</p>}
       <button type="submit" className="ix-btn ix-btn-wide" disabled={!formOk || busy}>
-        {busy ? 'Se trimite…' : formOk ? 'Trimite și primește caietul bonus' : 'Răspunde la toate cele 3 întrebări'}
+        {busy ? 'Se trimite…' : formOk ? 'Trimite și primește caietul bonus' : 'Răspunde la toate cele 4 întrebări'}
       </button>
     </form>
   );

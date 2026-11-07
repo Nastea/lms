@@ -101,7 +101,7 @@ export default function LiveRegistrations() {
           <ReminderSender
             total={data.paid.length}
             endpoint="/api/admin/intensiv-feedback-invite"
-            title="Invitație la feedback: link spre cele 3 întrebări + promisiunea caietului bonus"
+            title="Invitație la feedback: link spre cele 4 întrebări + promisiunea caietului bonus"
             confirmText={`Trimit invitația la feedback tuturor celor ${data.paid.length} participanți?`}
           />
 

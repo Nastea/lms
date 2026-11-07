@@ -9,6 +9,7 @@ type Row = {
   usefulness: number | null;
   takeaway: string | null;
   improve: string | null;
+  topics: string | null;
   bonus_sent_at: string | null;
 };
 
@@ -73,8 +74,9 @@ export default function FeedbackAnswers() {
                   {new Date(r.created_at).toLocaleString('ro-RO', { timeZone: 'Europe/Chisinau', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
                   {' · bonus '}{r.bonus_sent_at ? 'trimis' : 'netrimis'}
                 </p>
-                <p><span className="opacity-60">Ce ia cu sine: </span>{r.takeaway}</p>
+                <p><span className="opacity-60">Ce i-a plăcut / folosit: </span>{r.takeaway}</p>
                 <p><span className="opacity-60">Ce putem face mai bine: </span>{r.improve}</p>
+                <p><span className="opacity-60">Teme pentru workshopuri: </span>{r.topics}</p>
               </article>
             ))}
           </div>

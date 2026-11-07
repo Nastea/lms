@@ -9,6 +9,7 @@ create table if not exists public.intensiv_feedback (
   usefulness int check (usefulness between 1 and 10),
   takeaway text,
   improve text,
+  topics text,
   bonus_sent_at timestamptz
 );
 -- Fără politici: tabelul e accesibil doar de pe server (service role).

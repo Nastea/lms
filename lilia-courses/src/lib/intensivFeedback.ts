@@ -33,13 +33,13 @@ export const BONUS_EMAIL = {
 /** Emailul care îi invită pe participanți să completeze formularul. */
 export const INVITE_EMAIL = {
   key: 'intensiv-feedback-invite-1',
-  subject: '3 întrebări despre intensiv și un caiet bonus pentru tine',
+  subject: '4 întrebări despre intensiv și un caiet bonus pentru tine',
   html: wrap(`
     <p style="margin:0 0 16px;">Bună!</p>
     <p style="margin:0 0 16px;">Îți mulțumesc că ai fost alături de mine la intensivul „Am un plan pentru viața mea”.</p>
-    <p style="margin:0 0 20px;">Aș vrea să aflu cum a fost pentru tine. Sunt doar <strong>3 întrebări</strong>, durează cam 2 minute. Ca mulțumire, după ce răspunzi îți trimit pe email <strong>un caiet bonus</strong>.</p>
+    <p style="margin:0 0 20px;">Aș vrea să aflu cum a fost pentru tine. Sunt doar <strong>4 întrebări</strong>, durează cam 3 minute. Ca mulțumire, după ce răspunzi îți trimit pe email <strong>un caiet bonus</strong>.</p>
     <p style="margin:0 0 20px;">
-      <a href="${FEEDBACK.pageUrl}" style="display:inline-block;background:#0d6b75;color:#ffffff;text-decoration:none;font-weight:bold;font-size:18px;padding:14px 28px;">Răspunde la 3 întrebări</a>
+      <a href="${FEEDBACK.pageUrl}" style="display:inline-block;background:#0d6b75;color:#ffffff;text-decoration:none;font-weight:bold;font-size:18px;padding:14px 28px;">Răspunde la 4 întrebări</a>
     </p>
     <p style="margin:0 0 16px;font-size:14px;">Folosește adresa de email cu care te-ai înscris, ca bonusul să ajungă la tine.</p>
     <p style="margin:0;">Cu drag,<br>Lilia Dubița</p>`),

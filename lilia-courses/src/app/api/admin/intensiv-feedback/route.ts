@@ -9,7 +9,7 @@ export async function GET(req: Request) {
 
   const { data, error } = await supabaseAdmin
     .from('intensiv_feedback')
-    .select('created_at, name, email, usefulness, takeaway, improve, bonus_sent_at')
+    .select('created_at, name, email, usefulness, takeaway, improve, topics, bonus_sent_at')
     .order('created_at', { ascending: false });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   const rows = data ?? [];
@@ -17,7 +17,7 @@ export async function GET(req: Request) {
   if (new URL(req.url).searchParams.get('format') === 'csv') {
     const esc = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
     const lines = [
-      ['Data', 'Nume', 'Email', 'Cat de util (1-10)', 'Ce ia cu sine', 'Ce putem face mai bine', 'Bonus trimis'],
+      ['Data', 'Nume', 'Email', 'Cat de util (1-10)', 'Ce i-a placut / folosit', 'Ce putem face mai bine', 'Teme pentru workshopuri', 'Bonus trimis'],
       ...rows.map((r) => [
         new Date(r.created_at).toLocaleString('ro-RO', { timeZone: 'Europe/Chisinau' }),
         r.name,
@@ -25,6 +25,7 @@ export async function GET(req: Request) {
         r.usefulness,
         r.takeaway,
         r.improve,
+        r.topics,
         r.bonus_sent_at ? 'da' : 'nu',
       ]),
     ];
