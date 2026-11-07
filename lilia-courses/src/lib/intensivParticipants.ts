@@ -27,7 +27,8 @@ export async function participantEmails(): Promise<string[]> {
   ];
 }
 
-type Send = (to: string) => Promise<{ ok: boolean; error?: string }>;
+/** `test` = true: cheie unică, ca testul să poată fi repetat oricând. */
+type Send = (to: string, test?: boolean) => Promise<{ ok: boolean; error?: string }>;
 const BATCH = 5;
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -44,7 +45,7 @@ export async function bulkSendRoute(req: Request, send: Send, logLabel: string) 
   if (body.mode === 'test') {
     const to = admin.user?.email;
     if (!to) return NextResponse.json({ error: 'Adminul nu are email' }, { status: 400 });
-    return NextResponse.json({ to, ...(await send(to)) });
+    return NextResponse.json({ to, ...(await send(to, true)) });
   }
   if (body.mode !== 'all') return NextResponse.json({ error: 'mode invalid' }, { status: 400 });
 

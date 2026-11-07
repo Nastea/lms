@@ -155,11 +155,13 @@ export const RECORDINGS_EMAIL = {
 };
 
 /** Trimite emailul cu înregistrările unei adrese. Nu aruncă. */
-export async function sendRecordings(to: string) {
-  return resend({ to, subject: RECORDINGS_EMAIL.subject, html: RECORDINGS_EMAIL.html }, `${RECORDINGS_EMAIL.key}/${to.toLowerCase()}`);
+export async function sendRecordings(to: string, test = false) {
+  const key = `${RECORDINGS_EMAIL.key}/${to.toLowerCase()}${test ? `/test-${Date.now()}` : ''}`;
+  return resend({ to, subject: RECORDINGS_EMAIL.subject, html: RECORDINGS_EMAIL.html }, key);
 }
 
 /** Trimite invitația la feedback unei adrese. Nu aruncă. */
-export async function sendInvite(to: string) {
-  return resend({ to, subject: INVITE_EMAIL.subject, html: INVITE_EMAIL.html }, `${INVITE_EMAIL.key}/${to.toLowerCase()}`);
+export async function sendInvite(to: string, test = false) {
+  const key = `${INVITE_EMAIL.key}/${to.toLowerCase()}${test ? `/test-${Date.now()}` : ''}`;
+  return resend({ to, subject: INVITE_EMAIL.subject, html: INVITE_EMAIL.html }, key);
 }
