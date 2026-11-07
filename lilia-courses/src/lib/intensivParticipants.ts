@@ -7,7 +7,7 @@ import { INTENSIV } from '@/lib/intensiv';
  * Participanți fără comandă plătită pe site (adăugați manual), care primesc totuși
  * emailurile de după intensiv și pot completa feedbackul.
  */
-export const EXTRA_PARTICIPANTS = ['jizdancarolina@gmail.com'];
+export const EXTRA_PARTICIPANTS = ['jizdancarolina@gmail.com', 'anasionas@gmail.com'];
 
 /** Toate adresele participanților: comenzile plătite + EXTRA_PARTICIPANTS, fără dubluri, în ordine stabilă. */
 export async function participantEmails(): Promise<string[]> {
