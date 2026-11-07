@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { INTENSIV } from '@/lib/intensiv';
-import { participantEmails } from '@/lib/intensivParticipants';
+import { EXTRA_PARTICIPANTS, participantEmails } from '@/lib/intensivParticipants';
 
 /**
  * GET /api/admin/intensiv-orders[?format=csv]
@@ -29,6 +29,9 @@ export async function GET(req: Request) {
   }
 
   const paid = (data ?? []).filter((o) => o.status === 'paid');
+  const paidEmails = new Set(paid.map((o) => (o.customer_email || '').trim().toLowerCase()));
+  // Adăugați manual (fără plată pe site): doar cei care nu au deja o comandă plătită.
+  const manual = EXTRA_PARTICIPANTS.filter((e) => !paidEmails.has(e));
   const pending = (data ?? []).filter((o) => o.status === 'pending');
 
   if (new URL(req.url).searchParams.get('format') === 'csv') {
@@ -43,6 +46,7 @@ export async function GET(req: Request) {
         o.amount,
         o.invite_sent_at ? 'da' : 'nu',
       ]),
+      ...manual.map((e) => ['adaugat manual', '', e, '', '', '']),
     ];
     const csv = '﻿' + rows.map((r) => r.map(esc).join(',')).join('\n');
     return new Response(csv, {
@@ -57,6 +61,7 @@ export async function GET(req: Request) {
   return NextResponse.json(
     {
       paid,
+      manual,
       pendingCount: pending.length,
       revenue: paid.reduce((sum, o) => sum + Number(o.amount || 0), 0),
       recipients: (await participantEmails().catch(() => [])).length,

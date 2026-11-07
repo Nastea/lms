@@ -14,7 +14,7 @@ type Order = {
   invite_sent_at: string | null;
 };
 
-type Data = { paid: Order[]; pendingCount: number; revenue: number; recipients: number };
+type Data = { paid: Order[]; pendingCount: number; revenue: number; recipients: number; manual: string[] };
 
 const REFRESH_MS = 10_000;
 
@@ -129,6 +129,15 @@ export default function LiveRegistrations() {
                     <td className="p-3">{o.customer_email || '—'}</td>
                     <td className="p-3 whitespace-nowrap">{o.customer_phone || '—'}</td>
                     <td className="p-3">{o.invite_sent_at ? 'da' : 'nu'}</td>
+                  </tr>
+                ))}
+                {data.manual.map((e) => (
+                  <tr key={e} className="border-t border-white/10">
+                    <td className="p-3 whitespace-nowrap opacity-60">adăugat manual</td>
+                    <td className="p-3">—</td>
+                    <td className="p-3">{e}</td>
+                    <td className="p-3">—</td>
+                    <td className="p-3">—</td>
                   </tr>
                 ))}
               </tbody>
