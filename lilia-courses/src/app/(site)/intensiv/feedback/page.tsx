@@ -3,7 +3,7 @@ import { Archivo } from 'next/font/google';
 import FeedbackForm from './FeedbackForm';
 import '../intensiv.css';
 
-/* Feedback după intensiv: 4 întrebări; participanții primesc pe email caietul bonus. */
+/* Feedback după intensiv: 4 întrebări; participanții primesc pe email ghidul „Mai aproape de tine”. */
 
 const archivo = Archivo({
   subsets: ['latin', 'latin-ext'],
@@ -13,7 +13,7 @@ const archivo = Archivo({
 
 export const metadata: Metadata = {
   title: 'Cum a fost la intensiv? — Lilia Dubița',
-  description: '4 întrebări despre intensivul „Am un plan pentru viața mea” și un caiet bonus pentru tine.',
+  description: '4 întrebări despre intensivul „Am un plan pentru viața mea” și un ghid practic cadou.',
   robots: { index: false },
 };
 
@@ -29,7 +29,7 @@ export default function IntensivFeedbackPage() {
               <h1 className="ix-cover-title ix-fb-title">Cum a fost la intensiv?</h1>
               <p className="ix-cover-sub ix-fb-sub">
                 Patru întrebări, cam trei minute. Citesc fiecare răspuns. Ca mulțumire, îți trimit pe
-                email un caiet bonus.
+                email ghidul practic „Mai aproape de tine”.
               </p>
               <FeedbackForm />
             </div>

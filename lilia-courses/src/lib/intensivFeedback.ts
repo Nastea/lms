@@ -7,7 +7,7 @@ import path from 'path';
  */
 export const FEEDBACK = {
   bonusFile: 'caiet-bonus.pdf',
-  bonusFilename: 'Caiet bonus - Lilia Dubita.pdf',
+  bonusFilename: 'Mai aproape de tine - Ghid practic - Lilia Dubita.pdf',
   pageUrl: 'https://www.liliadubita.md/intensiv/feedback',
   from: () => process.env.CREDENTIALS_EMAIL_FROM || process.env.RESEND_FROM || 'Lilia Dubița <noreply@liliadubita.md>',
   replyTo: 'danexprim@liliadubita.md',
@@ -21,27 +21,27 @@ const wrap = (inner: string) => `<!doctype html><html lang="ro"><head><meta char
 
 /** Emailul cu bonusul, trimis după ce cineva completează formularul. */
 export const BONUS_EMAIL = {
-  subject: 'Mulțumesc pentru feedback! Caietul tău bonus e atașat',
+  subject: 'Mulțumesc pentru feedback! Ghidul „Mai aproape de tine” e atașat',
   html: (firstName: string) =>
     wrap(`
     <p style="margin:0 0 16px;">${firstName ? `Bună, ${escapeHtml(firstName)}!` : 'Bună!'}</p>
     <p style="margin:0 0 16px;">Îți mulțumesc că ai găsit timp să-mi scrii cum a fost la intensiv. Citesc fiecare răspuns și mă ajută mult.</p>
-    <p style="margin:0 0 16px;">📒 Așa cum am promis, <strong>caietul bonus e atașat la acest email</strong>. Îl poți printa sau completa pe ecran, cum îți e mai comod.</p>
+    <p style="margin:0 0 16px;">📒 Așa cum am promis, îți trimit <strong>ghidul practic „Mai aproape de tine”</strong>, atașat la acest email. Am adunat în el exercițiile mele preferate pentru cunoașterea de sine și creșterea iubirii de sine. Îl poți printa sau completa pe ecran, cum îți e mai comod.</p>
     <p style="margin:0;">Cu drag,<br>Lilia Dubița</p>`),
 };
 
 /** Emailul care îi invită pe participanți să completeze formularul. */
 export const INVITE_EMAIL = {
   key: 'intensiv-feedback-invite-1',
-  subject: '4 întrebări despre intensiv și un caiet bonus pentru tine',
+  subject: '4 întrebări despre intensiv și un cadou pentru tine',
   html: wrap(`
     <p style="margin:0 0 16px;">Bună!</p>
     <p style="margin:0 0 16px;">Îți mulțumesc că ai fost alături de mine la intensivul „Am un plan pentru viața mea”.</p>
-    <p style="margin:0 0 20px;">Aș vrea să aflu cum a fost pentru tine. Sunt doar <strong>4 întrebări</strong>, durează cam 3 minute. Ca mulțumire, după ce răspunzi îți trimit pe email <strong>un caiet bonus</strong>.</p>
+    <p style="margin:0 0 20px;">Aș vrea să aflu cum a fost pentru tine. Sunt doar <strong>4 întrebări</strong>, durează cam 3 minute. Ca mulțumire, după ce răspunzi îți trimit pe email <strong>ghidul practic „Mai aproape de tine”</strong>, cu exercițiile mele preferate pentru creșterea iubirii de sine.</p>
     <p style="margin:0 0 20px;">
       <a href="${FEEDBACK.pageUrl}" style="display:inline-block;background:#0d6b75;color:#ffffff;text-decoration:none;font-weight:bold;font-size:18px;padding:14px 28px;">Răspunde la 4 întrebări</a>
     </p>
-    <p style="margin:0 0 16px;font-size:14px;">Folosește adresa de email cu care te-ai înscris, ca bonusul să ajungă la tine.</p>
+    <p style="margin:0 0 16px;font-size:14px;">Folosește adresa de email cu care te-ai înscris, ca ghidul să ajungă la tine.</p>
     <p style="margin:0;">Cu drag,<br>Lilia Dubița</p>`),
 };
 

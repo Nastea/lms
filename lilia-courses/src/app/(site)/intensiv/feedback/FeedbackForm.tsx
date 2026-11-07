@@ -43,8 +43,8 @@ export default function FeedbackForm() {
         <p className="ix-cover-by">Mulțumesc din suflet! ❤️</p>
         <p className="ix-cover-sub">
           {done.bonusSent
-            ? `Caietul bonus e pe drum spre ${email.trim()}. Dacă nu-l vezi în câteva minute, uită-te și în Spam sau Promoții.`
-            : 'Răspunsul tău a ajuns la mine. Îți trimit caietul bonus pe email în curând.'}
+            ? `Ghidul „Mai aproape de tine” e pe drum spre ${email.trim()}. Dacă nu-l vezi în câteva minute, uită-te și în Spam sau Promoții.`
+            : 'Răspunsul tău a ajuns la mine. Îți trimit ghidul pe email în curând.'}
         </p>
       </div>
     );
@@ -83,13 +83,13 @@ export default function FeedbackForm() {
       </label>
 
       <label className="ix-fb-q">
-        <span>Emailul cu care te-ai înscris (aici îți trimit caietul bonus)</span>
+        <span>Emailul cu care te-ai înscris (aici îți trimit ghidul)</span>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
       </label>
 
       {error && <p className="ix-form-error" role="alert">{error}</p>}
       <button type="submit" className="ix-btn ix-btn-wide" disabled={!formOk || busy}>
-        {busy ? 'Se trimite…' : formOk ? 'Trimite și primește caietul bonus' : 'Răspunde la toate cele 4 întrebări'}
+        {busy ? 'Se trimite…' : formOk ? 'Trimite și primește ghidul' : 'Răspunde la toate cele 4 întrebări'}
       </button>
     </form>
   );

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { INTENSIV } from '@/lib/intensiv';
 import { sendBonus } from '@/lib/intensivFeedback';
+import { requireAdmin } from '@/lib/admin';
 
 const MAX = 4000;
 const clean = (v: unknown) => (typeof v === 'string' ? v.trim().slice(0, MAX) : '');
@@ -11,6 +12,7 @@ const clean = (v: unknown) => (typeof v === 'string' ? v.trim().slice(0, MAX) : 
  * { email, usefulness (1–10), takeaway, improve, topics }
  * Salvează răspunsul (unul per email; a doua oară îl actualizează) și, doar pentru
  * participanții plătiți, trimite o singură dată caietul bonus pe email.
+ * Un administrator logat poate testa cu orice email (rândul e salvat cu numele „TEST admin”).
  */
 export async function POST(req: Request) {
   const body = await req.json().catch(() => ({}));
@@ -36,7 +38,8 @@ export async function POST(req: Request) {
     console.error('INTENSIV_FEEDBACK_ORDERS', ordersError);
     return NextResponse.json({ error: 'A apărut o eroare. Încearcă din nou peste un minut.' }, { status: 500 });
   }
-  const order = (orders ?? []).find((o) => (o.customer_email || '').trim().toLowerCase() === email);
+  let order = (orders ?? []).find((o) => (o.customer_email || '').trim().toLowerCase() === email);
+  if (!order && (await requireAdmin()).ok) order = { customer_email: email, customer_name: 'TEST admin' };
   if (!order) {
     return NextResponse.json(
       { error: 'Nu găsim această adresă printre participanți. Folosește emailul cu care te-ai înscris la intensiv.' },
