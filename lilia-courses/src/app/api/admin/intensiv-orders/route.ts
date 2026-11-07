@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { INTENSIV } from '@/lib/intensiv';
+import { participantEmails } from '@/lib/intensivParticipants';
 
 /**
  * GET /api/admin/intensiv-orders[?format=csv]
@@ -58,6 +59,7 @@ export async function GET(req: Request) {
       paid,
       pendingCount: pending.length,
       revenue: paid.reduce((sum, o) => sum + Number(o.amount || 0), 0),
+      recipients: (await participantEmails().catch(() => [])).length,
     },
     { headers: { 'Cache-Control': 'no-store' } },
   );

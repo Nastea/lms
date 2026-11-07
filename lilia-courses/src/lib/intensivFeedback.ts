@@ -112,6 +112,53 @@ export async function sendBonus(to: string, firstName: string) {
   );
 }
 
+/** Înregistrările intensivului: fiecare parte are linkul și codul ei. */
+export const RECORDINGS = [
+  {
+    label: 'Partea 1',
+    time: '10:00–12:00',
+    url: 'https://us06web.zoom.us/rec/share/I90aau4wL8AatiFn_D9XEPhWpV_6Sbu5GrVCG_0dml1f-x5CBne6BC88Sockor_t.WQ0gJr9nelKI-T2w',
+    code: '0+vY6%Hp',
+  },
+  {
+    label: 'Partea 2',
+    time: '13:00–16:00',
+    url: 'https://us06web.zoom.us/rec/share/IRKG2Q8TxG2rJmKzUn_T1RqFwih_rwc2vt5VImz9P1nslJDBVdnueDY0O24YavL1.a8PEMSD7TQ361xyo',
+    code: '9F?i9Jf$',
+  },
+];
+
+const recordingBox = (r: (typeof RECORDINGS)[number]) => `
+    <div style="background:#e1e9ea;padding:20px;margin:0 0 12px;">
+      <p style="margin:0 0 12px;font-size:18px;"><strong>${r.label}</strong> <span style="color:#5b646c;font-size:15px;">(${r.time})</span></p>
+      <p style="margin:0 0 14px;">
+        <a href="${r.url}" style="display:inline-block;background:#0d6b75;color:#ffffff;text-decoration:none;font-weight:bold;font-size:17px;padding:12px 24px;">Deschide ${r.label.toLowerCase()}</a>
+      </p>
+      <p style="margin:0;">Codul pentru ${r.label.toLowerCase()}: <span style="display:inline-block;background:#ffffff;padding:4px 10px;font-family:'Courier New',Courier,monospace;font-size:20px;font-weight:bold;letter-spacing:1px;">${escapeHtml(r.code)}</span></p>
+    </div>`;
+
+/** Emailul de după intensiv: cele două înregistrări (cu coduri) + linkul la feedback. */
+export const RECORDINGS_EMAIL = {
+  key: 'intensiv-recordings-1',
+  subject: 'Înregistrarea intensivului „Am un plan pentru viața mea”',
+  html: wrap(`
+    <p style="margin:0 0 16px;">Bună!</p>
+    <p style="margin:0 0 16px;">Îți mulțumesc că ai fost alături de mine la intensivul „Am un plan pentru viața mea”. Așa cum am promis, îți trimit înregistrarea. E împărțită în <strong>două părți</strong>.</p>
+    <p style="margin:0 0 20px;padding:14px 16px;border-left:4px solid #0d6b75;background:#f3f2ef;"><strong>Important: accesul este cu cod, iar fiecare parte are codul ei.</strong> Când deschizi linkul, Zoom îți cere codul. Copiază-l exact, cu tot cu semne și litere mari sau mici.</p>
+    ${RECORDINGS.map(recordingBox).join('')}
+    <p style="margin:24px 0 12px;"><strong>Și o rugăminte:</strong> spune-mi cum a fost pentru tine. Sunt doar 4 întrebări, durează cam 3 minute. Ca mulțumire, primești cadou <strong>ghidul practic „Mai aproape de tine”</strong>, cu exercițiile mele preferate pentru creșterea iubirii de sine.</p>
+    <p style="margin:0 0 12px;">
+      <a href="${FEEDBACK.pageUrl}" style="display:inline-block;background:#1f2b33;color:#ffffff;text-decoration:none;font-weight:bold;font-size:17px;padding:12px 24px;">Răspunde și primește ghidul</a>
+    </p>
+    <p style="margin:0 0 20px;font-size:14px;">Folosește adresa de email cu care te-ai înscris, ca ghidul să ajungă la tine.</p>
+    <p style="margin:0;">Cu drag,<br>Lilia Dubița</p>`),
+};
+
+/** Trimite emailul cu înregistrările unei adrese. Nu aruncă. */
+export async function sendRecordings(to: string) {
+  return resend({ to, subject: RECORDINGS_EMAIL.subject, html: RECORDINGS_EMAIL.html }, `${RECORDINGS_EMAIL.key}/${to.toLowerCase()}`);
+}
+
 /** Trimite invitația la feedback unei adrese. Nu aruncă. */
 export async function sendInvite(to: string) {
   return resend({ to, subject: INVITE_EMAIL.subject, html: INVITE_EMAIL.html }, `${INVITE_EMAIL.key}/${to.toLowerCase()}`);

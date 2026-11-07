@@ -3,6 +3,7 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { INTENSIV } from '@/lib/intensiv';
 import { bonusToken, sendBonus } from '@/lib/intensivFeedback';
 import { requireAdmin } from '@/lib/admin';
+import { EXTRA_PARTICIPANTS } from '@/lib/intensivParticipants';
 
 const MAX = 4000;
 const clean = (v: unknown) => (typeof v === 'string' ? v.trim().slice(0, MAX) : '');
@@ -39,6 +40,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'A apărut o eroare. Încearcă din nou peste un minut.' }, { status: 500 });
   }
   let order = (orders ?? []).find((o) => (o.customer_email || '').trim().toLowerCase() === email);
+  if (!order && EXTRA_PARTICIPANTS.includes(email)) order = { customer_email: email, customer_name: null };
   if (!order && (await requireAdmin()).ok) order = { customer_email: email, customer_name: 'TEST admin' };
   if (!order) {
     return NextResponse.json(

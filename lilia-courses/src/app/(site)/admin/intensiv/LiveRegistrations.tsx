@@ -14,7 +14,7 @@ type Order = {
   invite_sent_at: string | null;
 };
 
-type Data = { paid: Order[]; pendingCount: number; revenue: number };
+type Data = { paid: Order[]; pendingCount: number; revenue: number; recipients: number };
 
 const REFRESH_MS = 10_000;
 
@@ -99,10 +99,10 @@ export default function LiveRegistrations() {
           </div>
 
           <ReminderSender
-            total={data.paid.length}
-            endpoint="/api/admin/intensiv-feedback-invite"
-            title="Invitație la feedback: link spre cele 4 întrebări + ghidul „Mai aproape de tine” cadou"
-            confirmText={`Trimit invitația la feedback tuturor celor ${data.paid.length} participanți?`}
+            total={data.recipients}
+            endpoint="/api/admin/intensiv-recordings"
+            title="Înregistrările (2 părți, cu coduri) + linkul la feedback"
+            confirmText={`Trimit înregistrările tuturor celor ${data.recipients} participanți?`}
           />
 
           <div className="overflow-x-auto rounded-xl bg-white/5">
