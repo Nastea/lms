@@ -4,14 +4,24 @@ import { useState } from 'react';
 
 type Failure = { email: string; error?: string };
 
-/** Butoanele pentru reminderul de dinaintea intensivului: test către mine, apoi către toți. */
-export default function ReminderSender({ total }: { total: number }) {
+/** Butoane „test către mine” și „către toți” pentru un email în masă către participanți. */
+export default function ReminderSender({
+  total,
+  endpoint = '/api/admin/intensiv-reminder',
+  title = 'Reminder pentru astăzi: noul link de Zoom + caietul atașat',
+  confirmText = `Trimit reminderul cu noul link de Zoom tuturor celor ${total} participanți?`,
+}: {
+  total: number;
+  endpoint?: string;
+  title?: string;
+  confirmText?: string;
+}) {
   const [status, setStatus] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState<Failure[]>([]);
 
   const post = async (body: object) => {
-    const res = await fetch('/api/admin/intensiv-reminder', {
+    const res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -34,7 +44,7 @@ export default function ReminderSender({ total }: { total: number }) {
   };
 
   const sendAll = async () => {
-    if (!window.confirm(`Trimit reminderul cu noul link de Zoom tuturor celor ${total} participanți?`)) return;
+    if (!window.confirm(confirmText)) return;
     setBusy(true);
     setFailed([]);
     let offset = 0;
@@ -61,7 +71,7 @@ export default function ReminderSender({ total }: { total: number }) {
 
   return (
     <div className="rounded-xl bg-white/5 p-5 space-y-3">
-      <p className="font-semibold">Reminder pentru astăzi: noul link de Zoom + caietul atașat</p>
+      <p className="font-semibold">{title}</p>
       <div className="flex flex-wrap gap-3">
         <button onClick={sendTest} disabled={busy} className="rounded-xl border border-white/30 px-4 py-2 disabled:opacity-40">
           Trimite-mi un test

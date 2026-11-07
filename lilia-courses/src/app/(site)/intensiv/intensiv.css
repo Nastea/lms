@@ -327,7 +327,7 @@ body:has(.ix) > footer { display: none; }
 .ix-form { display: grid; gap: 16px; }
 .ix-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .ix-form label { display: grid; gap: 6px; font-size: var(--step-small); font-weight: 500; }
-.ix-form input:not([type='checkbox']) {
+.ix-form input:not([type='checkbox']):not([type='radio']) {
   width: 100%;
   min-height: 52px;
   padding: 0 14px;
@@ -339,7 +339,7 @@ body:has(.ix) > footer { display: none; }
   border-radius: 0;
   transition: border-color 140ms, background-color 140ms;
 }
-.ix-form input:not([type='checkbox']):focus { outline: none; border-color: var(--accent); background: #fff; }
+.ix-form input:not([type='checkbox']):not([type='radio']):focus { outline: none; border-color: var(--accent); background: #fff; }
 .ix-form .ix-check { display: flex; gap: 12px; align-items: flex-start; font-weight: 400; line-height: 1.45; }
 .ix-check input { width: 22px; height: 22px; margin-top: 2px; flex-shrink: 0; accent-color: var(--accent); }
 .ix-check a { font-weight: 500; }
@@ -480,3 +480,43 @@ body:has(.ix) > footer { display: none; }
 /* ── Thank-you page (after payment) ───────────────────────────────── */
 .ix-cover-single { grid-template-columns: 1fr; max-width: 900px; }
 .ix-cover-sub a { font-weight: 600; }
+
+/* ── Feedback după intensiv (/intensiv/feedback) ──────────────────── */
+.ix-fb { min-height: 0; margin-bottom: 72px; max-width: 760px; }
+.ix-fb-title { font-size: clamp(2.4rem, 4.6vw, 4.2rem); }
+.ix-fb-sub { max-width: 46ch; }
+.ix-fb-form { width: 100%; gap: 32px; }
+.ix-fb-q { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; font-size: var(--step-body) !important; font-weight: 500; }
+.ix-fb-q legend { padding: 0; margin-bottom: 12px; }
+.ix-fb-q b { color: var(--accent); margin-right: 4px; }
+.ix-fb-q textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font: inherit;
+  font-weight: 400;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid transparent;
+  border-radius: 0;
+  resize: vertical;
+}
+.ix-fb-q textarea:focus { outline: none; border-color: var(--accent); background: #fff; }
+.ix-fb-scale { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; }
+.ix-fb-scale label { position: relative; cursor: pointer; }
+.ix-fb-scale input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.ix-fb-scale span {
+  display: grid; place-items: center;
+  min-height: 48px;
+  border: 2px solid transparent;
+  background: var(--surface);
+  font-weight: 600;
+  transition: background 150ms, color 150ms;
+}
+.ix-fb-scale label:hover span { border-color: var(--accent); }
+.ix-fb-scale .is-on span { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.ix-fb-scale input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+.ix-fb-ends { display: flex; justify-content: space-between; color: var(--muted); font-size: var(--step-small); font-weight: 400; }
+.ix-fb-done { display: grid; gap: 16px; }
+@media (max-width: 520px) {
+  .ix-fb-scale { grid-template-columns: repeat(5, 1fr); }
+}

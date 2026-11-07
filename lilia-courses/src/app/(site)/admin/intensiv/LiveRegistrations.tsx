@@ -98,7 +98,12 @@ export default function LiveRegistrations() {
             </div>
           </div>
 
-          <ReminderSender total={data.paid.length} />
+          <ReminderSender
+            total={data.paid.length}
+            endpoint="/api/admin/intensiv-feedback-invite"
+            title="Invitație la feedback: link spre cele 3 întrebări + promisiunea caietului bonus"
+            confirmText={`Trimit invitația la feedback tuturor celor ${data.paid.length} participanți?`}
+          />
 
           <div className="overflow-x-auto rounded-xl bg-white/5">
             <table className="w-full text-sm">
