@@ -91,6 +91,9 @@ export async function POST(req: Request) {
     const { productId, currency = 'MDL' } = body;
     // Intensivul are prețul impus pe server; restul produselor păstrează comportamentul existent.
     const isIntensiv = productId === INTENSIV.productId;
+    if (isIntensiv && INTENSIV.salesClosed) {
+      return NextResponse.json({ error: 'Înscrierile la intensiv s-au închis.' }, { status: 410 });
+    }
     const amount: number = isIntensiv ? currentIntensivPrice().amount : body.amount;
     const invoiceName = isIntensiv ? INTENSIV.invoiceName : 'RELAȚIA 360 – De la conflict la conectare';
     const invoiceShortName = isIntensiv ? 'INTENSIV' : 'RELAȚIA 360';

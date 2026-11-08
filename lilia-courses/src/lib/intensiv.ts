@@ -6,6 +6,8 @@
  */
 export const INTENSIV = {
   productId: 'intensiv_plan',
+  /** true = vânzările sunt oprite: pagina nu mai arată formularul, iar checkout-ul refuză. */
+  salesClosed: true,
   /** Numele de pe factura Paynet. */
   invoiceName: 'INTENSIV – Am un plan pentru viața mea',
   /** Preînscriere: 400 lei la Paynet, afișat „20 €”, până la `regularFrom`. */

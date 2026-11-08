@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import { Archivo } from 'next/font/google';
-import { currentIntensivPrice } from '@/lib/intensiv';
+import { INTENSIV, currentIntensivPrice } from '@/lib/intensiv';
 import SignupForm from './SignupForm';
 import Reveal from './Reveal';
 import './intensiv.css';
@@ -104,6 +104,7 @@ const SHEETS = [
 
 export default function IntensivPage() {
   const { label: price, laterLabel: later, isPre } = currentIntensivPrice();
+  const closed = INTENSIV.salesClosed;
 
   return (
     <div className={`ix ${archivo.variable}`}>
@@ -119,7 +120,7 @@ export default function IntensivPage() {
               <a href="#ce-primesti">Ce primești</a>
               <a href="#intrebari">Întrebări</a>
             </div>
-            <a href="#inscriere" className="ix-btn">Mă înscriu</a>
+            <a href="#inscriere" className="ix-btn">{closed ? 'Înscrierile' : 'Mă înscriu'}</a>
           </nav>
 
           <div className="ix-cover" id="top">
@@ -140,7 +141,7 @@ export default function IntensivPage() {
                 schimbe următoarele 60 de zile.
               </p>
               <a href="#inscriere" className="ix-btn ix-btn-big">
-                {isPre ? 'Mă preînscriu' : 'Mă înscriu'} — {price}
+                {closed ? 'Înscrierile s-au închis' : `${isPre ? 'Mă preînscriu' : 'Mă înscriu'} — ${price}`}
               </a>
             </div>
             <div className="ix-cover-photo">
@@ -229,6 +230,17 @@ export default function IntensivPage() {
             />
           </div>
           <div className="ix-price-body" data-reveal>
+            {closed ? (
+              <div className="ix-menu">
+                <p className="ix-menu-group">Înscrierile s-au închis</p>
+                <p className="ix-form-note">
+                  Intensivul a avut loc pe 7 noiembrie. Mulțumesc tuturor celor care au fost alături de mine!
+                  Dacă vrei să afli primul de următoarele workshopuri, scrie-ne la danexprim@liliadubita.md
+                  sau sună la 067 102 290.
+                </p>
+              </div>
+            ) : (
+            <>
             <div className="ix-menu">
               <p className="ix-menu-group">Intensivul + caietul de lucru</p>
               <div className="ix-menu-row" data-current="">
@@ -251,6 +263,8 @@ export default function IntensivPage() {
               )}
             </div>
             <SignupForm label={`Plătesc ${price} și mă înscriu`} />
+            </>
+            )}
           </div>
         </section>
 
@@ -282,7 +296,7 @@ export default function IntensivPage() {
               <summary>Nu am primit emailul. Ce fac?</summary>
               <p>Uită-te și în Spam sau Promoții. Dacă nici acolo nu e, scrie-ne la danexprim@liliadubita.md sau sună la 067 102 290 și te ajutăm.</p>
             </details>
-            <a href="#inscriere" className="ix-btn">Mă înscriu — {price}</a>
+            {!closed && <a href="#inscriere" className="ix-btn">Mă înscriu — {price}</a>}
           </div>
           <div className="ix-faq-photos">
             <Image
